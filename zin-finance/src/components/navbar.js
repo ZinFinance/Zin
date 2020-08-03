@@ -340,14 +340,13 @@ function Navbar() {
               </li>
             </ul>
             <ul className="navbar-btns">
-              <li>
-                <a
-                  href="kyc-application.html"
-                  className="btn btn-sm btn-outline btn-light"
-                >
-                  <em className="text-primary ti ti-files"></em>
-                  <span>KYC Application</span>
-                </a>
+              <li onClick={() => setActive("kyc-application")}>
+                <Link to="/kyc-application">
+                  <button className="btn btn-sm btn-outline btn-light">
+                    <em className="text-primary ti ti-files"></em>
+                    <span>KYC Application</span>
+                  </button>
+                </Link>
               </li>
               <li className="d-none">
                 <span className="badge badge-outline badge-success badge-lg">

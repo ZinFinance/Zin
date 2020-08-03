@@ -5,6 +5,8 @@ import SignIn from "./components/signIn";
 import Profile from "./components/profile";
 import SignUp from "./components/signUp";
 import Transactions from "./components/transactions";
+import KYCApplication from "./components/kycApplication";
+import KYCForm from "./components/kycForm";
 
 const Routes = () => (
   <Switch>
@@ -13,6 +15,8 @@ const Routes = () => (
     <Route path="/sign-up" component={SignUp} />
     <Route path="/profile" component={Profile} />
     <Route path="/transactions" component={Transactions} />
+    <Route path="/kyc-application" component={KYCApplication} />
+    <Route path="/kyc-form" component={KYCForm} />
     <Redirect path="*" to="/" />
   </Switch>
 );

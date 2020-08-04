@@ -1,10 +1,7 @@
 import React from "react";
-import { useCheckAuth } from "../auth";
 import { Link } from "react-router-dom";
 
 function KYCApplication() {
-  useCheckAuth();
-
   return (
     <div className="container">
       <div className="row justify-content-center">

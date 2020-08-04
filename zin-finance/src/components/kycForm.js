@@ -1,9 +1,6 @@
 import React from "react";
-import { useCheckAuth } from "../auth";
 
 function KYCForm() {
-  useCheckAuth();
-
   return (
     <div className="container">
       <div className="row justify-content-center">

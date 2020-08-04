@@ -2,14 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUser } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
-import { useCheckAuth } from "../auth";
 
 function SignIn(props) {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  useCheckAuth(true);
 
   function signIn() {
     dispatch(

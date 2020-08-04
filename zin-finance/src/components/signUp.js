@@ -1,9 +1,6 @@
 import React from "react";
-import { useCheckAuth } from "../auth";
 
 function SignUp(props) {
-  useCheckAuth(true);
-
   return (
     <div className="page-ath-content">
       <div className="page-ath-header">

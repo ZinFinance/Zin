@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 function Navbar() {
   const user = useSelector((state) => state.userReducer.user);
   const dispatch = useDispatch();
-  const [active, setActive] = useState("dashboard");
+  const location = useLocation();
 
   function logout() {
     dispatch(logoutUser());
@@ -52,7 +53,7 @@ function Navbar() {
                     </div>
                   </div>
                   <ul className="user-links">
-                    <li onClick={() => setActive("profile")}>
+                    <li>
                       <Link to="/profile">
                         <i className="ti ti-id-badge"></i>My Profile
                       </Link>
@@ -70,9 +71,9 @@ function Navbar() {
                   </ul>
                   <ul className="user-links bg-light">
                     <li>
-                      <a href="/sign-in" onClick={logout}>
+                      <Link to="/sign-in" onClick={logout}>
                         <i className="ti ti-power-off"></i>Logout
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -85,10 +86,7 @@ function Navbar() {
         <div className="container">
           <div className="navbar-innr">
             <ul className="navbar-menu">
-              <li
-                className={active === "dashboard" ? "active" : ""}
-                onClick={() => setActive("dashboard")}
-              >
+              <li className={location.pathname === "/" ? "active" : ""}>
                 <Link to="/">
                   <em className="ikon ikon-dashboard"></em> Dashboard
                 </Link>
@@ -104,17 +102,15 @@ function Navbar() {
                 </a>
               </li>
               <li
-                className={active === "transactions" ? "active" : ""}
-                onClick={() => setActive("transactions")}
+                className={
+                  location.pathname === "/transactions" ? "active" : ""
+                }
               >
                 <Link to="/transactions">
                   <em className="ikon ikon-transactions"></em> Transactions
                 </Link>
               </li>
-              <li
-                className={active === "profile" ? "active" : ""}
-                onClick={() => setActive("profile")}
-              >
+              <li className={location.pathname === "/profile" ? "active" : ""}>
                 <Link to="/profile">
                   <em className="ikon ikon-user"></em> Profile
                 </Link>
@@ -340,7 +336,7 @@ function Navbar() {
               </li>
             </ul>
             <ul className="navbar-btns">
-              <li onClick={() => setActive("kyc-application")}>
+              <li>
                 <Link to="/kyc-application">
                   <button className="btn btn-sm btn-outline btn-light">
                     <em className="text-primary ti ti-files"></em>

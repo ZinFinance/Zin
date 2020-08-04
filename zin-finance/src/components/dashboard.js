@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { useCheckAuth } from "../auth";
+import { Link } from "react-router-dom";
 
 function Dashboard(props) {
-  useCheckAuth();
-
   return (
     <div className="container">
       <div className="row">
@@ -88,9 +87,11 @@ function Dashboard(props) {
               <div className="card-head has-aside">
                 <h4 className="card-title">Transaction</h4>
                 <div className="card-opt">
-                  <a href="transactions.html" className="link ucap">
-                    View ALL <em className="fas fa-angle-right ml-2" />
-                  </a>
+                  <Link to="/transactions">
+                    <span className="link ucap">
+                      View ALL <em className="fas fa-angle-right ml-2" />
+                    </span>
+                  </Link>
                 </div>
               </div>
               <table className="table tnx-table">

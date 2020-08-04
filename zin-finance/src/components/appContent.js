@@ -1,18 +1,15 @@
-import React from 'react';
-import Navbar from './navbar'
-import Footer from './footer'
+import React from "react";
+import Navbar from "./navbar";
+import Footer from "./footer";
 
-function Content(props) {
-
+function AppContent(props) {
   return (
-    <div className='page-user'>
+    <div className="page-user">
       <Navbar />
-        <div className="page-content">
-          {props.children}
-        </div>
+      <div className="page-content">{props.children}</div>
       <Footer />
     </div>
   );
 }
 
-export default Content;
+export default AppContent;

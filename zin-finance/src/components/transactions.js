@@ -1,9 +1,6 @@
 import React from "react";
-import { useCheckAuth } from "../auth";
 
 function Transactions() {
-  useCheckAuth();
-
   return (
     <div className="container">
       <div className="card content-area">

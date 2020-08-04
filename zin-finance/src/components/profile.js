@@ -1,10 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { useCheckAuth } from "../auth";
 
 function Profile(props) {
-  useCheckAuth();
-
   return (
     <div className="container">
       <div className="row">

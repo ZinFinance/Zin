@@ -1,0 +1,13 @@
+﻿using Zin.Services.Models;
+using System.Threading.Tasks;
+
+namespace Zin.Services.Services
+{
+    public interface IAccountService
+    {
+        Task<bool> ConfirmEmailAsync(string userId, string token);
+        Task<Result> RegisterAsync(UserDetails userDetails, string password);
+        Task<Result> ReSendEmailConfirmationAsync(string email);
+        Task<Result> ChangePasswordAsync(string userId, string currentPassword, string newPassword);
+    }
+}

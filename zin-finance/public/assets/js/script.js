@@ -51,22 +51,22 @@
     });
   }
 
-  // Active page menu when click
-  var CurURL = window.location.href,
-    urlSplit = CurURL.split("#");
-  var $nav_link = $("a");
-  if ($nav_link.length > 0) {
-    $nav_link.each(function () {
-      if (CurURL === this.href && urlSplit[1] !== "") {
-        $(this)
-          .closest("li")
-          .addClass("active")
-          .parent()
-          .closest("li")
-          .addClass("active");
-      }
-    });
-  }
+  // // Active page menu when click
+  // var CurURL = window.location.href,
+  //   urlSplit = CurURL.split("#");
+  // var $nav_link = $("a");
+  // if ($nav_link.length > 0) {
+  //   $nav_link.each(function () {
+  //     if (CurURL === this.href && urlSplit[1] !== "") {
+  //       $(this)
+  //         .closest("li")
+  //         .addClass("active")
+  //         .parent()
+  //         .closest("li")
+  //         .addClass("active");
+  //     }
+  //   });
+  // }
 
   // Countdown Clock
   var $count_token_clock = $(".countdown-clock");

@@ -12,6 +12,7 @@ function SignIn(props) {
     dispatch(
       fetchUser({
         email,
+        // emailVerified: true,
       })
     );
   }

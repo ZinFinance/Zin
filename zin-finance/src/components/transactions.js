@@ -1,8 +1,10 @@
 import React from "react";
+import TransactionDetailsModal from "./transactionDetailsModal";
 
 function Transactions() {
   return (
     <div className="container">
+      <TransactionDetailsModal />
       <div className="card content-area">
         <div className="card-innr">
           <div className="card-head">
@@ -185,14 +187,14 @@ function Transactions() {
                   </span>
                 </td>
                 <td className="data-col text-right">
-                  <a
-                    href="#"
+                  <span
+                    style={{ cursor: "pointer" }}
                     data-toggle="modal"
                     data-target="#transaction-details"
                     className="btn btn-light-alt btn-xs btn-icon"
                   >
                     <em className="ti ti-eye" />
-                  </a>
+                  </span>
                 </td>
               </tr>
               {/* .data-item */}

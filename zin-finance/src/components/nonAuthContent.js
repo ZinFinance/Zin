@@ -1,6 +1,6 @@
 import React from "react";
 
-function AuthContent(props) {
+function NonAuthContent(props) {
   return (
     <div className="page-ath">
       <div className="page-ath-wrap">
@@ -17,4 +17,4 @@ function AuthContent(props) {
   );
 }
 
-export default AuthContent;
+export default NonAuthContent;

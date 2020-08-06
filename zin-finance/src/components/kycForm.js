@@ -1,6 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 function KYCForm() {
+  const user = useSelector((state) => state.userReducer.user);
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!user.emailVerified) {
+      history.push("/kyc-application");
+    }
+  }, [user, history]);
+
   return (
     <div className="container">
       <div className="row justify-content-center">

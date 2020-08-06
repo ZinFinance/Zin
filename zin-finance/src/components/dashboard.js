@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useCheckEmailVerified } from "../auth";
 
 function Dashboard(props) {
   const user = useSelector((state) => state.userReducer.user);
+  const disabled = useCheckEmailVerified(user);
 
   return (
     <div className="container">
@@ -273,11 +275,7 @@ function Dashboard(props) {
                 </span>
               </div>
               <div className="token-buy">
-                <button
-                  disabled={!user.emailVerified ? true : null}
-                  style={!user.emailVerified ? { cursor: "not-allowed" } : null}
-                  className="btn btn-primary"
-                >
+                <button {...disabled} className="btn btn-primary">
                   Buy Tokens
                 </button>
               </div>

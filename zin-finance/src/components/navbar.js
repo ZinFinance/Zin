@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 function Navbar() {
   const user = useSelector((state) => state.userReducer.user);
   const dispatch = useDispatch();
   const location = useLocation();
+  const [, , removeCookie] = useCookies(["email"]);
 
   function logout() {
+    removeCookie("email");
     dispatch(logoutUser());
   }
 
@@ -22,9 +25,10 @@ function Navbar() {
         {!user.emailVerified && (
           <div
             style={{ borderRadius: 0, marginBottom: 0, textAlign: "center" }}
-            class="alert alert-danger"
+            className="alert alert-danger"
           >
-            Please verify your email and refresh in order to perform any actions
+            Please verify your email address and refresh in order to perform any
+            actions
           </div>
         )}
         <div className="container">
@@ -72,11 +76,6 @@ function Navbar() {
                     <li>
                       <a href="#">
                         <i className="ti ti-infinite"></i>Referral
-                      </a>
-                    </li>
-                    <li>
-                      <a href="activity.html">
-                        <i className="ti ti-eye"></i>Activity
                       </a>
                     </li>
                   </ul>

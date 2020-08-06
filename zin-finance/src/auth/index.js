@@ -13,3 +13,11 @@ export const useCheckAuth = (redirectToDashboard) => {
     history.push("/sign-in");
   }
 };
+
+export const useCheckEmailVerified = () => {
+  const user = useSelector((state) => state.userReducer.user);
+  return {
+    disabled: !user.emailVerified ? true : null,
+    style: !user.emailVerified ? { cursor: "not-allowed" } : null,
+  };
+};

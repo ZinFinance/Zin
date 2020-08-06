@@ -1,9 +1,17 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { useCheckEmailVerified } from "../auth";
+
+import WalletModal from "./walletModal";
 
 function Profile(props) {
+  const user = useSelector((state) => state.userReducer.user);
+  const disabled = useCheckEmailVerified();
+
   return (
     <div className="container">
+      <WalletModal />
       <div className="row">
         <div className="main-content col-lg-8">
           <div className="content-area card">
@@ -122,7 +130,7 @@ function Profile(props) {
                             name="nationality"
                             id="nationality"
                           >
-                            <option value="us">United State</option>
+                            <option value="us">United States</option>
                             <option value="uk">United KingDom</option>
                             <option value="fr">France</option>
                             <option value="ch">China</option>
@@ -138,7 +146,7 @@ function Profile(props) {
                     <div className="gaps-1x" />
                     {/* 10px gap */}
                     <div className="d-sm-flex justify-content-between align-items-center">
-                      <button className="btn btn-primary">
+                      <button {...disabled} className="btn btn-primary">
                         Update Profile
                       </button>
                       <div className="gaps-2x d-sm-none" />
@@ -167,6 +175,7 @@ function Profile(props) {
                   </div>
                   <div className="input-item">
                     <input
+                      {...disabled}
                       type="checkbox"
                       className="input-switch input-switch-sm"
                       id="pass-change-confirm"
@@ -182,6 +191,7 @@ function Profile(props) {
                   </div>
                   <div className="input-item">
                     <input
+                      {...disabled}
                       type="checkbox"
                       className="input-switch input-switch-sm"
                       id="latest-news"
@@ -193,6 +203,7 @@ function Profile(props) {
                   </div>
                   <div className="input-item">
                     <input
+                      {...disabled}
                       type="checkbox"
                       className="input-switch input-switch-sm"
                       id="activity-alert"
@@ -277,7 +288,9 @@ function Profile(props) {
                   <div className="gaps-1x" />
                   {/* 10px gap */}
                   <div className="d-sm-flex justify-content-between align-items-center">
-                    <button className="btn btn-primary">Update</button>
+                    <button {...disabled} className="btn btn-primary">
+                      Update
+                    </button>
                     <div className="gaps-2x d-sm-none" />
                     <span className="text-success">
                       <em className="ti ti-check-box" /> Changed Password
@@ -311,7 +324,10 @@ function Profile(props) {
                   <span className="badge badge-disabled ml-2">Disabled</span>
                 </span>
                 <div className="gaps-2x d-sm-none" />
-                <button className="order-sm-first btn btn-primary">
+                <button
+                  {...disabled}
+                  className="order-sm-first btn btn-primary"
+                >
                   Enable 2FA
                 </button>
               </div>
@@ -327,14 +343,29 @@ function Profile(props) {
               <h6 className="card-title card-title-sm">Your Account Status</h6>
               <ul className="btn-grp">
                 <li>
-                  <a href="#" className="btn btn-auto btn-xs btn-success">
-                    Email Verified
-                  </a>
+                  {user.emailVerified ? (
+                    <span
+                      style={{ cursor: "initial" }}
+                      className="btn btn-auto btn-xs btn-success"
+                    >
+                      Email Verified
+                    </span>
+                  ) : (
+                    <span
+                      style={{ cursor: "initial" }}
+                      className="btn btn-auto btn-xs btn-danger"
+                    >
+                      Email Not Verified
+                    </span>
+                  )}
                 </li>
                 <li>
-                  <a href="#" className="btn btn-auto btn-xs btn-warning">
+                  <span
+                    style={{ cursor: "initial" }}
+                    className="btn btn-auto btn-xs btn-warning"
+                  >
                     KYC Pending
-                  </a>
+                  </span>
                 </li>
               </ul>
               <div className="gaps-2-5x" />
@@ -350,7 +381,7 @@ function Profile(props) {
                   />
                 </span>
                 <a
-                  href="#"
+                  href="#edit-wallet"
                   data-toggle="modal"
                   data-target="#edit-wallet"
                   className="link link-ucap"
@@ -402,9 +433,12 @@ function Profile(props) {
                 You have not submitted your KYC application to verify your
                 indentity.
               </p>
-              <a href="#" className="btn btn-primary btn-block">
-                Click to Proceed
-              </a>
+
+              <Link to="/kyc-application">
+                <button className="btn btn-primary btn-block">
+                  Click to Proceed
+                </button>
+              </Link>
               <h6 className="kyc-alert text-danger">
                 * KYC verification required for purchase token
               </h6>

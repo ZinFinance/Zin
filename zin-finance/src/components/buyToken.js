@@ -1,23 +1,30 @@
 import React from "react";
 import AddWalletModal from "./addWalletModal";
 import GetPaymentAddressModal from "./getPaymentAddressModal";
+import PayOnlineModal from "./payOnlineModal";
+import { useCheckEmailVerified } from "../auth";
 
 function BuyToken() {
+  const disabled = useCheckEmailVerified();
+  console.log("disabled", disabled);
+
   return (
     <div className="container">
       <AddWalletModal />
       <GetPaymentAddressModal />
+      <PayOnlineModal />
       <div className="row">
         <div className="main-content col-lg-8">
           <div className="d-lg-none">
-            <span
+            <button
+              {...disabled}
               data-toggle="modal"
               data-target="#add-wallet"
               className="btn btn-danger btn-xl btn-between w-100 mgb-1-5x"
             >
               Add your wallet address before buy{" "}
               <em className="ti ti-arrow-right" />
-            </span>
+            </button>
             <div className="gaps-1x mgb-0-5x d-lg-none d-none d-sm-block" />
           </div>
           <div className="content-area card">
@@ -239,25 +246,25 @@ function BuyToken() {
               </div>
               <div className="pay-buttons">
                 <div className="pay-button">
-                  <span
-                    style={{ cursor: "pointer" }}
+                  <button
+                    {...disabled}
                     data-toggle="modal"
                     data-target="#get-pay-address"
                     className="btn btn-light-alt btn-between w-100"
                   >
                     Get Address for Payment <em className="ti ti-wallet" />
-                  </span>
+                  </button>
                 </div>
                 <div className="pay-button-sap">or</div>
                 <div className="pay-button">
-                  <a
-                    href="#"
+                  <button
+                    {...disabled}
                     data-toggle="modal"
                     data-target="#pay-online"
                     className="btn btn-primary btn-between w-100"
                   >
                     Make Online Payment <em className="ti ti-arrow-right" />
-                  </a>
+                  </button>
                 </div>
               </div>
               <div className="pay-notes">
@@ -280,6 +287,7 @@ function BuyToken() {
         <div className="aside sidebar-right col-lg-4">
           <div className="d-none d-lg-block">
             <button
+              {...disabled}
               data-toggle="modal"
               data-target="#add-wallet"
               className="btn btn-danger btn-xl btn-between w-100"

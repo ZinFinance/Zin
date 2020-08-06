@@ -50,6 +50,24 @@ namespace Zin.Controllers
             return BadRequest(result);
         }
 
+        [HttpGet("reset")]
+        public async Task<ActionResult> PasswordResetAsync(string userName)
+        {
+            Result result = await accountService.PasswordResetAsync(userName);
+            if (result.Status)
+                return Ok(result);
+            return BadRequest(result);
+        }
+
+        [HttpPost("reset/confirm")]
+        public async Task<ActionResult> PasswordResetConfirmAsync(PasswordReset passwordReset)
+        {
+            Result result = await accountService.PasswordResetConfirmAsync(passwordReset.UserId, passwordReset.TempToken, passwordReset.NewPassword);
+            if (result.Status)
+                return Ok(result);
+            return BadRequest(result);
+        }
+
         [Authorize]
         [HttpPost("changePassword")]
         public async Task<ActionResult> ChangePasswordAsync(ChangePassword changePassword)

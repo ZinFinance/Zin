@@ -78,7 +78,7 @@ namespace Zin.Services.Implementation
             return new Result(true, "EMAIL_RESEND");
         }
 
-        public async Task<Result> ChangePasswordAsync(string userId,string currentPassword,string newPassword)
+        public async Task<Result> ChangePasswordAsync(string userId, string currentPassword, string newPassword)
         {
             AppUser appUser = await userManager.FindByIdAsync(userId);
             IdentityResult result = await userManager.ChangePasswordAsync(appUser, currentPassword, newPassword);
@@ -91,6 +91,43 @@ namespace Zin.Services.Implementation
             await emailService.SendEmailAsync(appUser.Email, "Password Changed", "Your password successfully changed.");
 
             return new Result(true, "PASSWORD_CHANGED");
+        }
+
+        public async Task<Result> PasswordResetAsync(string userName)
+        {
+            // find account
+            AppUser appUser = await userManager.FindByNameAsync(userName);
+            if (appUser == null)
+                return new Result(false, "ACCOUNT_NOT_EXISTS");
+
+            // send email
+            string tempToken = await userManager.GeneratePasswordResetTokenAsync(appUser);
+            var resetPasswordUrl = $"{configuration["UserManager:ResetPasswordBaseUrl"]}?userId={WebUtility.UrlEncode(appUser.Id)}&token={WebUtility.UrlEncode(tempToken)}";
+            await emailService.SendResetPasswordEmailAsync(appUser.Email, resetPasswordUrl);
+
+            // return
+            return new Result(true, "RESET_PASSWORD_EMAIL_SEND");
+        }
+
+        public async Task<Result> PasswordResetConfirmAsync(string userId, string token, string newPassword)
+        {
+            // find account
+            AppUser appUser = await userManager.FindByIdAsync(userId);
+            if (appUser == null)
+                return new Result(false, "INVALID_OR_EXPIRED_TOKEN");
+
+            // reset password
+            IdentityResult result = await userManager.ResetPasswordAsync(appUser, token, newPassword);
+            if (!result.Succeeded)
+            {
+                return new Result(result);
+            }
+
+            // send email password reset success
+            await emailService.SendEmailAsync(appUser.Email, "Password Reset Successfully", "You have successfully reset your password.");
+
+            // return
+            return new Result(true, "RESET_PASSWORD_SUCCESS");
         }
 
         private async Task<string> CreateEmailConfirmationUrlAsync(AppUser appUser)

@@ -6,6 +6,7 @@ namespace Zin.EmailManager.Services
     {
         Task SendEmailAsync(string to, string title, string message);
         Task SendEmailReConfirmationAsync(string to, string emailConfirmationUrl);
+        Task SendResetPasswordEmailAsync(string to, string resetPasswordUrl);
         Task SendRegisterEmailAsync(string to, string fullName, string emailConfirmationUrl);
     }
 }

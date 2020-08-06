@@ -54,5 +54,19 @@ namespace Zin.EmailManager.Implementation
                 }
             });
         }
+
+        public async Task SendResetPasswordEmailAsync(string to, string resetPasswordUrl)
+        {
+            await SendAsync(new Email
+            {
+                To = to,
+                Subject = "Reset Password",
+                TemplateName = "PasswordReset.html",
+                Tags = new Dictionary<string, string>
+                {
+                    { "url", resetPasswordUrl }
+                }
+            });
+        }
     }
 }

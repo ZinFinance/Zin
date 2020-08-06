@@ -380,14 +380,25 @@ function Profile(props) {
                     title="1 ETH = 100 TWZ"
                   />
                 </span>
-                <a
-                  href="#edit-wallet"
-                  data-toggle="modal"
-                  data-target="#edit-wallet"
-                  className="link link-ucap"
-                >
-                  Edit
-                </a>
+                {user.emailVerified ? (
+                  <a
+                    href="#edit-wallet"
+                    data-toggle="modal"
+                    data-target="#edit-wallet"
+                    className="link link-ucap"
+                  >
+                    Edit
+                  </a>
+                ) : (
+                  <span
+                    style={{ cursor: "not-allowed" }}
+                    data-toggle="modal"
+                    data-target="#edit-wallet"
+                    className="link link-ucap"
+                  >
+                    Edit
+                  </span>
+                )}
               </div>
             </div>
           </div>

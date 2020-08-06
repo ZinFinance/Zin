@@ -11,6 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Templates\LoginTfa.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\Default.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

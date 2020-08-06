@@ -68,5 +68,19 @@ namespace Zin.EmailManager.Implementation
                 }
             });
         }
+
+        public async Task SendLoginTfaCodeAsync(string to, string code)
+        {
+            await SendAsync(new Email
+            {
+                To = to,
+                Subject = "Login Code",
+                TemplateName = "LoginTfa.html",
+                Tags = new Dictionary<string, string>
+                {
+                    { "code", code }
+                }
+            });
+        }
     }
 }

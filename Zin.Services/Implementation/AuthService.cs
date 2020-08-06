@@ -106,7 +106,7 @@ namespace Zin.Services.Implementation
             await userManager.UpdateAsync(appUser);
 
             // send email
-            await emailService.SendEmailAsync(appUser.Email, "Login TFA Code", $"Your tfa login code is {appUser.TfaCode}");
+            await emailService.SendLoginTfaCodeAsync(appUser.Email, appUser.TfaCode);
         }
 
         private async Task<AppUser> GetUserFromTempTokenAsync(string tempToken)

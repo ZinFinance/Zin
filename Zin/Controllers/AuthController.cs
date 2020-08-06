@@ -31,18 +31,30 @@ namespace Zin.Controllers
             SignInResult signInResult = await signInManager.PasswordSignInAsync(login.UserName, login.Password, false, true);
             if (!signInResult.Succeeded)
             {
-                return BadRequest(new Result<AccessTokenResponse>(new AccessTokenResponse(signInResult), false));
+                return BadRequest(new Result<TempTokenResponse>(new TempTokenResponse(signInResult), false));
             }
 
             // create access token
-            Result<AccessTokenResponse> result = await authService.CreateSessionAsync(login.UserName);
+            Result<TempTokenResponse> result = await authService.CreateTfaSessionAsync(login.UserName);
             return Ok(result);
         }
 
         [HttpPost("login/tfa")]
-        public Task<ActionResult> LoginWithTfaAsync(string token)
+        public async Task<ActionResult> LoginWithTfaAsync(LoginTfa loginTfa)
         {
-            throw new NotImplementedException();
+            Result<AccessTokenResponse> result = await authService.CreateSessionAsync(loginTfa.TempToken, loginTfa.TfaCode);
+            if (result.Status)
+                return Ok(result);
+            return BadRequest(result);
+        }
+
+        [HttpPost("login/tfa/resend")]
+        public async Task<ActionResult> ResendLoginTfaCodeAsync(ResendLoginTfaCode resendLoginTfaCode)
+        {
+            Result result = await authService.ResendLoginTfaCodeAsync(resendLoginTfaCode.TempToken);
+            if (result.Status)
+                return Ok(result);
+            return BadRequest(result);
         }
     }
 }

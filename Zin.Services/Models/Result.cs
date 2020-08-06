@@ -41,6 +41,13 @@ namespace Zin.Services.Models
             Data = data;
             Code = ResponseCode.Data.ToString();
         }
+
+        public Result(bool status, string message)
+        {
+            Status = status;
+            Message = message;
+            Code = ResponseCode.Message.ToString();
+        }
     }
 
     internal enum ResponseCode

@@ -90,6 +90,9 @@ namespace Zin
                     };
                 });
 
+            // add data protection
+            services.AddDataProtection();
+
             // add services and repositories
             services.AddServices();
             services.AddRepositories();

@@ -8,5 +8,6 @@ namespace Zin.Repository.Models
         public string LastName { get; set; }
         public string EthAddress { get; set; }
         public string TfaCode { get; set; }
+        public string ReferralCode { get; set; }
     }
 }

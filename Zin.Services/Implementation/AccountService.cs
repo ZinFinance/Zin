@@ -6,6 +6,7 @@ using Zin.Services.Services;
 using System.Net;
 using System.Threading.Tasks;
 using Zin.Repository.Models;
+using Zin.Repository.Repository;
 
 namespace Zin.Services.Implementation
 {
@@ -14,20 +15,25 @@ namespace Zin.Services.Implementation
         private readonly UserManager<AppUser> userManager;
         private readonly IConfiguration configuration;
         private readonly IEmailService emailService;
+        private readonly IReferralCodeRepository referralCodeRepository;
 
         public AccountService(UserManager<AppUser> userManager,
             IConfiguration configuration,
-            IEmailService emailService)
+            IEmailService emailService,
+            IReferralCodeRepository referralCodeRepository)
         {
             this.userManager = userManager;
             this.configuration = configuration;
             this.emailService = emailService;
+            this.referralCodeRepository = referralCodeRepository;
         }
 
         public async Task<Result> RegisterAsync(UserDetails userDetails, string password)
         {
             // register user
             AppUser appUser = userDetails.ToCore();
+            appUser.ReferralCode = await referralCodeRepository.GetNewReferralCodeAsync();
+
             IdentityResult result = await userManager.CreateAsync(appUser, password);
             if (!result.Succeeded)
             {

@@ -72,8 +72,7 @@ namespace Zin.Services.Implementation
                 return new Result(false, "EMAIL_ALREADY_CONFIRMED");
 
             // send re confirmation email
-            string emailConfirmationUrl = await CreateEmailConfirmationUrlAsync(appUser);
-            await emailService.SendEmailReConfirmationAsync(appUser.Email, emailConfirmationUrl);
+            await SendEmailConfirmationAsync(appUser);
 
             return new Result(true, "EMAIL_RESEND");
         }
@@ -128,6 +127,12 @@ namespace Zin.Services.Implementation
 
             // return
             return new Result(true, "RESET_PASSWORD_SUCCESS");
+        }
+
+        public async Task SendEmailConfirmationAsync(AppUser appUser)
+        {
+            string emailConfirmationUrl = await CreateEmailConfirmationUrlAsync(appUser);
+            await emailService.SendEmailReConfirmationAsync(appUser.Email, emailConfirmationUrl);
         }
 
         private async Task<string> CreateEmailConfirmationUrlAsync(AppUser appUser)

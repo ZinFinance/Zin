@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Zin.Services.Services;
 using Zin.Services.Models;
 using Microsoft.AspNetCore.Authorization;
+using Zin.Models.Account;
 
 namespace Zin.Controllers
 {
@@ -23,6 +24,15 @@ namespace Zin.Controllers
         {
             Result<UserDetails> result = await profileService.GetAsync(User.Id());
             return Ok(result);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateProfileAsync(UpdateProfile updateProfile)
+        {
+            Result result = await profileService.UpdateAsync(User.Id(), updateProfile.ToDto());
+            if (result.Status)
+                return Ok(result);
+            return BadRequest(result);
         }
     }
 }

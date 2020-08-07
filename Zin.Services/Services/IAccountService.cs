@@ -1,5 +1,6 @@
 ﻿using Zin.Services.Models;
 using System.Threading.Tasks;
+using Zin.Repository.Models;
 
 namespace Zin.Services.Services
 {
@@ -11,5 +12,6 @@ namespace Zin.Services.Services
         Task<Result> ChangePasswordAsync(string userId, string currentPassword, string newPassword);
         Task<Result> PasswordResetAsync(string userName);
         Task<Result> PasswordResetConfirmAsync(string userId, string token, string newPassword);
+        Task SendEmailConfirmationAsync(AppUser appUser);
     }
 }

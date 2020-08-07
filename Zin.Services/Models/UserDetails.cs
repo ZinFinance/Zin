@@ -36,5 +36,15 @@ namespace Zin.Services.Models
                 EthAddress = appUser.EthAddress
             };
         }
+
+        public static AppUser Update(this AppUser appUser, UserDetails userDetails)
+        {
+            appUser.FirstName = userDetails.FirstName;
+            appUser.LastName = userDetails.LastName;
+            appUser.EthAddress = userDetails.EthAddress;
+            appUser.UserName = userDetails.UserName;
+            appUser.Email = userDetails.Email;
+            return appUser;
+        }
     }
 }

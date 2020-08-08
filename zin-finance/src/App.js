@@ -9,7 +9,9 @@ import AuthRoutes from "./routes/authRoutes";
 import NonAuthRoutes from "./routes/nonAuthRoutes";
 
 import { useCookies } from "react-cookie";
+
 import { fetchUser } from "./redux/actions/userActions";
+import { getKYCAccessToken } from "./redux/actions/kycActions";
 
 import PageLoader from "./components/pageLoader";
 
@@ -18,6 +20,12 @@ function App() {
   const dispatch = useDispatch();
   const location = useLocation();
   const [cookies, setCookie] = useCookies(["email"]);
+
+  useEffect(() => {
+    if (user && user.id) {
+      dispatch(getKYCAccessToken(user.id));
+    }
+  }, [user, dispatch]);
 
   useEffect(() => {
     console.log("user changed", user);
@@ -29,6 +37,8 @@ function App() {
           dispatch(
             fetchUser({
               email: cookies.email,
+              id: "testing123",
+              emailVerified: cookies.email === "bjafri5@gmail.com",
             })
           ),
         1000

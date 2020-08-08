@@ -292,14 +292,24 @@
   }
 
   // Dropzone
-  var $upload_zone = $(".upload-zone");
-  if ($upload_zone.length > 0) {
-    Dropzone.autoDiscover = false;
-    $upload_zone.each(function () {
-      var $self = $(this);
-      $self.addClass("dropzone").dropzone({ url: "/images" });
-    });
-  }
+  // var $upload_zone = $(".upload-zone");
+  // if ($upload_zone.length > 0) {
+  //   Dropzone.autoDiscover = false;
+  //   $upload_zone.each(function () {
+  //     var $self = $(this);
+  //     $self.addClass("dropzone").dropzone({
+  //       url: "/images",
+  //       autoProcessQueue: false,
+  //       init: function () {
+  //         this.on("addedfile", function () {
+  //           if (this.files[1] != null) {
+  //             this.removeFile(this.files[0]);
+  //           }
+  //         });
+  //       },
+  //     });
+  //   });
+  // }
 
   //magnificPopup	Content
   var $image_popup = $(".image-popup");

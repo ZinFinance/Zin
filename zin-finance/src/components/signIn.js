@@ -12,7 +12,8 @@ function SignIn(props) {
     dispatch(
       fetchUser({
         email,
-        // emailVerified: true,
+        id: "testing123",
+        emailVerified: email === "bjafri5@gmail.com",
       })
     );
   }

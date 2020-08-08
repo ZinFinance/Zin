@@ -6,7 +6,9 @@ function AppContent(props) {
   return (
     <div className="page-user">
       <Navbar />
-      <div className="page-content">{props.children}</div>
+      <div id="page-content" className="page-content">
+        {props.children}
+      </div>
       <Footer />
     </div>
   );

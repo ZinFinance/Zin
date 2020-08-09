@@ -13,10 +13,6 @@ const REQUEST_URL = CORS_PROXY_URL + SUMSUB_BASE_URL;
 var config = {};
 config.baseURL = REQUEST_URL;
 
-axios.interceptors.request.use(createSignature, function (error) {
-  return Promise.reject(error);
-});
-
 // This function creates signature for the request as described here: https://developers.sumsub.com/api-reference/#app-tokens
 function createSignature(config) {
   console.log("Creating a signature for the request...");
@@ -52,6 +48,7 @@ function createAccessToken(externalUserId, ttlInSecs = 600) {
   config.url = url;
   config.headers = headers;
   config.data = null;
+  config = createSignature(config);
 
   return config;
 }
@@ -79,6 +76,67 @@ export function getKYCAccessToken(externalUserId, callback) {
       }
     } catch (err) {
       console.log("error fetching kyc access token", err);
+    }
+  };
+}
+
+//https://developers.sumsub.com/api-reference/#getting-applicant-data
+function getApplicantData(externalUserId) {
+  console.log("Getting the applicant status...");
+
+  var method = "get";
+  var url = `/resources/applicants/-;externalUserId=${externalUserId}/one`;
+
+  var headers = {
+    Accept: "application/json",
+    "X-App-Token": SUMSUB_APP_TOKEN,
+  };
+
+  config.method = method;
+  config.url = url;
+  config.headers = headers;
+  config.data = null;
+
+  config = createSignature(config);
+  return config;
+}
+
+// https://developers.sumsub.com/api-reference/#getting-applicant-status-sdk
+function getApplicantStatus(applicantId) {
+  console.log("Getting the applicant status...");
+
+  var method = "get";
+  var url = `/resources/applicants/${applicantId}/status`;
+
+  var headers = {
+    Accept: "application/json",
+    "X-App-Token": SUMSUB_APP_TOKEN,
+  };
+
+  config.method = method;
+  config.url = url;
+  config.headers = headers;
+  config.data = null;
+  config = createSignature(config);
+
+  return config;
+}
+
+export function getKYCApplicationStatus(externalUserId) {
+  return async (dispatch) => {
+    try {
+      let applicantData = await axios(getApplicantData(externalUserId));
+      console.log("kyc applicant data", applicantData.data);
+      let applicationStatus = await axios(
+        getApplicantStatus(applicantData.data.id)
+      );
+      console.log("kyc application status", applicationStatus.data);
+      dispatch({
+        type: ActionTypes.SET_KYC_APPLICATION_STATUS,
+        data: applicationStatus.data,
+      });
+    } catch (err) {
+      console.log("error fetching kyc application status", err);
     }
   };
 }

@@ -1,9 +1,57 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function KYCApplication() {
-  const user = useSelector((state) => state.userReducer.user);
+  const emailVerified = useSelector((state) => state.userReducer.emailVerified);
+  const kycApplicationStatus = useSelector(
+    (state) => state.kycReducer.applicationStatus
+  );
+  const [kycStatus, setKYCStatus] = useState({
+    description: `You have not submitted your application to verify your 
+      identity. In order to purchase our tokens, please verify your identity.`,
+    buttonText: "Click here to complete your KYC",
+    disabled: false,
+  });
+
+  useEffect(() => {
+    if (emailVerified) {
+      if (kycApplicationStatus) {
+        if (kycApplicationStatus.reviewStatus === "completed") {
+          if ((kycApplicationStatus.reviewResult.reviewAnswer = "RED")) {
+            setKYCStatus({
+              buttonText: "Click here to view more details",
+              description: "Your application has been rejected",
+              disabled: false,
+            });
+          } else {
+            setKYCStatus({
+              buttonText: "Your application has been approved",
+              description: "Your application has been approved",
+              disabled: true,
+            });
+          }
+        } else if (
+          kycApplicationStatus.reviewStatus === "pending" ||
+          kycApplicationStatus.reviewStatus === "queued" ||
+          kycApplicationStatus.reviewStatus === "onHold"
+        ) {
+          setKYCStatus({
+            buttonText: "Click here to view your status",
+            description: "Your application has been received and is pending",
+            disabled: false,
+          });
+        }
+      }
+    } else {
+      setKYCStatus({
+        buttonText: "Click here to complete your KYC",
+        description:
+          "Please verify your email in order to complete the KYC form",
+        disabled: true,
+      });
+    }
+  }, [emailVerified, kycApplicationStatus]);
 
   return (
     <div className="container">
@@ -30,21 +78,13 @@ function KYCApplication() {
                 <div className="status-icon">
                   <em className="ti ti-files" />
                 </div>
-                {!user.emailVerified ? (
-                  <span className="status-text text-dark">
-                    Please verify your email in order to complete the KYC form
-                  </span>
-                ) : (
-                  <span className="status-text text-dark">
-                    You have not submitted your necessary documents to verify
-                    your identity. In order to purchase our tokens, please
-                    verify your identity.
-                  </span>
-                )}
-                {user.emailVerified ? (
+                <span className="status-text text-dark">
+                  {kycStatus.description}
+                </span>
+                {!kycStatus.disabled ? (
                   <Link to="/kyc-form">
                     <button className="btn btn-primary">
-                      Click here to complete your KYC
+                      {kycStatus.buttonText}
                     </button>
                   </Link>
                 ) : (
@@ -53,7 +93,7 @@ function KYCApplication() {
                     style={{ cursor: "not-allowed" }}
                     className="btn btn-primary"
                   >
-                    Click here to complete your KYC
+                    {kycStatus.buttonText}
                   </button>
                 )}
               </div>

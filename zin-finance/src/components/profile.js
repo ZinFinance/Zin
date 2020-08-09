@@ -7,7 +7,11 @@ import WalletModal from "./walletModal";
 
 function Profile(props) {
   const user = useSelector((state) => state.userReducer.user);
+  const emailVerified = useSelector((state) => state.userReducer.emailVerified);
   const disabled = useCheckEmailVerified();
+  const kycApplicationStatus = useSelector(
+    (state) => state.kycReducer.applicationStatus
+  );
 
   return (
     <div className="container">
@@ -343,7 +347,7 @@ function Profile(props) {
               <h6 className="card-title card-title-sm">Your Account Status</h6>
               <ul className="btn-grp">
                 <li>
-                  {user.emailVerified ? (
+                  {emailVerified ? (
                     <span
                       style={{ cursor: "initial" }}
                       className="btn btn-auto btn-xs btn-success"
@@ -360,12 +364,22 @@ function Profile(props) {
                   )}
                 </li>
                 <li>
-                  <span
-                    style={{ cursor: "initial" }}
-                    className="btn btn-auto btn-xs btn-warning"
-                  >
-                    KYC Pending
-                  </span>
+                  {kycApplicationStatus &&
+                  kycApplicationStatus.reviewStatus === "completed" ? (
+                    <span
+                      style={{ cursor: "initial" }}
+                      className="btn btn-auto btn-xs btn-success"
+                    >
+                      KYC Complete
+                    </span>
+                  ) : (
+                    <span
+                      style={{ cursor: "initial" }}
+                      className="btn btn-auto btn-xs btn-warning"
+                    >
+                      KYC Pending
+                    </span>
+                  )}
                 </li>
               </ul>
               <div className="gaps-2-5x" />
@@ -380,7 +394,7 @@ function Profile(props) {
                     title="1 ETH = 100 TWZ"
                   />
                 </span>
-                {user.emailVerified ? (
+                {emailVerified ? (
                   <a
                     href="#edit-wallet"
                     data-toggle="modal"
@@ -392,8 +406,6 @@ function Profile(props) {
                 ) : (
                   <span
                     style={{ cursor: "not-allowed" }}
-                    data-toggle="modal"
-                    data-target="#edit-wallet"
                     className="link link-ucap"
                   >
                     Edit

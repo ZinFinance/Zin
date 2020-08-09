@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
@@ -7,13 +7,26 @@ import { useCookies } from "react-cookie";
 
 function Navbar() {
   const user = useSelector((state) => state.userReducer.user);
+  const emailVerified = useSelector((state) => state.userReducer.emailVerified);
   const dispatch = useDispatch();
   const location = useLocation();
   const [, , removeCookie] = useCookies(["email"]);
+  const [resendEmailData, setResendEmailData] = useState({
+    text: "Resend Email",
+    disabled: false,
+    loading: false,
+  });
 
   function logout() {
     removeCookie("email");
     dispatch(logoutUser());
+  }
+
+  function resendEmail() {
+    setResendEmailData({
+      text: "Email sent",
+      disabled: true,
+    });
   }
 
   return (
@@ -22,13 +35,24 @@ function Navbar() {
         style={{ paddingLeft: 0, paddingRight: 0 }}
         className="topbar is-sticky"
       >
-        {!user.emailVerified && (
+        {!emailVerified && (
           <div
             style={{ borderRadius: 0, marginBottom: 0, textAlign: "center" }}
             className="alert alert-danger"
           >
             Please verify your email address and refresh in order to perform any
             actions
+            <button
+              disabled={resendEmailData.disabled}
+              onClick={resendEmail}
+              style={{
+                marginLeft: "25px",
+                cursor: resendEmailData.disabled ? "not-allowed" : "cursor",
+              }}
+              className="btn btn-warning btn-sm"
+            >
+              {resendEmailData.text}
+            </button>
           </div>
         )}
         <div className="container">

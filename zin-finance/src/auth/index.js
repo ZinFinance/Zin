@@ -15,9 +15,9 @@ export const useCheckAuth = (redirectToDashboard) => {
 };
 
 export const useCheckEmailVerified = () => {
-  const user = useSelector((state) => state.userReducer.user);
+  const emailVerified = useSelector((state) => state.userReducer.emailVerified);
   return {
-    disabled: !user.emailVerified ? true : null,
-    style: !user.emailVerified ? { cursor: "not-allowed" } : null,
+    disabled: !emailVerified ? true : null,
+    style: !emailVerified ? { cursor: "not-allowed" } : null,
   };
 };

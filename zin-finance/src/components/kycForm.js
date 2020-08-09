@@ -9,7 +9,8 @@ import snsWebSdk from "@sumsub/websdk";
 import ReactDOM from "react-dom";
 
 function KYCForm() {
-  const user = useSelector((state) => state.userReducer.user);
+  const userId = useSelector((state) => state.userReducer.user.id);
+  const emailVerified = useSelector((state) => state.userReducer.emailVerified);
   const accessToken = useSelector((state) => state.kycReducer.accessToken);
   const history = useHistory();
 
@@ -27,15 +28,15 @@ function KYCForm() {
   }, []);
 
   useEffect(() => {
-    if (!user.emailVerified) {
+    if (!emailVerified) {
       history.push("/kyc-application");
     }
-  }, [user, history]);
+  }, [emailVerified, history]);
 
   useEffect(() => {
     const iframe = document.querySelector("iframe");
     if (accessToken && !iframe) {
-      launchWebSdk(SUMSUB_BASE_URL, "basic-kyc", accessToken, user.email);
+      launchWebSdk(SUMSUB_BASE_URL, "basic-kyc", accessToken, userId);
     }
   }, [accessToken]);
 

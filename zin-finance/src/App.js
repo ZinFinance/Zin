@@ -59,9 +59,10 @@ function App() {
     document.body.appendChild(script);
 
     return () => {
+      console.log("removing script");
       document.body.removeChild(script);
     };
-  }, [location, user]);
+  }, [location]);
 
   if (cookies.email && !user) {
     return <PageLoader />;

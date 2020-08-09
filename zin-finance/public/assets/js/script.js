@@ -143,6 +143,7 @@
     $toggle_nav.on("click", function (e) {
       $toggle_nav.toggleClass("active");
       $navbar.toggleClass("active");
+      e.stopImmediatePropagation();
       e.preventDefault();
     });
   }

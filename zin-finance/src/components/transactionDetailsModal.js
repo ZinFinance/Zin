@@ -109,7 +109,7 @@ function TransactionDetailsModal() {
                         className="fas fa-info-circle"
                         data-toggle="tooltip"
                         data-placement="bottom"
-                        title
+                        title="1 ETH = 100 TWZ"
                         data-original-title="1 ETH = 100 TWZ"
                       />
                     </span>
@@ -118,7 +118,7 @@ function TransactionDetailsModal() {
                         className="fas fa-info-circle"
                         data-toggle="tooltip"
                         data-placement="bottom"
-                        title
+                        title="1 ETH = 100 TWZ"
                         data-original-title="1 ETH = 100 TWZ"
                       />{" "}
                       $2540.65

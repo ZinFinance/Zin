@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Zin.Services.Services;
 using Zin.Services.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace Zin.Controllers
 {
@@ -23,6 +24,8 @@ namespace Zin.Controllers
             this.configuration = configuration;
         }
 
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Result))]
         [HttpPost("register")]
         public async Task<ActionResult> RegisterAsync(Register register)
         {
@@ -41,6 +44,8 @@ namespace Zin.Controllers
                 Redirect(configuration["UserManager:EmailConfirmFailed"]);
         }
 
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Result))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result))]
         [HttpPost("email/resend")]
         public async Task<ActionResult> ReSendEmailConfirmationAsync([Required, EmailAddress] string email)
         {
@@ -50,6 +55,8 @@ namespace Zin.Controllers
             return BadRequest(result);
         }
 
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Result))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result))]
         [HttpGet("reset")]
         public async Task<ActionResult> PasswordResetAsync(string userName)
         {
@@ -59,6 +66,8 @@ namespace Zin.Controllers
             return BadRequest(result);
         }
 
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Result))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result))]
         [HttpPost("reset/confirm")]
         public async Task<ActionResult> PasswordResetConfirmAsync(PasswordReset passwordReset)
         {
@@ -69,6 +78,8 @@ namespace Zin.Controllers
         }
 
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Result))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result))]
         [HttpPost("changePassword")]
         public async Task<ActionResult> ChangePasswordAsync(ChangePassword changePassword)
         {

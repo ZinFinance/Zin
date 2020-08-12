@@ -7,6 +7,7 @@ using Zin.Services.Services;
 using System;
 using System.Threading.Tasks;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
+using Microsoft.AspNetCore.Http;
 
 namespace Zin.Controllers
 {
@@ -24,6 +25,8 @@ namespace Zin.Controllers
             this.authService = authService;
         }
 
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Result<TempTokenResponse>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<TempTokenResponse>))]
         [HttpPost("login")]
         public async Task<ActionResult> LoginAsync(Login login)
         {
@@ -39,6 +42,8 @@ namespace Zin.Controllers
             return Ok(result);
         }
 
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Result))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result))]
         [HttpPost("login/tfa")]
         public async Task<ActionResult> LoginWithTfaAsync(LoginTfa loginTfa)
         {
@@ -48,6 +53,8 @@ namespace Zin.Controllers
             return BadRequest(result);
         }
 
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Result))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result))]
         [HttpPost("login/tfa/resend")]
         public async Task<ActionResult> ResendLoginTfaCodeAsync(ResendLoginTfaCode resendLoginTfaCode)
         {

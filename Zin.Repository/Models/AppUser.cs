@@ -9,5 +9,7 @@ namespace Zin.Repository.Models
         public string EthAddress { get; set; }
         public string TfaCode { get; set; }
         public string ReferralCode { get; set; }
+        public string ZinTokens { get; set; }
+        public string ReferralZinTokens { get; set; }
     }
 }

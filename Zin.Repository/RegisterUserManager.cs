@@ -9,6 +9,8 @@ namespace Zin.Repository
         public static void AddRepositories(this IServiceCollection services)
         {
             services.AddTransient<IReferralCodeRepository, ReferralCodeRepository>();
+            services.AddTransient<IRegisteredTxRepository, RegisteredTxRepository>();
+            services.AddTransient<IUserBalanceRepository, UserBalanceRepository>();
         }
     }
 }

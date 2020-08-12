@@ -11,6 +11,7 @@ namespace Zin.Services
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IProfileService, ProfileService>();
+            services.AddTransient<IEthTxCheckService, EthTxCheckService>();
         }
     }
 }

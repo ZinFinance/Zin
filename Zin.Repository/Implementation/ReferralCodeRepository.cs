@@ -9,7 +9,7 @@ using Zin.Repository.Repository;
 
 namespace Zin.Repository.Implementation
 {
-    class ReferralCodeRepository : IReferralCodeRepository
+    public class ReferralCodeRepository : IReferralCodeRepository
     {
         private readonly AppDbContext appDbContext;
 
@@ -34,6 +34,16 @@ namespace Zin.Repository.Implementation
         {
             var existedUser = await appDbContext.Users.FindAsync(userName);
             return existedUser.ReferralCode;
+        }
+
+        public async Task<AppUser> GetUserByReferralCodeAsync(string referralCode)
+        {
+            if(string.IsNullOrWhiteSpace(referralCode))
+                return null;
+            var existedUsers = await appDbContext.Users.Where(x => x.ReferralCode.Equals(referralCode)).ToListAsync();
+            if (existedUsers.Count <= 0)
+                return null;
+            return existedUsers.First();
         }
 
 

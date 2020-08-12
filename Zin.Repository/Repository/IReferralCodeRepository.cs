@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Zin.Repository.Models;
 
 namespace Zin.Repository.Repository
 {
@@ -6,5 +7,6 @@ namespace Zin.Repository.Repository
     {
         Task<string> GetNewReferralCodeAsync();
         Task<string> GetReferralCodeByUserNameAsync(string userName);
+        Task<AppUser> GetUserByReferralCodeAsync(string referralCode);
     }
 }

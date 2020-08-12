@@ -10,5 +10,12 @@ namespace Zin.Repository.DbContext
         {
             Database.Migrate();
         }
+
+        public DbSet<RegisteredTx> RegisteredTx { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
     }
 }

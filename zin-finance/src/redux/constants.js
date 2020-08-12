@@ -1,0 +1,9 @@
+//User constants
+export const FETCH_USER = "FETCH_USER";
+export const LOGOUT_USER = "LOGOUT_USER";
+export const REGISTER_USER = "REGISTER_USER";
+export const SET_EMAIL_CONFIRM = "SET_EMAIL_CONFIRM";
+
+//KYC constants
+export const SET_KYC_ACCESS_TOKEN = "SET_KYC_ACCESS_TOKEN";
+export const SET_KYC_APPLICATION_STATUS = "SET_KYC_APPLICATION_STATUS";

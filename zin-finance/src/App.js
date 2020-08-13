@@ -8,7 +8,7 @@ import NonAuthContent from "./components/nonAuthContent";
 import AuthRoutes from "./routes/authRoutes";
 import NonAuthRoutes from "./routes/nonAuthRoutes";
 
-import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 
 import { fetchUser } from "./redux/actions/userActions";
 import {
@@ -23,35 +23,31 @@ function App() {
   const emailVerified = useSelector((state) => state.userReducer.emailVerified);
   const dispatch = useDispatch();
   const location = useLocation();
-  const [cookies, setCookie] = useCookies(["email"]);
 
   useEffect(() => {
-    if (user && user.id && emailVerified) {
-      dispatch(getKYCAccessToken(user.id));
-      dispatch(getKYCApplicationStatus(user.id));
+    if (user && user.userName && emailVerified) {
+      dispatch(getKYCAccessToken(user.userName));
+      dispatch(getKYCApplicationStatus(user.userName));
     }
   }, [user, dispatch, emailVerified]);
 
   useEffect(() => {
     console.log("user changed", user);
-    if (user && !cookies.email) {
-      setCookie("email", user.email, { path: "/" });
-    } else if (!user && cookies.email) {
+    if (!user && Cookies.get('userName')) {
       setTimeout(
         () =>
           dispatch(
             fetchUser({
-              email: cookies.email,
-              id: "testing123",
+              userName: Cookies.get('userName')
             })
           ),
         1000
       );
     }
-  }, [user, cookies.email, dispatch, setCookie]);
+  }, [user, dispatch]);
+
 
   useEffect(() => {
-    console.log("location changed", location);
     const script = document.createElement("script");
     script.id = "_themeScript";
     script.src = "/assets/js/script.js?ver=104";
@@ -62,9 +58,9 @@ function App() {
       console.log("removing script");
       document.body.removeChild(script);
     };
-  }, [location]);
+  }, [user, location]);
 
-  if (cookies.email && !user) {
+  if (Cookies.get('userName') && !user) {
     return <PageLoader />;
   } else if (user) {
     return (

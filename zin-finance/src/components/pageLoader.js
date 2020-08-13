@@ -13,7 +13,7 @@ function PageLoader(props) {
     >
       <Loader
         type="Puff"
-        color="#2C80FF"
+        color="#165e50"
         height={props.height ? props.height : 100}
         width={props.width ? props.width : 100}
       />

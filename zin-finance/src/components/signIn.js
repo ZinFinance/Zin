@@ -1,20 +1,28 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { fetchUser } from "../redux/actions/userActions";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
+import Loader from "react-loader-spinner";
 
-function SignIn(props) {
+function SignIn() {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const loginError = useSelector((state) => state.userReducer.loginError);
 
-  function signIn() {
+  useEffect(() => {
+    if (loginError) {
+      setLoading(false)
+    }
+  }, [loginError])
+
+  function signIn(e) {
+    e.preventDefault();
+    setLoading(true)
     dispatch(
-      fetchUser({
-        email,
-        id: "testing123",
-        emailVerified: email === "bjafri5@gmail.com",
-      })
+      login(userName, password, rememberMe)
     );
   }
 
@@ -23,18 +31,20 @@ function SignIn(props) {
       <h2 className="page-ath-heading">
         Sign in <small>with your TokenWiz Account</small>
       </h2>
-      <form action="index.html">
+      <form onSubmit={signIn}>
         <div className="input-item">
           <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            required
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
             type="text"
-            placeholder="Your Email"
+            placeholder="Your Username"
             className="input-bordered"
           />
         </div>
         <div className="input-item">
           <input
+            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             type="password"
@@ -45,6 +55,7 @@ function SignIn(props) {
         <div className="d-flex justify-content-between align-items-center">
           <div className="input-item text-left">
             <input
+              onChange={(e) => setRememberMe(e.target.checked)}
               className="input-checkbox input-checkbox-md"
               id="remember-me"
               type="checkbox"
@@ -56,11 +67,29 @@ function SignIn(props) {
             <div className="gaps-2x" />
           </div>
         </div>
-        <button onClick={signIn} className="btn btn-primary btn-block">
-          Sign In
-        </button>
+        {
+          loading ?
+            <button disabled className="btn btn-primary btn-block">
+              <Loader
+                style={{
+                  display: 'inline-block',
+                  marginRight: '10px'
+                }}
+                type="TailSpin"
+                color="white"
+                height={25}
+                width={25}
+              />
+              <span>Signing In...</span>
+            </button> :
+            <button disabled={loading} className="btn btn-primary btn-block">Sign In</button>
+        }
+        {
+          loginError &&
+          <div style={{ color: 'red', marginTop: '10px' }}>{loginError}</div>
+        }
       </form>
-      <div className="sap-text">
+      {/* <div className="sap-text">
         <span>Or Sign In With</span>
       </div>
       <ul className="row guttar-20px guttar-vr-20px">
@@ -79,7 +108,7 @@ function SignIn(props) {
             <span>Google</span>
           </a>
         </li>
-      </ul>
+      </ul> */}
       <div className="gaps-2x" />
       <div className="gaps-2x" />
       <div className="form-note">

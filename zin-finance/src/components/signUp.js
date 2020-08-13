@@ -1,8 +1,9 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
 import { registerUser } from "../redux/actions/userActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from 'react-router-dom'
+import Loader from "react-loader-spinner";
 
 const initialState = {
   userName: "",
@@ -12,7 +13,7 @@ const initialState = {
   password: "",
   confirmPassword: "",
   ethAddress: "",
-};
+}
 
 function reducer(state, { field, value }) {
   return {
@@ -23,7 +24,23 @@ function reducer(state, { field, value }) {
 
 function SignUp(props) {
   const [form, updateForm] = useReducer(reducer, initialState);
+  const justRegistered = useSelector((state) => state.userReducer.justRegistered);
+  const registerError = useSelector((state) => state.userReducer.registerError);
   const dispatch = useDispatch();
+  const history = useHistory()
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (justRegistered) {
+      history.push('/sign-up-success')
+    }
+  }, [justRegistered])
+
+  useEffect(() => {
+    if (registerError) {
+      setLoading(false)
+    }
+  }, [registerError])
 
   const {
     userName,
@@ -48,7 +65,10 @@ function SignUp(props) {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(registerUser(form));
+    setLoading(true)
+    setTimeout(() => {
+      dispatch(registerUser(form));
+    }, 5000)
   };
 
   return (
@@ -141,6 +161,7 @@ function SignUp(props) {
         </div>
         <div className="input-item text-left">
           <input
+            required
             className="input-checkbox input-checkbox-md"
             id="term-condition"
             type="checkbox"
@@ -150,7 +171,28 @@ function SignUp(props) {
             &amp; <a href="regular-page.html"> Terms.</a>
           </label>
         </div>
-        <button className="btn btn-primary btn-block">Create Account</button>
+        {
+          loading ?
+            <button disabled className="btn btn-primary btn-block">
+              <Loader
+
+                style={{
+                  display: 'inline-block',
+                  marginRight: '10px'
+                }}
+                type="TailSpin"
+                color="white"
+                height={25}
+                width={25}
+              />
+              <span>Creating Account...</span>
+            </button> :
+            <button disabled={loading} className="btn btn-primary btn-block">Create Account</button>
+        }
+        {
+          registerError &&
+          <div style={{ color: 'red', marginTop: '10px' }}>{registerError}</div>
+        }
       </form>
       {/* <div className="sap-text">
         <span>Or Sign Up With</span>

@@ -3,14 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 function Navbar() {
   const user = useSelector((state) => state.userReducer.user);
   const emailVerified = useSelector((state) => state.userReducer.emailVerified);
   const dispatch = useDispatch();
   const location = useLocation();
-  const [, , removeCookie] = useCookies(["email"]);
   const [resendEmailData, setResendEmailData] = useState({
     text: "Resend Email",
     disabled: false,
@@ -18,7 +16,6 @@ function Navbar() {
   });
 
   function logout() {
-    removeCookie("email");
     dispatch(logoutUser());
   }
 
@@ -71,7 +68,7 @@ function Navbar() {
             </ul>
             <a className="topbar-logo" href="./">
               <img
-                src="images/logo-light2x.png"
+                src="images/logo-light.png"
                 srcSet="images/logo-light2x.png 2x"
                 alt="logo"
               />
@@ -79,7 +76,7 @@ function Navbar() {
             <ul className="topbar-nav">
               <li className="topbar-nav-item relative">
                 <span className="user-welcome d-none d-lg-inline-block">
-                  Welcome {user.email}!
+                  Welcome {user.userName}!
                 </span>
                 <a className="toggle-tigger user-thumb" href="#">
                   <em className="ti ti-user"></em>

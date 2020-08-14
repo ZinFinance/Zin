@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { resendEmail } from "../redux/actions/userActions";
+import AsyncButton from "./AsyncButton";
 
 function Navbar() {
   const user = useSelector((state) => state.userReducer.user);
@@ -13,17 +15,37 @@ function Navbar() {
     text: "Resend Email",
     disabled: false,
     loading: false,
+    error: false,
   });
 
   function logout() {
     dispatch(logoutUser());
   }
 
-  function resendEmail() {
+  async function resendConfirmationEmail() {
     setResendEmailData({
-      text: "Email sent",
+      text: "Sending Email...",
       disabled: true,
+      loading: true,
     });
+    setTimeout(async () => {
+      let error = await resendEmail(user.email);
+      if (error) {
+        setResendEmailData({
+          text: "Resend Email",
+          disabled: false,
+          loading: false,
+          error,
+        });
+      } else {
+        setResendEmailData({
+          text: "Email sent",
+          disabled: true,
+          loading: false,
+          error: false,
+        });
+      }
+    }, 1000);
   }
 
   return (
@@ -39,7 +61,26 @@ function Navbar() {
           >
             Please verify your email address and refresh in order to perform any
             actions
-            <button
+            <AsyncButton
+              loading={resendEmailData.loading}
+              buttonProps={{
+                disabled: resendEmailData.disabled,
+                onClick: resendConfirmationEmail,
+                style: {
+                  marginLeft: "25px",
+                  cursor: resendEmailData.disabled ? "not-allowed" : "pointer",
+                },
+              }}
+              defaultText={resendEmailData.text}
+              loadingText={resendEmailData.text}
+              buttonClasses="btn-warning btn-sm"
+            />
+            {resendEmailData.error && (
+              <div style={{ marginTop: "10px" }} className="text-danger">
+                {resendEmailData.error}
+              </div>
+            )}
+            {/* <button
               disabled={resendEmailData.disabled}
               onClick={resendEmail}
               style={{
@@ -49,7 +90,7 @@ function Navbar() {
               className="btn btn-warning btn-sm"
             >
               {resendEmailData.text}
-            </button>
+            </button> */}
           </div>
         )}
         <div className="container">
@@ -76,7 +117,7 @@ function Navbar() {
             <ul className="topbar-nav">
               <li className="topbar-nav-item relative">
                 <span className="user-welcome d-none d-lg-inline-block">
-                  Welcome {user.userName}!
+                  Welcome {user.firstName}!
                 </span>
                 <a className="toggle-tigger user-thumb" href="#">
                   <em className="ti ti-user"></em>

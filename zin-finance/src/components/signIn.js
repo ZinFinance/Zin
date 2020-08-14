@@ -1,44 +1,55 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useReducer } from "react";
+import { useDispatch } from "react-redux";
 import { login } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
-import Loader from "react-loader-spinner";
+import AsyncButton from "./AsyncButton";
 
 function SignIn() {
   const dispatch = useDispatch();
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const loginError = useSelector((state) => state.userReducer.loginError);
+  const [state, setState] = useReducer(reducer, {
+    email: "",
+    password: "",
+    rememberMe: false,
+    error: false,
+    loading: false,
+  });
 
-  useEffect(() => {
-    if (loginError) {
-      setLoading(false)
-    }
-  }, [loginError])
+  function reducer(state, newState) {
+    return {
+      ...state,
+      ...newState,
+    };
+  }
+
+  const { email, password, rememberMe, loading, error } = state;
 
   function signIn(e) {
     e.preventDefault();
-    setLoading(true)
-    dispatch(
-      login(userName, password, rememberMe)
-    );
+    setState({ loading: true });
+    setTimeout(() => {
+      dispatch(
+        login(email, password, rememberMe, (error) => {
+          if (error) {
+            setState({ loading: false, error });
+          }
+        })
+      );
+    }, 1000);
   }
 
   return (
     <div className="page-ath-form">
       <h2 className="page-ath-heading">
-        Sign in <small>with your TokenWiz Account</small>
+        Sign in <small>with your Zin Account</small>
       </h2>
       <form onSubmit={signIn}>
         <div className="input-item">
           <input
             required
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            type="text"
-            placeholder="Your Username"
+            value={email}
+            onChange={(e) => setState({ email: e.target.value })}
+            type="email"
+            placeholder="Your Email"
             className="input-bordered"
           />
         </div>
@@ -46,7 +57,7 @@ function SignIn() {
           <input
             required
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => setState({ password: e.target.value })}
             type="password"
             placeholder="Password"
             className="input-bordered"
@@ -55,7 +66,7 @@ function SignIn() {
         <div className="d-flex justify-content-between align-items-center">
           <div className="input-item text-left">
             <input
-              onChange={(e) => setRememberMe(e.target.checked)}
+              onChange={(e) => setState({ rememberMe: e.target.checked })}
               className="input-checkbox input-checkbox-md"
               id="remember-me"
               type="checkbox"
@@ -67,27 +78,13 @@ function SignIn() {
             <div className="gaps-2x" />
           </div>
         </div>
-        {
-          loading ?
-            <button disabled className="btn btn-primary btn-block">
-              <Loader
-                style={{
-                  display: 'inline-block',
-                  marginRight: '10px'
-                }}
-                type="TailSpin"
-                color="white"
-                height={25}
-                width={25}
-              />
-              <span>Signing In...</span>
-            </button> :
-            <button disabled={loading} className="btn btn-primary btn-block">Sign In</button>
-        }
-        {
-          loginError &&
-          <div style={{ color: 'red', marginTop: '10px' }}>{loginError}</div>
-        }
+        <AsyncButton
+          loading={loading}
+          loadingText={"Singing In..."}
+          defaultText={"Sign In"}
+          buttonClasses="btn-primary btn-block"
+        />
+        {error && <span className="text-danger">{error}</span>}
       </form>
       {/* <div className="sap-text">
         <span>Or Sign In With</span>

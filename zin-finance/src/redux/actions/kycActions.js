@@ -4,8 +4,8 @@ import * as ActionTypes from "../constants";
 
 // These parameters should be used for all requests
 const SUMSUB_APP_TOKEN =
-  "tst:KnL8G5jjXawwMWlwZyt9eYA6.158aUzdUJFVhPKGEL0gkXSqViQ9J3zS7";
-const SUMSUB_SECRET_KEY = "bpsCYQIckv6ogdFelm5Gh6GDbh2jeOnF";
+  "tst:nuJhopWJuLu0DtyHLzFvJBfu.gr9aUzPO0O64SYqqfmHn69oOMtpYwLWV";
+const SUMSUB_SECRET_KEY = "X0WjbSEfmq4b82h9M08zkokym21692KO";
 const CORS_PROXY_URL = "https://cors-anywhere.herokuapp.com/";
 export const SUMSUB_BASE_URL = "https://test-api.sumsub.com"; // Don't forget to change when switching to production
 const REQUEST_URL = CORS_PROXY_URL + SUMSUB_BASE_URL;
@@ -56,8 +56,11 @@ function createAccessToken(externalUserId, ttlInSecs = 600) {
 async function getAccessToken(externalUserId) {
   //   let externalUserId =
   //     "random-JSToken-" + Math.random().toString(36).substr(2, 9);
+  externalUserId = crypto
+    .createHash("md5")
+    .update(externalUserId)
+    .digest("hex");
   console.log("External UserID: ", externalUserId);
-
   let response = await axios(createAccessToken(externalUserId, 1200));
   console.log("access token response", response.data);
   return response.data.token;

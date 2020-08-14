@@ -357,6 +357,7 @@
   var $data_table_filter = $(".dt-filter-init");
   if ($data_table_filter.length > 0) {
     var $data_table_fltr = $data_table_filter.DataTable({
+      bDestroy: true,
       ordering: false,
       autoWidth: false,
       dom:

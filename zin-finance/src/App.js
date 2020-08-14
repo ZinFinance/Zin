@@ -25,27 +25,18 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    if (user && user.userName && emailVerified) {
-      dispatch(getKYCAccessToken(user.userName));
-      dispatch(getKYCApplicationStatus(user.userName));
+    if (user && user.email && emailVerified) {
+      dispatch(getKYCAccessToken(user.email));
+      dispatch(getKYCApplicationStatus(user.email));
     }
   }, [user, dispatch, emailVerified]);
 
   useEffect(() => {
     console.log("user changed", user);
-    if (!user && Cookies.get('userName')) {
-      setTimeout(
-        () =>
-          dispatch(
-            fetchUser({
-              userName: Cookies.get('userName')
-            })
-          ),
-        1000
-      );
+    if (!user && Cookies.get("token")) {
+      setTimeout(() => dispatch(fetchUser(Cookies.get("token"))), 1000);
     }
   }, [user, dispatch]);
-
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -60,7 +51,7 @@ function App() {
     };
   }, [user, location]);
 
-  if (Cookies.get('userName') && !user) {
+  if (Cookies.get("token") && !user) {
     return <PageLoader />;
   } else if (user) {
     return (

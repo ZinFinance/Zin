@@ -23,7 +23,7 @@ function NonAuthContent(props) {
               <li>
                 <a href="regular-page.html">Terms</a>
               </li>
-              <li>© 2018 TokenWiz.</li>
+              <li>© {new Date().getFullYear()} Zin.</li>
             </ul>
           </div>
         </div>

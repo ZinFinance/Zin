@@ -1,56 +1,41 @@
-import React, { useReducer, useEffect, useState } from "react";
+import React, { useReducer } from "react";
 import { Link } from "react-router-dom";
 import { registerUser } from "../redux/actions/userActions";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from 'react-router-dom'
-import Loader from "react-loader-spinner";
+import { useHistory } from "react-router-dom";
+import AsyncButton from "./AsyncButton";
 
 const initialState = {
-  userName: "",
   firstName: "",
   lastName: "",
   email: "",
   password: "",
   confirmPassword: "",
   ethAddress: "",
-}
+  loading: false,
+  error: false,
+};
 
-function reducer(state, { field, value }) {
+function reducer(state, newState) {
   return {
     ...state,
-    [field]: value,
+    ...newState,
   };
 }
 
-function SignUp(props) {
-  const [form, updateForm] = useReducer(reducer, initialState);
-  const justRegistered = useSelector((state) => state.userReducer.justRegistered);
-  const registerError = useSelector((state) => state.userReducer.registerError);
-  const dispatch = useDispatch();
-  const history = useHistory()
-  const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    if (justRegistered) {
-      history.push('/sign-up-success')
-    }
-  }, [justRegistered])
-
-  useEffect(() => {
-    if (registerError) {
-      setLoading(false)
-    }
-  }, [registerError])
+function SignUp() {
+  const [state, setState] = useReducer(reducer, initialState);
+  const history = useHistory();
 
   const {
-    userName,
     firstName,
     lastName,
     email,
     password,
     confirmPassword,
     ethAddress,
-  } = form;
+    loading,
+    error,
+  } = state;
 
   const onChange = (e) => {
     if (e.target.name === "confirmPassword") {
@@ -60,15 +45,26 @@ function SignUp(props) {
         e.target.setCustomValidity("");
       }
     }
-    updateForm({ field: e.target.name, value: e.target.value });
+    setState({ [e.target.name]: e.target.value });
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true)
-    setTimeout(() => {
-      dispatch(registerUser(form));
-    }, 5000)
+    setState({ loading: true });
+    setTimeout(async () => {
+      let error = await registerUser({
+        userName: email,
+        email,
+        firstName,
+        lastName,
+        ethAddress,
+      });
+      if (error) {
+        setState({ error, loading: false });
+      } else {
+        history.push("/sign-up-success", { justRegistered: true });
+      }
+    }, 1000);
   };
 
   return (
@@ -77,17 +73,6 @@ function SignUp(props) {
         Sign up <small>Create New Zin Account</small>
       </h2>
       <form onSubmit={onSubmit}>
-        <div className="input-item">
-          <input
-            required
-            name="userName"
-            value={userName}
-            onChange={onChange}
-            type="text"
-            placeholder="Username"
-            className="input-bordered"
-          />
-        </div>
         <div className="input-item">
           <input
             required
@@ -167,32 +152,19 @@ function SignUp(props) {
             type="checkbox"
           />
           <label htmlFor="term-condition">
-            I agree to TokenWiz’s <a href="regular-page.html">Privacy Policy</a>{" "}
+            I agree to Zin's <a href="regular-page.html">Privacy Policy</a>{" "}
             &amp; <a href="regular-page.html"> Terms.</a>
           </label>
         </div>
-        {
-          loading ?
-            <button disabled className="btn btn-primary btn-block">
-              <Loader
-
-                style={{
-                  display: 'inline-block',
-                  marginRight: '10px'
-                }}
-                type="TailSpin"
-                color="white"
-                height={25}
-                width={25}
-              />
-              <span>Creating Account...</span>
-            </button> :
-            <button disabled={loading} className="btn btn-primary btn-block">Create Account</button>
-        }
-        {
-          registerError &&
-          <div style={{ color: 'red', marginTop: '10px' }}>{registerError}</div>
-        }
+        <AsyncButton
+          loading={loading}
+          defaultText="Create Account"
+          loadingText="Creating Account..."
+          buttonClasses="btn-primary btn-block"
+        />
+        {error && (
+          <div style={{ color: "red", marginTop: "10px" }}>{error}</div>
+        )}
       </form>
       {/* <div className="sap-text">
         <span>Or Sign Up With</span>

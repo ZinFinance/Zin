@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useCheckEmailVerified } from "../auth";
+import { useCheckEmailVerified } from "../utility";
 
-function Dashboard(props) {
+function Dashboard() {
   const user = useSelector((state) => state.userReducer.user);
   const disabled = useCheckEmailVerified(user);
 
@@ -15,7 +15,7 @@ function Dashboard(props) {
             <div className="card-innr">
               <div className="token-balance token-balance-with-icon">
                 <div className="token-balance-icon">
-                  <img src="images/logo-light-sm.png" alt="logo" />
+                  <img src="/images/logo-light-sm.png" alt="logo" />
                 </div>
                 <div className="token-balance-text">
                   <h6 className="card-sub-title">Tokens Balance</h6>
@@ -52,7 +52,7 @@ function Dashboard(props) {
                 <div className="token-info">
                   <img
                     className="token-info-icon"
-                    src="images/logo-sm.png"
+                    src="/images/logo-sm.png"
                     alt="logo-sm"
                   />
                   <div className="gaps-2x" />

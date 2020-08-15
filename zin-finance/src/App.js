@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 
 import AppContent from "./components/appContent";
 import NonAuthContent from "./components/nonAuthContent";
@@ -23,20 +23,31 @@ function App() {
   const emailVerified = useSelector((state) => state.userReducer.emailVerified);
   const dispatch = useDispatch();
   const location = useLocation();
+  const history = useHistory();
+  const [redirect, setRedirect] = useState("");
 
   useEffect(() => {
-    if (user && user.email && emailVerified) {
+    if (!user && location.search) {
+      setRedirect(location.search.substring(1));
+    } else if (user && redirect) {
+      history.push(redirect);
+      setRedirect("");
+    }
+  }, [location.search]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const shouldFetchKYCInfo = user && user.email && emailVerified;
+  useEffect(() => {
+    if (shouldFetchKYCInfo) {
       dispatch(getKYCAccessToken(user.email));
       dispatch(getKYCApplicationStatus(user.email));
     }
-  }, [user, dispatch, emailVerified]);
+  }, [shouldFetchKYCInfo]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    console.log("user changed", user);
     if (!user && Cookies.get("token")) {
       setTimeout(() => dispatch(fetchUser(Cookies.get("token"))), 1000);
     }
-  }, [user, dispatch]);
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const script = document.createElement("script");

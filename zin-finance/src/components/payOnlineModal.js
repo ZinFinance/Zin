@@ -27,7 +27,7 @@ function PayOnlineModal() {
                   id="pay-coin"
                 />
                 <label className="pay-check-label" htmlFor="pay-coin">
-                  <img src="images/pay-a.png" alt="pay-logo" />
+                  <img src="/images/pay-a.png" alt="pay-logo" />
                 </label>
               </li>
               <li className="pay-item">
@@ -38,7 +38,7 @@ function PayOnlineModal() {
                   id="pay-coinpay"
                 />
                 <label className="pay-check-label" htmlFor="pay-coinpay">
-                  <img src="images/pay-b.png" alt="pay-logo" />
+                  <img src="/images/pay-b.png" alt="pay-logo" />
                 </label>
               </li>
               <li className="pay-item">
@@ -49,7 +49,7 @@ function PayOnlineModal() {
                   id="pay-paypal"
                 />
                 <label className="pay-check-label" htmlFor="pay-paypal">
-                  <img src="images/pay-c.png" alt="pay-logo" />
+                  <img src="/images/pay-c.png" alt="pay-logo" />
                 </label>
               </li>
             </ul>

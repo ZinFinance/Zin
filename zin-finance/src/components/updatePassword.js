@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import { useCheckEmailVerified } from "../auth";
+import { useCheckEmailVerified } from "../utility";
 import { updatePassword } from "../redux/actions/userActions";
 import AsyncButton from "./AsyncButton";
 

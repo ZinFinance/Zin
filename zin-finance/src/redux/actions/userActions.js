@@ -60,6 +60,27 @@ export async function registerUser(data) {
   }
 }
 
+export async function resetPassword(userName) {
+  try {
+    if (userName === verifiedTestAccount.email) {
+      return null;
+    }
+    let response = await axios.get("/api/Account/reset", null, {
+      params: {
+        userName,
+      },
+    });
+    if (response.status === 200) {
+      return null;
+    } else {
+      return response.data.message;
+    }
+  } catch (err) {
+    console.log("error resetting password", err);
+    return DEFAULT_ERROR;
+  }
+}
+
 export function login(email, password, rememberMe, callback) {
   return async (dispatch) => {
     try {
@@ -186,6 +207,9 @@ export async function updatePassword(data) {
 
 export async function resendEmail(email) {
   try {
+    if (email === unverifiedTestAccount.email) {
+      return null;
+    }
     let resendResponse = await axios.post("/api​/Account/email/resent", null, {
       headers: {
         Authorization: `Bearer ${Cookies.get("token")}`,
@@ -225,6 +249,11 @@ function _fetchUser(token) {
       if (token === verifiedTestAccount.email) {
         resolve({
           data: verifiedTestAccount,
+        });
+        return;
+      } else if (token === unverifiedTestAccount.email) {
+        resolve({
+          data: unverifiedTestAccount,
         });
         return;
       }

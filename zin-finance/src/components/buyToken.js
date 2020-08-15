@@ -1,8 +1,8 @@
 import React from "react";
-import AddWalletModal from "./addWalletModal";
+import WalletModal from "./walletModal";
 import GetPaymentAddressModal from "./getPaymentAddressModal";
 import PayOnlineModal from "./payOnlineModal";
-import { useCheckEmailVerified } from "../auth";
+import { useCheckEmailVerified } from "../utility";
 
 function BuyToken() {
   const disabled = useCheckEmailVerified();
@@ -10,7 +10,7 @@ function BuyToken() {
 
   return (
     <div className="container">
-      <AddWalletModal />
+      <WalletModal />
       <GetPaymentAddressModal />
       <PayOnlineModal />
       <div className="row">
@@ -19,10 +19,10 @@ function BuyToken() {
             <button
               {...disabled}
               data-toggle="modal"
-              data-target="#add-wallet"
+              data-target="#edit-wallet"
               className="btn btn-danger btn-xl btn-between w-100 mgb-1-5x"
             >
-              Add your wallet address before buy{" "}
+              Edit your wallet address before buying{" "}
               <em className="ti ti-arrow-right" />
             </button>
             <div className="gaps-1x mgb-0-5x d-lg-none d-none d-sm-block" />
@@ -289,10 +289,10 @@ function BuyToken() {
             <button
               {...disabled}
               data-toggle="modal"
-              data-target="#add-wallet"
+              data-target="#edit-wallet"
               className="btn btn-danger btn-xl btn-between w-100"
             >
-              Add your wallet address before buy{" "}
+              Edit your wallet address before buying{" "}
               <em className="ti ti-arrow-right" />
             </button>
             <div className="gaps-3x" />

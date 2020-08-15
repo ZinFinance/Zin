@@ -11,11 +11,11 @@ function AuthRoutes() {
   return (
     <Switch>
       <Route exact path="/" component={Dashboard} />
-      <Route path="/profile" component={Profile} />
-      <Route path="/transactions" component={Transactions} />
-      <Route path="/kyc-application" component={KYCApplication} />
-      <Route path="/kyc-form" component={KYCForm} />
-      <Route path="/buy-token" component={BuyToken} />
+      <Route exact path="/profile" component={Profile} />
+      <Route exact path="/transactions" component={Transactions} />
+      <Route exact path="/kyc-application" component={KYCApplication} />
+      <Route exact path="/kyc-form" component={KYCForm} />
+      <Route exact path="/buy-token" component={BuyToken} />
       <Redirect path="*" to="/" />
     </Switch>
   );

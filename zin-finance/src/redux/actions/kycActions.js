@@ -88,6 +88,10 @@ function getApplicantData(externalUserId) {
   console.log("Getting the applicant status...");
 
   var method = "get";
+  externalUserId = crypto
+    .createHash("md5")
+    .update(externalUserId)
+    .digest("hex");
   var url = `/resources/applicants/-;externalUserId=${externalUserId}/one`;
 
   var headers = {

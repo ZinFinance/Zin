@@ -7,8 +7,8 @@ import AsyncButton from "./AsyncButton";
 function SignIn() {
   const dispatch = useDispatch();
   const [state, setState] = useReducer(reducer, {
-    email: "",
-    password: "",
+    email: "admin@admin.com",
+    password: "admin",
     rememberMe: false,
     error: false,
     loading: false,
@@ -84,7 +84,11 @@ function SignIn() {
           defaultText={"Sign In"}
           buttonClasses="btn-primary btn-block"
         />
-        {error && <span className="text-danger">{error}</span>}
+        {error && (
+          <div style={{ marginTop: "10px" }} className="text-danger">
+            {error}
+          </div>
+        )}
       </form>
       {/* <div className="sap-text">
         <span>Or Sign In With</span>

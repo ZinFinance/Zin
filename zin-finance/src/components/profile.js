@@ -1,7 +1,7 @@
 import React, { useReducer } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { useCheckEmailVerified } from "../auth";
+import { useCheckEmailVerified } from "../utility";
 import { updateUser } from "../redux/actions/userActions";
 
 import WalletModal from "./walletModal";

@@ -8,8 +8,8 @@ function NonAuthContent(props) {
           <div className="page-ath-header">
             <a href="./" className="page-ath-logo">
               <img
-                src="images/logo.png"
-                srcSet="images/logo2x.png 2x"
+                src="/images/logo.png"
+                srcSet="/images/logo2x.png 2x"
                 alt="logo"
               />
             </a>
@@ -30,7 +30,7 @@ function NonAuthContent(props) {
         <div className="page-ath-gfx">
           <div className="w-100 d-flex justify-content-center">
             <div className="col-md-8 col-xl-5">
-              <img src="images/ath-gfx.png" alt="gfx" />
+              <img src="/images/ath-gfx.png" alt="gfx" />
             </div>
           </div>
         </div>

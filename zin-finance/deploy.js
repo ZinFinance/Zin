@@ -1,7 +1,5 @@
 const ftp = require("basic-ftp");
 
-deploy();
-
 async function deploy() {
   const client = new ftp.Client();
   client.ftp.verbose = true;
@@ -15,6 +13,9 @@ async function deploy() {
     await client.uploadFromDir(__dirname + "/build", "site/wwwroot/");
   } catch (err) {
     console.log("Deploy Error", err);
+  } finally {
+    client.close();
   }
-  client.close();
 }
+
+deploy();

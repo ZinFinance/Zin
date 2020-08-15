@@ -109,8 +109,8 @@ function Navbar() {
             </ul>
             <a className="topbar-logo" href="./">
               <img
-                src="images/logo-light.png"
-                srcSet="images/logo-light2x.png 2x"
+                src="/images/logo-light.png"
+                srcSet="/images/logo-light2x.png 2x"
                 alt="logo"
               />
             </a>
@@ -163,14 +163,22 @@ function Navbar() {
                   <em className="ikon ikon-dashboard"></em> Dashboard
                 </Link>
               </li>
-              <li className={location.pathname === "/profile" ? "active" : ""}>
+              <li
+                className={
+                  location.pathname.replace(/\//g, "") === "profile"
+                    ? "active"
+                    : ""
+                }
+              >
                 <Link to="/profile">
                   <em className="ikon ikon-user"></em> Profile
                 </Link>
               </li>
               <li
                 className={
-                  location.pathname === "/transactions" ? "active" : ""
+                  location.pathname.replace(/\//g, "") === "transactions"
+                    ? "active"
+                    : ""
                 }
               >
                 <Link to="/transactions">
@@ -178,7 +186,11 @@ function Navbar() {
                 </Link>
               </li>
               <li
-                className={location.pathname === "/buy-token" ? "active" : ""}
+                className={
+                  location.pathname.replace(/\//g, "") === "buy-token"
+                    ? "active"
+                    : ""
+                }
               >
                 <Link to="/buy-token">
                   <em className="ikon ikon-coins"></em> Buy Tokens

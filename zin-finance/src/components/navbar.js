@@ -107,13 +107,15 @@ function Navbar() {
                 </span>
               </li>
             </ul>
-            <a className="topbar-logo" href="./">
-              <img
-                src="/images/logo-light.png"
-                srcSet="/images/logo-light2x.png 2x"
-                alt="logo"
-              />
-            </a>
+            <Link to="/">
+              <span className="topbar-logo">
+                <img
+                  src="/images/logo-light.png"
+                  srcSet="/images/logo-light2x.png 2x"
+                  alt="logo"
+                />
+              </span>
+            </Link>
             <ul className="topbar-nav">
               <li className="topbar-nav-item relative">
                 <span className="user-welcome d-none d-lg-inline-block">
@@ -196,10 +198,16 @@ function Navbar() {
                   <em className="ikon ikon-coins"></em> Buy Tokens
                 </Link>
               </li>
-              <li>
-                <a href="ico-distribution.html">
-                  <em className="ikon ikon-exchange"></em> Refferal
-                </a>
+              <li
+                className={
+                  location.pathname.replace(/\//g, "") === "referral"
+                    ? "active"
+                    : ""
+                }
+              >
+                <Link to="/referral">
+                  <em className="ikon ikon-exchange"></em> Referral
+                </Link>
               </li>
             </ul>
             <ul className="navbar-btns">

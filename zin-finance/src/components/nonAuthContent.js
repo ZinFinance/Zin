@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function NonAuthContent(props) {
   return (
@@ -6,13 +7,13 @@ function NonAuthContent(props) {
       <div className="page-ath-wrap">
         <div className="page-ath-content">
           <div className="page-ath-header">
-            <a href="./" className="page-ath-logo">
+            <Link to="/sign-in" className="page-ath-logo">
               <img
                 src="/images/logo.png"
                 srcSet="/images/logo2x.png 2x"
                 alt="logo"
               />
-            </a>
+            </Link>
           </div>
           {props.children}
           <div className="page-ath-footer">

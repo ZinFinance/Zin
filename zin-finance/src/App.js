@@ -28,7 +28,7 @@ function App() {
 
   useEffect(() => {
     if (!user && location.search && !redirect) {
-      setRedirect(location.search.substring(1));
+      setRedirect(new URLSearchParams(location.search).get("continue"));
     } else if (user && !location.search && redirect) {
       history.push(redirect);
       setRedirect("");

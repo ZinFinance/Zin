@@ -16,7 +16,7 @@ function NonAuthRoutes() {
         path="*"
         to={{
           pathname: `/sign-in`,
-          search: window.location.pathname,
+          search: `continue=${window.location.pathname}`,
         }}
       />
     </Switch>

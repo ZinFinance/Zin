@@ -109,7 +109,7 @@ export function login(email, password, rememberMe, callback) {
         }
         return;
       }
-      let authResponse = await axios.get("/api​/Auth/login", {
+      let authResponse = await axios.get("/api/Auth/login", {
         email,
         password,
       });
@@ -155,7 +155,7 @@ export function updateUser(data, callback) {
         }
         return;
       }
-      let updateResponse = await axios.put("/api​/Profile", data, {
+      let updateResponse = await axios.put("/api/Profile", data, {
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
@@ -210,7 +210,7 @@ export async function resendEmail(email) {
     if (email === unverifiedTestAccount.email) {
       return null;
     }
-    let resendResponse = await axios.post("/api​/Account/email/resent", null, {
+    let resendResponse = await axios.post("/api/Account/email/resend", null, {
       headers: {
         Authorization: `Bearer ${Cookies.get("token")}`,
       },

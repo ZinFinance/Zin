@@ -27,29 +27,31 @@ function App() {
   const [redirect, setRedirect] = useState("");
 
   useEffect(() => {
-    if (!user && location.search) {
+    if (!user && location.search && !redirect) {
       setRedirect(location.search.substring(1));
-    } else if (user && redirect) {
+    } else if (user && !location.search && redirect) {
       history.push(redirect);
       setRedirect("");
     }
-  }, [location.search]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [user, location.search, redirect, history]);
 
-  const shouldFetchKYCInfo = user && user.email && emailVerified;
+  const kycApplicant = emailVerified && user && user.email;
   useEffect(() => {
-    if (shouldFetchKYCInfo) {
-      dispatch(getKYCAccessToken(user.email));
-      dispatch(getKYCApplicationStatus(user.email));
+    if (kycApplicant) {
+      dispatch(getKYCAccessToken(kycApplicant));
+      dispatch(getKYCApplicationStatus(kycApplicant));
     }
-  }, [shouldFetchKYCInfo]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [kycApplicant, dispatch]);
 
+  const shouldFetchUser = !user && Cookies.get("token");
   useEffect(() => {
-    if (!user && Cookies.get("token")) {
+    if (shouldFetchUser) {
       setTimeout(() => dispatch(fetchUser(Cookies.get("token"))), 1000);
     }
-  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [shouldFetchUser, dispatch]);
 
   useEffect(() => {
+    console.log("theme hook");
     const script = document.createElement("script");
     script.id = "_themeScript";
     script.src = "/assets/js/script.js?ver=104";
@@ -60,9 +62,9 @@ function App() {
       console.log("removing script");
       document.body.removeChild(script);
     };
-  }, [user, location]);
+  }, [user, location.pathname]);
 
-  if (Cookies.get("token") && !user) {
+  if (shouldFetchUser) {
     return <PageLoader />;
   } else if (user) {
     return (

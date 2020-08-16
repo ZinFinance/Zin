@@ -73,7 +73,7 @@ function Dashboard() {
                         <span>Ticket Symbol:</span>TWZ
                       </li>
                     </ul>
-                    <a href="#" className="btn btn-primary">
+                    <a href="#/" className="btn btn-primary">
                       <em className="fas fa-download mr-3" />
                       Download Whitepaper
                     </a>
@@ -239,22 +239,19 @@ function Dashboard() {
                     defaultValue={1}
                   />
                   <div className="token-pay-currency">
-                    <a
-                      href="#"
-                      className="link ucap link-light toggle-tigger toggle-caret"
-                    >
+                    <span className="link ucap link-light toggle-tigger toggle-caret">
                       ETH
-                    </a>
+                    </span>
                     <div className="toggle-class dropdown-content">
                       <ul className="dropdown-list">
                         <li>
-                          <a href="#">BTC</a>
+                          <a href="#/">BTC</a>
                         </li>
                         <li>
-                          <a href="#">LTC</a>
+                          <a href="#/">LTC</a>
                         </li>
                         <li>
-                          <a href="#">USD</a>
+                          <a href="#/">USD</a>
                         </li>
                       </ul>
                     </div>
@@ -291,19 +288,16 @@ function Dashboard() {
               <div className="card-head has-aside">
                 <h4 className="card-title">Tokens Sale Graph</h4>
                 <div className="card-opt">
-                  <a
-                    href="#"
-                    className="link ucap link-light toggle-tigger toggle-caret"
-                  >
+                  <span className="link ucap link-light toggle-tigger toggle-caret">
                     7 Days
-                  </a>
+                  </span>
                   <div className="toggle-class dropdown-content">
                     <ul className="dropdown-list">
                       <li>
-                        <a href="#">30 days</a>
+                        <a href="#/">30 days</a>
                       </li>
                       <li>
-                        <a href="#">1 years</a>
+                        <a href="#/">1 years</a>
                       </li>
                     </ul>
                   </div>

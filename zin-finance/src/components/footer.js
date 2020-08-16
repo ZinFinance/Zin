@@ -26,7 +26,7 @@ function Footer(props) {
               <div className="copyright-text">
                 &copy; {new Date().getFullYear()} Zin.
               </div>
-              <div className="lang-switch relative">
+              {/* <div className="lang-switch relative">
                 <a href="#" className="lang-switch-btn toggle-tigger">
                   En <em className="ti ti-angle-up"></em>
                 </a>
@@ -43,7 +43,7 @@ function Footer(props) {
                     </li>
                   </ul>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

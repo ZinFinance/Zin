@@ -97,14 +97,14 @@ function Navbar() {
           <div className="d-flex justify-content-between align-items-center">
             <ul className="topbar-nav d-lg-none">
               <li className="topbar-nav-item relative">
-                <a className="toggle-nav" href="#">
+                <span className="toggle-nav">
                   <div className="toggle-icon">
                     <span className="toggle-line"></span>
                     <span className="toggle-line"></span>
                     <span className="toggle-line"></span>
                     <span className="toggle-line"></span>
                   </div>
-                </a>
+                </span>
               </li>
             </ul>
             <a className="topbar-logo" href="./">
@@ -119,9 +119,9 @@ function Navbar() {
                 <span className="user-welcome d-none d-lg-inline-block">
                   Welcome {user.firstName}!
                 </span>
-                <a className="toggle-tigger user-thumb" href="#">
+                <span className="toggle-tigger user-thumb">
                   <em className="ti ti-user"></em>
-                </a>
+                </span>
                 <div className="toggle-class dropdown-content dropdown-content-right dropdown-arrow-right user-dropdown">
                   <div className="user-status">
                     <h6 className="user-status-title">Token balance</h6>
@@ -136,9 +136,9 @@ function Navbar() {
                       </Link>
                     </li>
                     <li>
-                      <a href="#">
+                      <Link to="/referral">
                         <i className="ti ti-infinite"></i>Referral
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                   <ul className="user-links bg-light">

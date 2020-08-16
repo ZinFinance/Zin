@@ -52,23 +52,15 @@ function WalletModal(props) {
     <div className="modal fade" id="edit-wallet" tabIndex={-1}>
       <div className="modal-dialog modal-dialog-md modal-dialog-centered">
         <div className="modal-content">
-          <a
-            href="#"
-            className="modal-close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
+          <span className="modal-close" data-dismiss="modal" aria-label="Close">
             <em className="ti ti-close" />
-          </a>
+          </span>
           <div className="popup-body">
             <h4 className="popup-title">Wallet Address</h4>
             <p>
-              In order to receive your{" "}
-              <a href="#">
-                <strong>TWZ Tokens</strong>
-              </a>
-              , please select your wallet address and you have to put the
-              address below input box.{" "}
+              In order to receive your <strong>TWZ Tokens</strong>, please
+              select your wallet address and you have to put the address below
+              input box.{" "}
               <strong>
                 You will receive TWZ tokens to this address after the Token Sale
                 end.

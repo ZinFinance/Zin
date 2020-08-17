@@ -16,13 +16,15 @@ namespace Zin.Services.Implementation
         private readonly IEthTxCheckService ethTxCheckService;
         private readonly IUserBalanceRepository userBalanceRepository;
         private readonly IReferralCodeRepository referralCodeRepository;
+        private readonly IBonusCalculationRepository bonusCalculationRepository;
 
         public ProfileService(UserManager<AppUser> userManager,
             IAccountService accountService,
             IRegisteredTxRepository registeredTxRepository,
             IEthTxCheckService ethTxCheckService,
             IUserBalanceRepository userBalanceRepository,
-            IReferralCodeRepository referralCodeRepository)
+            IReferralCodeRepository referralCodeRepository,
+            IBonusCalculationRepository bonusCalculationRepository)
         {
             this.userManager = userManager;
             this.accountService = accountService;
@@ -30,6 +32,7 @@ namespace Zin.Services.Implementation
             this.ethTxCheckService = ethTxCheckService;
             this.userBalanceRepository = userBalanceRepository;
             this.referralCodeRepository = referralCodeRepository;
+            this.bonusCalculationRepository = bonusCalculationRepository;
         }
 
         public async Task<Result<UserDetails>> GetAsync(string userId)
@@ -63,19 +66,11 @@ namespace Zin.Services.Implementation
             //update the user the amount of tokens transferred
             await userBalanceRepository.AddUserTokenBalance(userId, BigInteger.Parse(txFromBlockchain.ZinTokensTransferred));
 
-            //now check if the referral code is present or not
-            if (string.IsNullOrWhiteSpace(referralCode))
-                return new Result(true, "TRANSACTION_REGISTERED_SUCCESSFULLY");
-
-            var referredUser = await referralCodeRepository.GetUserByReferralCodeAsync(referralCode);
-            if(referredUser == null)
-                return new Result(true, "TRANSACTION_REGISTERED_SUCCESSFULLY");
-            //if present then go and find out if it is correct and is assigned to a user (Case Sensitive)
-            //get the user details
-            //calculate related amount of tokens that should be assigned to that user
-            //assign the user that amount of tokens and update the user in db
-
-            return new Result(true, "TRANSACTION_REGISTERED_SUCCESSFULLY_WITH_REFERRAL_CODE");
+            //calculate and add the referral bonusses.
+            var presaleResponse = await CalculateAndAddPresaleBonuses(userId, BigInteger.Parse(txFromBlockchain.ZinTokensTransferred));
+            var referralResponse = await CalculateAndAddReferralBonuses(userId, referralCode, BigInteger.Parse(txFromBlockchain.ZinTokensTransferred));
+            
+            return referralResponse;
         }
 
         public async Task<Result> UpdateAsync(string userId, UserDetails userDetails)
@@ -94,6 +89,49 @@ namespace Zin.Services.Implementation
                 await accountService.SendEmailConfirmationAsync(appUser);
 
             return new Result(true, "PROFILE_UPDATED");
+        }
+
+
+
+        private async Task<Result> CalculateAndAddReferralBonuses(string userId, string referralCode, BigInteger originalAmount)
+        {
+            //now check if the referral code is present or not
+            if (string.IsNullOrWhiteSpace(referralCode))
+                return new Result(true, "TRANSACTION_REGISTERED_SUCCESSFULLY");
+
+            //if present then go and find out if it is correct and is assigned to a user (Case Sensitive)
+            //get the user details
+            var referredUser = await referralCodeRepository.GetUserByReferralCodeAsync(referralCode);
+            if (referredUser == null)
+                return new Result(true, "TRANSACTION_REGISTERED_SUCCESSFULLY");
+
+            //calculate related amount of tokens that should be assigned to that user and assign the user that amount of tokens and update the user in db.
+            BigInteger calculatedInviterBonus = await CalculateBonus(BonusType.Inviter, originalAmount);
+            await userBalanceRepository.AddUserTokenBalance(referredUser.Id, calculatedInviterBonus);
+
+            //calculate related amount of tokens that should be assigned to that user and assign the user that amount of tokens and update the user in db.
+            BigInteger calculatedInviteeBonus = await CalculateBonus(BonusType.Invitee, originalAmount);
+            await userBalanceRepository.AddUserTokenBalance(userId, calculatedInviteeBonus);
+
+            return new Result(true, "TRANSACTION_REGISTERED_SUCCESSFULLY_WITH_REFERRAL_CODE");
+        }
+
+        private async Task<Result> CalculateAndAddPresaleBonuses(string userId, BigInteger originalAmount)
+        {
+            //calculate related amount of tokens that should be assigned to that user and assign the user that amount of tokens and update the user in db.
+            BigInteger calculatedInviterBonus = await CalculateBonus(BonusType.Presale, originalAmount);
+            await userBalanceRepository.AddUserTokenBalance(userId, calculatedInviterBonus);
+
+            return new Result(true, "TRANSACTION_REGISTERED_SUCCESSFULLY_WITH_PRESALE_BONUS");
+        }
+
+        private async Task<BigInteger> CalculateBonus(BonusType bonusType, BigInteger originalAmount) 
+        {
+            var bonusRate = await bonusCalculationRepository.GetActiveBonusRateWithType(bonusType);
+            if (bonusRate == null)
+                return 0;
+            BigInteger bonus = BigInteger.Multiply(originalAmount, bonusRate.BonusPercentage / 100);
+            return bonus;
         }
     }
 }

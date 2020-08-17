@@ -1,33 +1,72 @@
-import React from "react";
+import React, { useReducer } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { updateUser } from "../redux/actions/userActions";
+import AsyncButton from "./AsyncButton";
 
-function WalletModal() {
+function WalletModal(props) {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.userReducer.user);
+  const [state, setState] = useReducer(reducer, {
+    ethAddress: user.ethAddress,
+    success: false,
+    error: false,
+    loading: false,
+  });
+
+  function reducer(state, newState) {
+    return {
+      ...state,
+      ...newState,
+    };
+  }
+
+  const { ethAddress, error, success, loading } = state;
+
+  const onChange = (e) => {
+    setState({ [e.target.name]: e.target.value, success: false, error: false });
+  };
+
+  const updateWallet = (e) => {
+    e.preventDefault();
+    setState({ loading: true });
+    setTimeout(() => {
+      dispatch(
+        updateUser(
+          {
+            ...user,
+            ethAddress,
+          },
+          (error) => {
+            if (error) {
+              setState({ error, loading: false });
+            } else {
+              setState({ success: true, loading: false });
+            }
+          }
+        )
+      );
+    }, 1000);
+  };
+
   return (
     <div className="modal fade" id="edit-wallet" tabIndex={-1}>
       <div className="modal-dialog modal-dialog-md modal-dialog-centered">
         <div className="modal-content">
-          <a
-            href="#"
-            className="modal-close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
+          <span className="modal-close" data-dismiss="modal" aria-label="Close">
             <em className="ti ti-close" />
-          </a>
+          </span>
           <div className="popup-body">
             <h4 className="popup-title">Wallet Address</h4>
             <p>
-              In order to receive your{" "}
-              <a href="#">
-                <strong>TWZ Tokens</strong>
-              </a>
-              , please select your wallet address and you have to put the
-              address below input box.{" "}
+              In order to receive your <strong>TWZ Tokens</strong>, please
+              select your wallet address and you have to put the address below
+              input box.{" "}
               <strong>
                 You will receive TWZ tokens to this address after the Token Sale
                 end.
               </strong>
             </p>
-            <form action="#">
+            <form onSubmit={updateWallet}>
               <div className="row">
                 <div className="col-md-6">
                   <div className="input-item input-with-label">
@@ -54,11 +93,16 @@ function WalletModal() {
                   Your Address for tokens:
                 </label>
                 <input
+                  required
                   className="input-bordered"
                   type="text"
-                  id="token-address"
-                  name="token-address"
-                  defaultValue="0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
+                  id="ethAddress"
+                  name="ethAddress"
+                  value={ethAddress}
+                  onChange={onChange}
+                  placeholder="Your Ethereum Address for tokens"
+                  pattern="^0x[a-fA-F0-9]{40}$"
+                  title="Address should be ERC20-compliant."
                 />
                 <span className="input-note">
                   Note: Address should be ERC20-compliant.
@@ -77,11 +121,19 @@ function WalletModal() {
               </div>
               <div className="gaps-3x" />
               <div className="d-sm-flex justify-content-between align-items-center">
-                <button className="btn btn-primary">Update Wallet</button>
+                <AsyncButton
+                  loading={loading}
+                  defaultText="Update Wallet"
+                  loadingText="Updating Wallet..."
+                  buttonClasses="btn-primary"
+                />
                 <div className="gaps-2x d-sm-none" />
-                <span className="text-success">
-                  <em className="ti ti-check-box" /> Updated wallet address
-                </span>
+                {error && <span className="text-danger">{error}</span>}
+                {success && (
+                  <span className="text-success">
+                    <em className="ti ti-check-box" /> Updated Wallet Address
+                  </span>
+                )}
               </div>
             </form>
             {/* form */}

@@ -79,19 +79,13 @@ function Transactions() {
                 </td>
                 <td className="data-col text-right">
                   <div className="relative d-inline-block d-md-none">
-                    <a
-                      href="#"
-                      className="btn btn-light-alt btn-xs btn-icon toggle-tigger"
-                    >
+                    <span className="btn btn-light-alt btn-xs btn-icon toggle-tigger">
                       <em className="ti ti-more-alt" />
-                    </a>
+                    </span>
                     <div className="toggle-class dropdown-content dropdown-content-center-left pd-2x">
                       <ul className="data-action-list">
                         <li>
-                          <a
-                            href="#"
-                            className="btn btn-auto btn-primary btn-xs"
-                          >
+                          <span className="btn btn-auto btn-primary btn-xs">
                             <span>
                               Pay{" "}
                               <span className="d-none d-xl-inline-block">
@@ -99,36 +93,33 @@ function Transactions() {
                               </span>
                             </span>
                             <em className="ti ti-wallet" />
-                          </a>
+                          </span>
                         </li>
                         <li>
-                          <a
-                            href="#"
-                            className="btn btn-danger-alt btn-xs btn-icon"
-                          >
+                          <span className="btn btn-danger-alt btn-xs btn-icon">
                             <em className="ti ti-trash" />
-                          </a>
+                          </span>
                         </li>
                       </ul>
                     </div>
                   </div>
                   <ul className="data-action-list d-none d-md-inline-flex">
                     <li>
-                      <a href="#" className="btn btn-auto btn-primary btn-xs">
+                      <span className="btn btn-auto btn-primary btn-xs">
                         <span>
                           Pay{" "}
                           <span className="d-none d-xl-inline-block">Now</span>
                         </span>
                         <em className="ti ti-wallet" />
-                      </a>
+                      </span>
                     </li>
                     <li>
-                      <a
+                      <span
                         href="#"
                         className="btn btn-danger-alt btn-xs btn-icon"
                       >
                         <em className="ti ti-trash" />
-                      </a>
+                      </span>
                     </li>
                   </ul>
                 </td>

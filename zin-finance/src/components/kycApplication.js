@@ -102,7 +102,7 @@ function KYCApplication() {
           {/* .card */}
           <p className="text-light text-center">
             If you have any question, please contact our support team{" "}
-            <a href="#">info@tokenwiz.com</a>.
+            <a href="mailto:info@tokenwiz.com">info@tokenwiz.com</a>.
           </p>
           <div className="gaps-1x" />
           <div className="gaps-3x d-none d-sm-block" />

@@ -330,6 +330,7 @@
       var $self = $(this),
         _items = $self.data("items") ? $self.data("items") : 5;
       $self.DataTable({
+        destroy: true,
         ordering: false,
         autoWidth: false,
         dom:
@@ -357,6 +358,7 @@
   var $data_table_filter = $(".dt-filter-init");
   if ($data_table_filter.length > 0) {
     var $data_table_fltr = $data_table_filter.DataTable({
+      destroy: true,
       ordering: false,
       autoWidth: false,
       dom:

@@ -1,17 +1,76 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useReducer } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { useCheckEmailVerified } from "../auth";
+import { useCheckEmailVerified } from "../utility";
+import { updateUser } from "../redux/actions/userActions";
 
 import WalletModal from "./walletModal";
+import UpdatePassword from "./updatePassword";
+import AsyncButton from "./AsyncButton";
 
-function Profile(props) {
+function Profile() {
   const user = useSelector((state) => state.userReducer.user);
+  const dispatch = useDispatch();
+  const [state, setState] = useReducer(reducer, {
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    ethAddress: user.ethAddress,
+    success: false,
+    error: false,
+    loading: false,
+  });
   const emailVerified = useSelector((state) => state.userReducer.emailVerified);
   const disabled = useCheckEmailVerified();
   const kycApplicationStatus = useSelector(
     (state) => state.kycReducer.applicationStatus
   );
+
+  function reducer(state, newState) {
+    return {
+      ...state,
+      ...newState,
+    };
+  }
+
+  const {
+    firstName,
+    lastName,
+    email,
+    ethAddress,
+    error,
+    success,
+    loading,
+  } = state;
+
+  const onChange = (e) => {
+    setState({ [e.target.name]: e.target.value, success: false, error: false });
+  };
+
+  const updateProfile = (e) => {
+    e.preventDefault();
+    setState({ loading: true });
+    setTimeout(() => {
+      dispatch(
+        updateUser(
+          {
+            firstName,
+            lastName,
+            email,
+            ethAddress,
+          },
+          (error) => {
+            debugger;
+            if (error) {
+              setState({ error, loading: false });
+            } else {
+              setState({ success: true, loading: false });
+            }
+          }
+        )
+      );
+    }, 1000);
+  };
 
   return (
     <div className="container">
@@ -33,11 +92,11 @@ function Profile(props) {
                     Personal Data
                   </a>
                 </li>
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <a className="nav-link" data-toggle="tab" href="#settings">
                     Settings
                   </a>
-                </li>
+                </li> */}
                 <li className="nav-item">
                   <a className="nav-link" data-toggle="tab" href="#password">
                     Password
@@ -47,22 +106,23 @@ function Profile(props) {
               {/* .nav-tabs-line */}
               <div className="tab-content" id="profile-details">
                 <div className="tab-pane fade show active" id="personal-data">
-                  <form action="#">
+                  <form onSubmit={updateProfile}>
                     <div className="row">
                       <div className="col-md-6">
                         <div className="input-item input-with-label">
                           <label
-                            htmlFor="full-name"
+                            htmlFor="firstName"
                             className="input-item-label"
                           >
-                            Full Name
+                            First Name
                           </label>
                           <input
                             className="input-bordered"
                             type="text"
-                            id="full-name"
-                            name="full-name"
-                            defaultValue="Stefan Harary"
+                            id="firstName"
+                            name="firstName"
+                            value={firstName}
+                            onChange={onChange}
                           />
                         </div>
                         {/* .input-item */}
@@ -70,99 +130,65 @@ function Profile(props) {
                       <div className="col-md-6">
                         <div className="input-item input-with-label">
                           <label
-                            htmlFor="email-address"
+                            htmlFor="lastName"
                             className="input-item-label"
                           >
+                            Last Name
+                          </label>
+                          <input
+                            className="input-bordered"
+                            type="text"
+                            id="lastName"
+                            name="lastName"
+                            value={lastName}
+                            onChange={onChange}
+                          />
+                        </div>
+                        {/* .input-item */}
+                      </div>
+                      <div className="col-md-6">
+                        <div className="input-item input-with-label">
+                          <label htmlFor="email" className="input-item-label">
                             Email Address
                           </label>
                           <input
                             className="input-bordered"
-                            type="text"
-                            id="email-address"
-                            name="email-address"
-                            defaultValue="info@softnio.com"
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={email}
                             disabled
+                            style={{ cursor: "not-allowed" }}
                           />
                         </div>
                         {/* .input-item */}
                       </div>
-                      <div className="col-md-6">
-                        <div className="input-item input-with-label">
-                          <label
-                            htmlFor="mobile-number"
-                            className="input-item-label"
-                          >
-                            Mobile Number
-                          </label>
-                          <input
-                            className="input-bordered"
-                            type="text"
-                            id="mobile-number"
-                            name="mobile-number"
-                          />
-                        </div>
-                        {/* .input-item */}
-                      </div>
-                      <div className="col-md-6">
-                        <div className="input-item input-with-label">
-                          <label
-                            htmlFor="date-of-birth"
-                            className="input-item-label"
-                          >
-                            Date of Birth
-                          </label>
-                          <input
-                            className="input-bordered date-picker-dob"
-                            type="text"
-                            id="date-of-birth"
-                            name="date-of-birth"
-                          />
-                        </div>
-                        {/* .input-item */}
-                      </div>
-                      {/* .col */}
-                      <div className="col-md-6">
-                        <div className="input-item input-with-label">
-                          <label
-                            htmlFor="nationality"
-                            className="input-item-label"
-                          >
-                            Nationality
-                          </label>
-                          <select
-                            className="select-bordered select-block"
-                            name="nationality"
-                            id="nationality"
-                          >
-                            <option value="us">United States</option>
-                            <option value="uk">United KingDom</option>
-                            <option value="fr">France</option>
-                            <option value="ch">China</option>
-                            <option value="cr">Czech Republic</option>
-                            <option value="cb">Colombia</option>
-                          </select>
-                        </div>
-                        {/* .input-item */}
-                      </div>
-                      {/* .col */}
                     </div>
                     {/* .row */}
                     <div className="gaps-1x" />
                     {/* 10px gap */}
                     <div className="d-sm-flex justify-content-between align-items-center">
-                      <button {...disabled} className="btn btn-primary">
-                        Update Profile
-                      </button>
+                      <AsyncButton
+                        loading={loading}
+                        buttonProps={disabled}
+                        buttonClasses="btn-primary"
+                        defaultText="Update Profile"
+                        loadingText="Updating Profile..."
+                      />
                       <div className="gaps-2x d-sm-none" />
-                      <span className="text-success">
-                        <em className="ti ti-check-box" /> All Changes are saved
-                      </span>
+                      {error && <span className="text-danger">{error}</span>}
+                      {success && (
+                        <span className="text-success">
+                          <em className="ti ti-check-box" /> Profile
+                          Successfully Updated
+                        </span>
+                      )}
                     </div>
                   </form>
                   {/* form */}
                 </div>
                 {/* .tab-pane */}
-                <div className="tab-pane fade" id="settings">
+                {/* <div className="tab-pane fade" id="settings">
                   <div className="pdb-1-5x">
                     <h5 className="card-title card-title-sm text-dark">
                       Security Settings
@@ -225,82 +251,9 @@ function Profile(props) {
                       updated
                     </span>
                   </div>
-                </div>
+                </div> */}
                 {/* .tab-pane */}
-                <div className="tab-pane fade" id="password">
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="input-item input-with-label">
-                        <label htmlFor="old-pass" className="input-item-label">
-                          Old Password
-                        </label>
-                        <input
-                          className="input-bordered"
-                          type="password"
-                          id="old-pass"
-                          name="old-pass"
-                        />
-                      </div>
-                      {/* .input-item */}
-                    </div>
-                    {/* .col */}
-                  </div>
-                  {/* .row */}
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="input-item input-with-label">
-                        <label htmlFor="new-pass" className="input-item-label">
-                          New Password
-                        </label>
-                        <input
-                          className="input-bordered"
-                          type="password"
-                          id="new-pass"
-                          name="new-pass"
-                        />
-                      </div>
-                      {/* .input-item */}
-                    </div>
-                    {/* .col */}
-                    <div className="col-md-6">
-                      <div className="input-item input-with-label">
-                        <label
-                          htmlFor="confirm-pass"
-                          className="input-item-label"
-                        >
-                          Confirm New Password
-                        </label>
-                        <input
-                          className="input-bordered"
-                          type="password"
-                          id="confirm-pass"
-                          name="confirm-pass"
-                        />
-                      </div>
-                      {/* .input-item */}
-                    </div>
-                    {/* .col */}
-                  </div>
-                  {/* .row */}
-                  <div className="note note-plane note-info pdb-1x">
-                    <em className="fas fa-info-circle" />
-                    <p>
-                      Password should be minmum 8 letter and include lower and
-                      uppercase letter.
-                    </p>
-                  </div>
-                  <div className="gaps-1x" />
-                  {/* 10px gap */}
-                  <div className="d-sm-flex justify-content-between align-items-center">
-                    <button {...disabled} className="btn btn-primary">
-                      Update
-                    </button>
-                    <div className="gaps-2x d-sm-none" />
-                    <span className="text-success">
-                      <em className="ti ti-check-box" /> Changed Password
-                    </span>
-                  </div>
-                </div>
+                <UpdatePassword />
                 {/* .tab-pane */}
               </div>
               {/* .tab-content */}
@@ -386,7 +339,11 @@ function Profile(props) {
               <h6 className="card-title card-title-sm">Receiving Wallet</h6>
               <div className="d-flex justify-content-between">
                 <span>
-                  <span>0x39deb3.....e2ac64rd</span>{" "}
+                  <span>
+                    {ethAddress.substr(0, 8) +
+                      "....." +
+                      ethAddress.substr(ethAddress.length - 8)}
+                  </span>{" "}
                   <em
                     className="fas fa-info-circle text-exlight"
                     data-toggle="tooltip"

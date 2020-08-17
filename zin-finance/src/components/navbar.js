@@ -3,30 +3,49 @@ import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import { resendEmail } from "../redux/actions/userActions";
+import AsyncButton from "./AsyncButton";
 
 function Navbar() {
   const user = useSelector((state) => state.userReducer.user);
   const emailVerified = useSelector((state) => state.userReducer.emailVerified);
   const dispatch = useDispatch();
   const location = useLocation();
-  const [, , removeCookie] = useCookies(["email"]);
   const [resendEmailData, setResendEmailData] = useState({
     text: "Resend Email",
     disabled: false,
     loading: false,
+    error: false,
   });
 
   function logout() {
-    removeCookie("email");
     dispatch(logoutUser());
   }
 
-  function resendEmail() {
+  async function resendConfirmationEmail() {
     setResendEmailData({
-      text: "Email sent",
+      text: "Sending Email...",
       disabled: true,
+      loading: true,
     });
+    setTimeout(async () => {
+      let error = await resendEmail(user.email);
+      if (error) {
+        setResendEmailData({
+          text: "Resend Email",
+          disabled: false,
+          loading: false,
+          error,
+        });
+      } else {
+        setResendEmailData({
+          text: "Email sent",
+          disabled: true,
+          loading: false,
+          error: false,
+        });
+      }
+    }, 1000);
   }
 
   return (
@@ -42,7 +61,26 @@ function Navbar() {
           >
             Please verify your email address and refresh in order to perform any
             actions
-            <button
+            <AsyncButton
+              loading={resendEmailData.loading}
+              buttonProps={{
+                disabled: resendEmailData.disabled,
+                onClick: resendConfirmationEmail,
+                style: {
+                  marginLeft: "25px",
+                  cursor: resendEmailData.disabled ? "not-allowed" : "pointer",
+                },
+              }}
+              defaultText={resendEmailData.text}
+              loadingText={resendEmailData.text}
+              buttonClasses="btn-warning btn-sm"
+            />
+            {resendEmailData.error && (
+              <div style={{ marginTop: "10px" }} className="text-danger">
+                {resendEmailData.error}
+              </div>
+            )}
+            {/* <button
               disabled={resendEmailData.disabled}
               onClick={resendEmail}
               style={{
@@ -52,38 +90,40 @@ function Navbar() {
               className="btn btn-warning btn-sm"
             >
               {resendEmailData.text}
-            </button>
+            </button> */}
           </div>
         )}
         <div className="container">
           <div className="d-flex justify-content-between align-items-center">
             <ul className="topbar-nav d-lg-none">
               <li className="topbar-nav-item relative">
-                <a className="toggle-nav" href="#">
+                <span className="toggle-nav">
                   <div className="toggle-icon">
                     <span className="toggle-line"></span>
                     <span className="toggle-line"></span>
                     <span className="toggle-line"></span>
                     <span className="toggle-line"></span>
                   </div>
-                </a>
+                </span>
               </li>
             </ul>
-            <a className="topbar-logo" href="./">
-              <img
-                src="images/logo-light2x.png"
-                srcSet="images/logo-light2x.png 2x"
-                alt="logo"
-              />
-            </a>
+            <Link to="/">
+              <span className="topbar-logo">
+                <img
+                  src="/images/logo-light.png"
+                  srcSet="/images/logo-light2x.png 2x"
+                  alt="logo"
+                />
+              </span>
+            </Link>
             <ul className="topbar-nav">
               <li className="topbar-nav-item relative">
                 <span className="user-welcome d-none d-lg-inline-block">
-                  Welcome {user.email}!
+                  Welcome {user.firstName}!
                 </span>
-                <a className="toggle-tigger user-thumb" href="#">
+                <span className="toggle-tigger user-thumb">
                   <em className="ti ti-user"></em>
-                </a>
+                </span>
                 <div className="toggle-class dropdown-content dropdown-content-right dropdown-arrow-right user-dropdown">
                   <div className="user-status">
                     <h6 className="user-status-title">Token balance</h6>
@@ -98,9 +138,9 @@ function Navbar() {
                       </Link>
                     </li>
                     <li>
-                      <a href="#">
+                      <Link to="/referral">
                         <i className="ti ti-infinite"></i>Referral
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                   <ul className="user-links bg-light">
@@ -125,14 +165,22 @@ function Navbar() {
                   <em className="ikon ikon-dashboard"></em> Dashboard
                 </Link>
               </li>
-              <li className={location.pathname === "/profile" ? "active" : ""}>
+              <li
+                className={
+                  location.pathname.replace(/\//g, "") === "profile"
+                    ? "active"
+                    : ""
+                }
+              >
                 <Link to="/profile">
                   <em className="ikon ikon-user"></em> Profile
                 </Link>
               </li>
               <li
                 className={
-                  location.pathname === "/transactions" ? "active" : ""
+                  location.pathname.replace(/\//g, "") === "transactions"
+                    ? "active"
+                    : ""
                 }
               >
                 <Link to="/transactions">
@@ -140,16 +188,26 @@ function Navbar() {
                 </Link>
               </li>
               <li
-                className={location.pathname === "/buy-token" ? "active" : ""}
+                className={
+                  location.pathname.replace(/\//g, "") === "buy-token"
+                    ? "active"
+                    : ""
+                }
               >
                 <Link to="/buy-token">
                   <em className="ikon ikon-coins"></em> Buy Tokens
                 </Link>
               </li>
-              <li>
-                <a href="ico-distribution.html">
-                  <em className="ikon ikon-exchange"></em> Refferal
-                </a>
+              <li
+                className={
+                  location.pathname.replace(/\//g, "") === "referral"
+                    ? "active"
+                    : ""
+                }
+              >
+                <Link to="/referral">
+                  <em className="ikon ikon-exchange"></em> Referral
+                </Link>
               </li>
             </ul>
             <ul className="navbar-btns">

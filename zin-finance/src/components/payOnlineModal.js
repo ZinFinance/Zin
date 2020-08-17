@@ -27,7 +27,7 @@ function PayOnlineModal() {
                   id="pay-coin"
                 />
                 <label className="pay-check-label" htmlFor="pay-coin">
-                  <img src="images/pay-a.png" alt="pay-logo" />
+                  <img src="/images/pay-a.png" alt="pay-logo" />
                 </label>
               </li>
               <li className="pay-item">
@@ -38,7 +38,7 @@ function PayOnlineModal() {
                   id="pay-coinpay"
                 />
                 <label className="pay-check-label" htmlFor="pay-coinpay">
-                  <img src="images/pay-b.png" alt="pay-logo" />
+                  <img src="/images/pay-b.png" alt="pay-logo" />
                 </label>
               </li>
               <li className="pay-item">
@@ -49,7 +49,7 @@ function PayOnlineModal() {
                   id="pay-paypal"
                 />
                 <label className="pay-check-label" htmlFor="pay-paypal">
-                  <img src="images/pay-c.png" alt="pay-logo" />
+                  <img src="/images/pay-c.png" alt="pay-logo" />
                 </label>
               </li>
             </ul>
@@ -71,8 +71,7 @@ function PayOnlineModal() {
             </div>
             <ul className="d-flex flex-wrap align-items-center guttar-30px">
               <li>
-                <a
-                  href="#"
+                <span
                   data-dismiss="modal"
                   data-toggle="modal"
                   data-target="#pay-review"
@@ -80,18 +79,17 @@ function PayOnlineModal() {
                 >
                   Buy Tokens &amp; Process to Pay{" "}
                   <em className="ti ti-arrow-right mgl-2x" />
-                </a>
+                </span>
               </li>
               <li className="pdt-1x pdb-1x">
-                <a
-                  href="#"
+                <span
                   data-dismiss="modal"
                   data-toggle="modal"
                   data-target="#get-pay-address"
                   className="link link-primary"
                 >
                   Make Manual Payment
-                </a>
+                </span>
               </li>
             </ul>
             <div className="gaps-2x" />

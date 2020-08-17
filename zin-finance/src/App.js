@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 
 import AppContent from "./components/appContent";
 import NonAuthContent from "./components/nonAuthContent";
@@ -8,7 +8,7 @@ import NonAuthContent from "./components/nonAuthContent";
 import AuthRoutes from "./routes/authRoutes";
 import NonAuthRoutes from "./routes/nonAuthRoutes";
 
-import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 
 import { fetchUser } from "./redux/actions/userActions";
 import {
@@ -23,35 +23,35 @@ function App() {
   const emailVerified = useSelector((state) => state.userReducer.emailVerified);
   const dispatch = useDispatch();
   const location = useLocation();
-  const [cookies, setCookie] = useCookies(["email"]);
+  const history = useHistory();
+  const [redirect, setRedirect] = useState("");
 
   useEffect(() => {
-    if (user && user.id && emailVerified) {
-      dispatch(getKYCAccessToken(user.id));
-      dispatch(getKYCApplicationStatus(user.id));
+    if (!user && location.search && !redirect) {
+      setRedirect(new URLSearchParams(location.search).get("continue"));
+    } else if (user && !location.search && redirect) {
+      history.push(redirect);
+      setRedirect("");
     }
-  }, [user, dispatch, emailVerified]);
+  }, [user, location.search, redirect, history]);
 
+  const kycApplicant = emailVerified && user && user.email;
   useEffect(() => {
-    console.log("user changed", user);
-    if (user && !cookies.email) {
-      setCookie("email", user.email, { path: "/" });
-    } else if (!user && cookies.email) {
-      setTimeout(
-        () =>
-          dispatch(
-            fetchUser({
-              email: cookies.email,
-              id: "testing123",
-            })
-          ),
-        1000
-      );
+    if (kycApplicant) {
+      dispatch(getKYCAccessToken(kycApplicant));
+      dispatch(getKYCApplicationStatus(kycApplicant));
     }
-  }, [user, cookies.email, dispatch, setCookie]);
+  }, [kycApplicant, dispatch]);
+
+  const shouldFetchUser = !user && Cookies.get("token");
+  useEffect(() => {
+    if (shouldFetchUser) {
+      setTimeout(() => dispatch(fetchUser(Cookies.get("token"))), 1000);
+    }
+  }, [shouldFetchUser, dispatch]);
 
   useEffect(() => {
-    console.log("location changed", location);
+    console.log("theme hook");
     const script = document.createElement("script");
     script.id = "_themeScript";
     script.src = "/assets/js/script.js?ver=104";
@@ -62,9 +62,9 @@ function App() {
       console.log("removing script");
       document.body.removeChild(script);
     };
-  }, [location]);
+  }, [user, location.pathname]);
 
-  if (cookies.email && !user) {
+  if (shouldFetchUser) {
     return <PageLoader />;
   } else if (user) {
     return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import {
@@ -9,7 +9,7 @@ import snsWebSdk from "@sumsub/websdk";
 import ReactDOM from "react-dom";
 
 function KYCForm() {
-  const userId = useSelector((state) => state.userReducer.user.id);
+  const userId = useSelector((state) => state.userReducer.user.email);
   const emailVerified = useSelector((state) => state.userReducer.emailVerified);
   const accessToken = useSelector((state) => state.kycReducer.accessToken);
   const history = useHistory();
@@ -36,9 +36,9 @@ function KYCForm() {
   useEffect(() => {
     const iframe = document.querySelector("iframe");
     if (accessToken && !iframe) {
-      launchWebSdk(SUMSUB_BASE_URL, "basic-kyc", accessToken, userId);
+      launchWebSdk(SUMSUB_BASE_URL, "zin-kyc", accessToken, userId);
     }
-  }, [accessToken]);
+  }, [accessToken, userId]);
 
   /**
  * @param apiUrl - 'https://test-api.sumsub.com' (sandbox)
@@ -88,10 +88,10 @@ function KYCForm() {
     snsWebSdkInstance.launch("#page-content");
   }
 
-  return <_KYCForm />;
+  return <KYCFormPortal />;
 }
 
-function _KYCForm(props) {
+function KYCFormPortal(props) {
   return ReactDOM.createPortal(props.children, document.getElementById("root"));
 }
 

@@ -12,6 +12,7 @@ namespace Zin.Repository.DbContext
         }
 
         public DbSet<RegisteredTx> RegisteredTx { get; set; }
+        public DbSet<BonusRate> BonusRate { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

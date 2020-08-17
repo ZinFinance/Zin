@@ -5,12 +5,12 @@ import { useHistory } from "react-router-dom";
 import AsyncButton from "./AsyncButton";
 
 const initialState = {
-  firstName: "",
-  lastName: "",
+  // firstName: "",
+  // lastName: "",
+  // ethAddress: "",
   email: "",
   password: "",
   confirmPassword: "",
-  ethAddress: "",
   loading: false,
   error: false,
 };
@@ -27,12 +27,12 @@ function SignUp() {
   const history = useHistory();
 
   const {
-    firstName,
-    lastName,
+    // firstName,
+    // lastName,
+    // ethAddress,
     email,
     password,
     confirmPassword,
-    ethAddress,
     loading,
     error,
   } = state;
@@ -55,9 +55,9 @@ function SignUp() {
       let error = await registerUser({
         userName: email,
         email,
-        firstName,
-        lastName,
-        ethAddress,
+        // firstName,
+        // lastName,
+        // ethAddress,
       });
       if (error) {
         setState({ error, loading: false });
@@ -73,7 +73,7 @@ function SignUp() {
         Sign up <small>Create New Zin Account</small>
       </h2>
       <form onSubmit={onSubmit}>
-        <div className="input-item">
+        {/* <div className="input-item">
           <input
             required
             name="firstName"
@@ -94,7 +94,7 @@ function SignUp() {
             placeholder="Your Last Name"
             className="input-bordered"
           />
-        </div>
+        </div> */}
         <div className="input-item">
           <input
             required
@@ -128,7 +128,7 @@ function SignUp() {
             className="input-bordered"
           />
         </div>
-        <div className="input-item">
+        {/* <div className="input-item">
           <input
             required
             name="ethAddress"
@@ -143,7 +143,7 @@ function SignUp() {
           <span className="input-note">
             Note: Address should be ERC20-compliant.
           </span>
-        </div>
+        </div> */}
         <div className="input-item text-left">
           <input
             required

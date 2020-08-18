@@ -115,10 +115,9 @@ export function login(email, password, rememberMe, callback) {
       });
       if (authResponse.status === 200) {
         let profile = await _fetchUser(authResponse.data.tempToken);
-        dispatch({
-          type: ActionTypes.SET_EMAIL_CONFIRM,
-          data: !authResponse.data.data.isEmailUnVerified,
-        });
+        dispatch(
+          _setEmailConfirmStatus(!authResponse.data.data.isEmailUnVerified)
+        );
         dispatch(_setUser(profile.data));
         if (rememberMe) {
           Cookies.set("token", authResponse.data.tempToken, { path: "/" });

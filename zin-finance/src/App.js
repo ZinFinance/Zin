@@ -15,8 +15,10 @@ import {
   getKYCAccessToken,
   getKYCApplicationStatus,
 } from "./redux/actions/kycActions";
+import { setTokenBalance } from "./redux/actions/tokenActions";
 
 import PageLoader from "./components/pageLoader";
+import EthService from "./ethService";
 
 function App() {
   const user = useSelector((state) => state.userReducer.user);
@@ -25,6 +27,14 @@ function App() {
   const location = useLocation();
   const history = useHistory();
   const [redirect, setRedirect] = useState("");
+
+  useEffect(() => {
+    const getTokenBalance = async () => {
+      let balance = await new EthService().getTokenBalance();
+      dispatch(setTokenBalance(balance));
+    };
+    getTokenBalance();
+  }, [dispatch]);
 
   useEffect(() => {
     if (!user && location.search && !redirect) {

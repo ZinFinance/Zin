@@ -8,8 +8,8 @@ function PayOnlineModal() {
           <div className="popup-body">
             <h4 className="popup-title">Buy Tokens and Payment</h4>
             <p className="lead">
-              To receiving <strong>18,750 TWZ</strong> tokens including{" "}
-              <strong>bonus 1,540 TWZ</strong> require payment amount of{" "}
+              To receiving <strong>18,750 ZIN</strong> tokens including{" "}
+              <strong>bonus 1,540 ZIN</strong> require payment amount of{" "}
               <strong>1.0 ETH</strong>.
             </p>
             <p>

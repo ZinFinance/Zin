@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import WalletModal from "./walletModal";
 import GetPaymentAddressModal from "./getPaymentAddressModal";
 import PayOnlineModal from "./payOnlineModal";
-import { useCheckEmailVerified } from "../utility";
+import { useCheckEmailVerified, getPrettyValue } from "../utility";
+import { useSelector } from "react-redux";
+import bigDecimal from "js-big-decimal";
 
 function BuyToken() {
   const disabled = useCheckEmailVerified();
-  console.log("disabled", disabled);
+  const tokenInfo = useSelector((state) => state.tokenReducer);
+  const [ethCalculation, setEthCalculation] = useState(1);
 
   return (
     <div className="container">
@@ -22,28 +25,28 @@ function BuyToken() {
               data-target="#edit-wallet"
               className="btn btn-danger btn-xl btn-between w-100 mgb-1-5x"
             >
-              Edit your wallet address before buying{" "}
+              Add your wallet address before buying{" "}
               <em className="ti ti-arrow-right" />
             </button>
             <div className="gaps-1x mgb-0-5x d-lg-none d-none d-sm-block" />
           </div>
           <div className="content-area card">
             <div className="card-innr">
-              <div className="card-head">
+              {/* <div className="card-head">
                 <span className="card-sub-title text-primary font-mid">
                   Step 1
                 </span>
                 <h4 className="card-title">
-                  Choose currency and calculate TWZ tokens price
+                  Choose currency and calculate ZIN tokens price
                 </h4>
               </div>
               <div className="card-text">
                 <p>
-                  You can buy our TWZ tokens using ETH, BTC, LTC or USD to
+                  You can buy our ZIN tokens using ETH, BTC, LTC or USD to
                   become part of Our project.
                 </p>
-              </div>
-              <div className="token-currency-choose">
+              </div> */}
+              {/* <div className="token-currency-choose">
                 <div className="row guttar-15px">
                   <div className="col-6">
                     <div className="pay-option">
@@ -115,19 +118,17 @@ function BuyToken() {
                     </div>
                   </div>
                 </div>
-                {/* .row */}
-              </div>
+              </div> */}
               <div className="card-head">
                 <span className="card-sub-title text-primary font-mid">
-                  Step 2
+                  Step 1
                 </span>
-                <h4 className="card-title">Amount of contribute</h4>
+                <h4 className="card-title">Amount to contribute</h4>
               </div>
               <div className="card-text">
                 <p>
-                  Enter your amount, you would like to contribute and calculate
-                  the amount of token you will received. The calculator helps to
-                  convert required currency to tokens.
+                  Enter the amount you would like to contribute and calculate
+                  the amount of tokens you will receieve.
                 </p>
               </div>
               <div className="token-contribute">
@@ -136,8 +137,9 @@ function BuyToken() {
                     <input
                       id="token-base-amount"
                       className="input-bordered input-with-hint"
-                      type="text"
-                      defaultValue={1}
+                      type="number"
+                      value={ethCalculation}
+                      onChange={(e) => setEthCalculation(e.target.value)}
                     />
                     <div className="token-pay-currency">
                       <span className="input-hint input-hint-sap">ETH</span>
@@ -146,8 +148,10 @@ function BuyToken() {
                   <div className="token-received">
                     <div className="token-eq-sign">=</div>
                     <div className="token-received-amount">
-                      <h5 className="token-amount">123,500.84</h5>
-                      <div className="token-symbol">TWZ</div>
+                      <h5 className="token-amount">
+                        {ethCalculation * tokenInfo.tokenRate}
+                      </h5>
+                      <div className="token-symbol">ZIN</div>
                     </div>
                   </div>
                 </div>
@@ -215,7 +219,7 @@ function BuyToken() {
                     <div className="col-md-4">
                       <div className="token-total">
                         <span className="token-overview-title font-bold">
-                          Total TWZ
+                          Total ZIN
                         </span>
                         <span className="token-overview-value token-total-amount text-primary">
                           1,823,500.84
@@ -233,15 +237,15 @@ function BuyToken() {
               </div>
               <div className="card-head">
                 <span className="card-sub-title text-primary font-mid">
-                  Step 3
+                  Step 2
                 </span>
                 <h4 className="card-title">Make a payment</h4>
               </div>
               <div className="card-text">
                 <p>
                   To get tokens please make a payment. You can send payment
-                  directly to our address or you may pay online. Once you paid,
-                  you will receive an email about the successfull deposit.{" "}
+                  directly to our address. Once paid, you will receive an email
+                  about the successfull deposit.{" "}
                 </p>
               </div>
               <div className="pay-buttons">
@@ -256,7 +260,7 @@ function BuyToken() {
                   </button>
                 </div>
                 <div className="pay-button-sap">or</div>
-                <div className="pay-button">
+                {/* <div className="pay-button">
                   <button
                     {...disabled}
                     data-toggle="modal"
@@ -265,7 +269,7 @@ function BuyToken() {
                   >
                     Make Online Payment <em className="ti ti-arrow-right" />
                   </button>
-                </div>
+                </div> */}
               </div>
               <div className="pay-notes">
                 <div className="note note-plane note-light note-md font-italic">
@@ -273,7 +277,7 @@ function BuyToken() {
                   <p>
                     Tokens will appear in your account after payment
                     successfully made and approved by our team.{" "}
-                    <br className="d-none d-lg-block" /> Please note that, TWZ
+                    <br className="d-none d-lg-block" /> Please note that, ZIN
                     tokens will distributed end of ICO Token Sales.{" "}
                   </p>
                 </div>
@@ -292,7 +296,7 @@ function BuyToken() {
               data-target="#edit-wallet"
               className="btn btn-danger btn-xl btn-between w-100"
             >
-              Edit your wallet address before buying{" "}
+              Add your wallet address before buying{" "}
               <em className="ti ti-arrow-right" />
             </button>
             <div className="gaps-3x" />
@@ -303,7 +307,7 @@ function BuyToken() {
                 <div className="token-balance-text">
                   <h6 className="card-sub-title">Tokens Balance</h6>
                   <span className="lead">
-                    120,000,000 <span>TWZ</span>
+                    {getPrettyValue(tokenInfo.tokenBalance)} <span>ZIN</span>
                   </span>
                 </div>
               </div>
@@ -311,17 +315,24 @@ function BuyToken() {
                 <h6 className="card-sub-title">Your Contribution</h6>
                 <ul className="token-balance-list">
                   <li className="token-balance-sub">
-                    <span className="lead">2.646</span>
+                    <span className="lead">
+                      {getPrettyValue(
+                        bigDecimal.divide(
+                          tokenInfo.tokenBalance,
+                          tokenInfo.tokenRate
+                        )
+                      )}
+                    </span>
                     <span className="sub">ETH</span>
                   </li>
-                  <li className="token-balance-sub">
+                  {/* <li className="token-balance-sub">
                     <span className="lead">1.265</span>
                     <span className="sub">BTC</span>
                   </li>
                   <li className="token-balance-sub">
                     <span className="lead">6.506</span>
                     <span className="sub">LTC</span>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </div>
@@ -335,9 +346,9 @@ function BuyToken() {
               </div>
               <div className="token-rate-wrap row">
                 <div className="token-rate col-md-6 col-lg-12">
-                  <span className="card-sub-title">TWZ Token Price</span>
+                  <span className="card-sub-title">ZIN Token Price</span>
                   <h4 className="font-mid text-dark">
-                    1 ETH = <span>12500 TWZ</span>
+                    1 ETH = <span>{tokenInfo.tokenRate} ZIN</span>
                   </h4>
                 </div>
                 <div className="token-rate col-md-6 col-lg-12">
@@ -364,10 +375,10 @@ function BuyToken() {
               </div>
               <ul className="progress-info">
                 <li>
-                  <span>Raised</span> 2,758 TWZ
+                  <span>Raised</span> 2,758 ZIN
                 </li>
                 <li className="text-right">
-                  <span>TOTAL</span> 1,500,000 TWZ
+                  <span>TOTAL</span> 1,500,000 ZIN
                 </li>
               </ul>
               <div className="progress-bar">

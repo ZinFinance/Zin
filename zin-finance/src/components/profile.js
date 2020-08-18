@@ -261,7 +261,7 @@ function Profile() {
             {/* .card-innr */}
           </div>
           {/* .card */}
-          <div className="content-area card">
+          {/* <div className="content-area card">
             <div className="card-innr">
               <div className="card-head">
                 <h4 className="card-title">Two-Factor Verification</h4>
@@ -289,8 +289,7 @@ function Profile() {
                 </button>
               </div>
             </div>
-            {/* .card-innr */}
-          </div>
+          </div> */}
           {/* .card */}
         </div>
         {/* .col */}
@@ -348,7 +347,7 @@ function Profile() {
                     className="fas fa-info-circle text-exlight"
                     data-toggle="tooltip"
                     data-placement="bottom"
-                    title="1 ETH = 100 TWZ"
+                    title="1 ETH = 100 ZIN"
                   />
                 </span>
                 {emailVerified ? (
@@ -400,7 +399,7 @@ function Profile() {
               {/* .copy-wrap */}
             </div>
           </div>
-          <div className="kyc-info card">
+          {/* <div className="kyc-info card">
             <div className="card-innr">
               <h6 className="card-title card-title-sm">
                 Identity Verification - KYC
@@ -423,7 +422,7 @@ function Profile() {
                 * KYC verification required for purchase token
               </h6>
             </div>
-          </div>
+          </div> */}
         </div>
         {/* .col */}
       </div>

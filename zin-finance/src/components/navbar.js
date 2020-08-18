@@ -128,7 +128,7 @@ function Navbar() {
                   <div className="user-status">
                     <h6 className="user-status-title">Token balance</h6>
                     <div className="user-status-balance">
-                      12,000,000 <small>TWZ</small>
+                      12,000,000 <small>ZIN</small>
                     </div>
                   </div>
                   <ul className="user-links">

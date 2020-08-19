@@ -42,7 +42,7 @@ namespace Zin.Services.Implementation
             return new Result<UserDetails>(appUser.ToDto());
         }
 
-        public async Task<Result> RegisterTxUsingReferalCodeAsync(string userId, string txId, string referralCode)
+        public async Task<Result> RegisterTxUsingReferalCodeAsync(string userId, string txId, string referralCode, string AmountTransferredInEther, string AmountTransferredInToken, string EtherToUsdRateAtThatTime)
         {
             //check if tx id is not null or empty
             if (string.IsNullOrWhiteSpace(txId))
@@ -56,19 +56,25 @@ namespace Zin.Services.Implementation
             //check using infura if valid transaction, success transaction
             //also return the values of the transaction
             var txFromBlockchain = await ethTxCheckService.GetEthTxFromBlockChainUsingTxId(txId);
+            //TODO: THIS WILL BE REMOVED WHEN BLOCKCHAIN IS INTEGRATED!!!
+            txFromBlockchain.AmountTransferredInEther = AmountTransferredInEther;
+            txFromBlockchain.AmountTransferredInToken = AmountTransferredInToken;
+            txFromBlockchain.TxId = txId;
+
             if (txFromBlockchain == null)
                 return new Result(false, "TRANSACTION_NOT_FOUND");
 
             //register transaction wrt user and include all the extra properties as well
             txFromBlockchain.UserId = userId;
+            txFromBlockchain.EtherToUsdRateAtThatTime = EtherToUsdRateAtThatTime;
             await registeredTxRepository.SaveRegisteredTxAsync(txFromBlockchain);
 
             //update the user the amount of tokens transferred
-            await userBalanceRepository.AddUserTokenBalance(userId, BigInteger.Parse(txFromBlockchain.ZinTokensTransferred));
+            await userBalanceRepository.AddUserTokenBalance(userId, BigInteger.Parse(txFromBlockchain.AmountTransferredInToken));
 
             //calculate and add the referral bonusses.
-            var presaleResponse = await CalculateAndAddPresaleBonuses(userId, BigInteger.Parse(txFromBlockchain.ZinTokensTransferred));
-            var referralResponse = await CalculateAndAddReferralBonuses(userId, referralCode, BigInteger.Parse(txFromBlockchain.ZinTokensTransferred));
+            var presaleResponse = await CalculateAndAddPresaleBonuses(userId, BigInteger.Parse(txFromBlockchain.AmountTransferredInToken));
+            var referralResponse = await CalculateAndAddReferralBonuses(userId, referralCode, BigInteger.Parse(txFromBlockchain.AmountTransferredInToken));
             
             return referralResponse;
         }
@@ -92,7 +98,13 @@ namespace Zin.Services.Implementation
         }
 
 
-
+        /// <summary>
+        /// private methods.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="referralCode"></param>
+        /// <param name="originalAmount"></param>
+        /// <returns></returns>
         private async Task<Result> CalculateAndAddReferralBonuses(string userId, string referralCode, BigInteger originalAmount)
         {
             //now check if the referral code is present or not

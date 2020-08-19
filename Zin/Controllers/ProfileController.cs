@@ -5,6 +5,7 @@ using Zin.Services.Models;
 using Microsoft.AspNetCore.Authorization;
 using Zin.Models.Account;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace Zin.Controllers
 {
@@ -55,6 +56,29 @@ namespace Zin.Controllers
             if (result.Status)
                 return Ok(result);
             return BadRequest(result);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<List<RegisterEthTx>>))]
+        [HttpGet("getregisteredtxs")]
+        public async Task<ActionResult> GetReferralTransactionAsync(bool onlyReferral)
+        {
+            var data = await profileService.GetRegisteredTxAsync(User.Id(), onlyReferral);
+
+            if (data == null)
+                return Ok(new Result<List<RegisterEthTx>>(new List<RegisterEthTx>(), true));
+
+            List<RegisterEthTx> list = new List<RegisterEthTx>();
+            foreach (var tx in data) {
+                list.Add(new RegisterEthTx { 
+                    TxId = tx.TxId,
+                    ReferralCode = tx.ReferralCode,
+                    AmountTransferredInEther = tx.AmountTransferredInEther,
+                    AmountTransferredInToken = tx.AmountTransferredInToken,
+                    EtherToUsdRateAtThatTime = tx.EtherToUsdRateAtThatTime
+                });
+            }
+
+            return Ok(new Result<List<RegisterEthTx>>(list, true));
         }
     }
 }

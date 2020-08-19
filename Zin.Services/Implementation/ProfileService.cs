@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Zin.Repository.Models;
 using Zin.Repository.Repository;
 using System.Numerics;
+using System.Collections.Generic;
 
 namespace Zin.Services.Implementation
 {
@@ -75,7 +76,7 @@ namespace Zin.Services.Implementation
             //calculate and add the referral bonusses.
             var presaleResponse = await CalculateAndAddPresaleBonuses(userId, BigInteger.Parse(txFromBlockchain.AmountTransferredInToken));
             var referralResponse = await CalculateAndAddReferralBonuses(userId, referralCode, BigInteger.Parse(txFromBlockchain.AmountTransferredInToken));
-            
+
             return referralResponse;
         }
 
@@ -83,6 +84,9 @@ namespace Zin.Services.Implementation
         {
             // find account
             AppUser appUser = await userManager.FindByIdAsync(userId);
+
+            if (string.IsNullOrWhiteSpace(appUser.EthAddress))
+                appUser.EthAddress = userDetails.EthAddress;
 
             // update details
             appUser.EmailConfirmed = userDetails.Email == appUser.Email;
@@ -97,6 +101,26 @@ namespace Zin.Services.Implementation
             return new Result(true, "PROFILE_UPDATED");
         }
 
+        public async Task<List<Models.RegisteredTx>> GetRegisteredTxAsync(string userId, bool onlyReferral)
+        {
+            var data = await registeredTxRepository.GetRegisteredTxOfUserAsync(userId, onlyReferral);
+            if (data == null)
+                return new List<Models.RegisteredTx>();
+
+            List<Models.RegisteredTx> list = new List<Models.RegisteredTx>();
+            foreach (var tx in data)
+            {
+                list.Add(new Models.RegisteredTx
+                {
+                    TxId = tx.TxId,
+                    ReferralCode = tx.ReferralCode,
+                    AmountTransferredInEther = tx.AmountTransferredInEther,
+                    AmountTransferredInToken = tx.AmountTransferredInToken,
+                    EtherToUsdRateAtThatTime = tx.EtherToUsdRateAtThatTime
+                });
+            }
+            return list;
+        }
 
         /// <summary>
         /// private methods.
@@ -137,7 +161,7 @@ namespace Zin.Services.Implementation
             return new Result(true, "TRANSACTION_REGISTERED_SUCCESSFULLY_WITH_PRESALE_BONUS");
         }
 
-        private async Task<BigInteger> CalculateBonus(BonusType bonusType, BigInteger originalAmount) 
+        private async Task<BigInteger> CalculateBonus(BonusType bonusType, BigInteger originalAmount)
         {
             var bonusRate = await bonusCalculationRepository.GetActiveBonusRateWithType(bonusType);
             if (bonusRate == null)

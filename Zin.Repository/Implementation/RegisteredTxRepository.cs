@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Zin.Repository.DbContext;
 using Zin.Repository.Models;
 using Zin.Repository.Repository;
@@ -12,6 +15,18 @@ namespace Zin.Repository.Implementation
         public RegisteredTxRepository(AppDbContext appDbContext)
         {
             this.appDbContext = appDbContext;
+        }
+
+        public async Task<List<RegisteredTx>> GetRegisteredTxOfUserAsync(string userId, bool referralOnly)
+        {
+            if (referralOnly)
+            {
+                return await appDbContext.RegisteredTx.Where(x => x.UserId.Equals(userId) && !string.IsNullOrWhiteSpace(x.ReferralCode)).ToListAsync();
+            }
+            else
+            {
+                return await appDbContext.RegisteredTx.Where(x => x.UserId.Equals(userId)).ToListAsync();
+            }
         }
 
         public async Task<RegisteredTx> GetRegisteredTxUsingIdAsync(string txId)

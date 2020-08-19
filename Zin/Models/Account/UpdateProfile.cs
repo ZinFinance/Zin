@@ -13,7 +13,7 @@ namespace Zin.Models.Account
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
-        [Required]
+        
         public string EthAddress { get; set; }
 
         internal UserDetails ToDto()

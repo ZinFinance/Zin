@@ -16,7 +16,7 @@ function Referral() {
                 Total Tokens Earned through Referrals
               </h6>
               <span className="lead">
-                120,000,000 <span>TWZ</span>
+                120,000,000 <span>ZIN</span>
               </span>
             </div>
           </div>
@@ -85,7 +85,7 @@ function Referral() {
                 </td>
                 <td className="data-col dt-token">
                   <span className="lead token-amount">20,000</span>
-                  <span className="sub sub-symbol">TWZ</span>
+                  <span className="sub sub-symbol">ZIN</span>
                 </td>
                 <td className="data-col dt-amount">
                   <span className="lead amount-pay">50.00</span>
@@ -95,7 +95,7 @@ function Referral() {
                       className="fas fa-info-circle"
                       data-toggle="tooltip"
                       data-placement="bottom"
-                      title="1 ETH = 1250 TWZ"
+                      title="1 ETH = 1250 ZIN"
                     />
                   </span>
                 </td>
@@ -185,7 +185,7 @@ function Referral() {
                 </td>
                 <td className="data-col dt-token">
                   <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">TWZ</span>
+                  <span className="sub sub-symbol">ZIN</span>
                 </td>
                 <td className="data-col dt-amount">
                   <span className="lead amount-pay">50.00</span>
@@ -195,7 +195,7 @@ function Referral() {
                       className="fas fa-info-circle"
                       data-toggle="tooltip"
                       data-placement="bottom"
-                      title="1 ETH = 1250 TWZ"
+                      title="1 ETH = 1250 ZIN"
                     />
                   </span>
                 </td>
@@ -249,7 +249,7 @@ function Referral() {
                 </td>
                 <td className="data-col dt-token">
                   <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">TWZ</span>
+                  <span className="sub sub-symbol">ZIN</span>
                 </td>
                 <td className="data-col dt-amount">
                   <span className="lead amount-pay">50.00</span>
@@ -259,7 +259,7 @@ function Referral() {
                       className="fas fa-info-circle"
                       data-toggle="tooltip"
                       data-placement="bottom"
-                      title="1 ETH = 1250 TWZ"
+                      title="1 ETH = 1250 ZIN"
                     />
                   </span>
                 </td>
@@ -311,7 +311,7 @@ function Referral() {
                 </td>
                 <td className="data-col dt-token">
                   <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">TWZ</span>
+                  <span className="sub sub-symbol">ZIN</span>
                 </td>
                 <td className="data-col dt-amount">
                   <span className="lead amount-pay">50.00</span>
@@ -321,7 +321,7 @@ function Referral() {
                       className="fas fa-info-circle"
                       data-toggle="tooltip"
                       data-placement="bottom"
-                      title="1 ETH = 1250 TWZ"
+                      title="1 ETH = 1250 ZIN"
                     />
                   </span>
                 </td>
@@ -373,7 +373,7 @@ function Referral() {
                 </td>
                 <td className="data-col dt-token">
                   <span className="lead token-amount">1,050</span>
-                  <span className="sub sub-symbol">TWZ</span>
+                  <span className="sub sub-symbol">ZIN</span>
                 </td>
                 <td className="data-col dt-amount">
                   <span className="lead amount-pay">0.85</span>
@@ -383,7 +383,7 @@ function Referral() {
                       className="fas fa-info-circle"
                       data-toggle="tooltip"
                       data-placement="bottom"
-                      title="1 ETH = 1250 TWZ"
+                      title="1 ETH = 1250 ZIN"
                     />
                   </span>
                 </td>
@@ -435,7 +435,7 @@ function Referral() {
                 </td>
                 <td className="data-col dt-token">
                   <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">TWZ</span>
+                  <span className="sub sub-symbol">ZIN</span>
                 </td>
                 <td className="data-col dt-amount">
                   <span className="lead amount-pay">50.00</span>
@@ -445,7 +445,7 @@ function Referral() {
                       className="fas fa-info-circle"
                       data-toggle="tooltip"
                       data-placement="bottom"
-                      title="1 ETH = 1250 TWZ"
+                      title="1 ETH = 1250 ZIN"
                     />
                   </span>
                 </td>
@@ -497,7 +497,7 @@ function Referral() {
                 </td>
                 <td className="data-col dt-token">
                   <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">TWZ</span>
+                  <span className="sub sub-symbol">ZIN</span>
                 </td>
                 <td className="data-col dt-amount">
                   <span className="lead amount-pay">50.00</span>
@@ -507,7 +507,7 @@ function Referral() {
                       className="fas fa-info-circle"
                       data-toggle="tooltip"
                       data-placement="bottom"
-                      title="1 ETH = 1250 TWZ"
+                      title="1 ETH = 1250 ZIN"
                     />
                   </span>
                 </td>
@@ -559,7 +559,7 @@ function Referral() {
                 </td>
                 <td className="data-col dt-token">
                   <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">TWZ</span>
+                  <span className="sub sub-symbol">ZIN</span>
                 </td>
                 <td className="data-col dt-amount">
                   <span className="lead amount-pay">50.00</span>
@@ -569,7 +569,7 @@ function Referral() {
                       className="fas fa-info-circle"
                       data-toggle="tooltip"
                       data-placement="bottom"
-                      title="1 ETH = 1250 TWZ"
+                      title="1 ETH = 1250 ZIN"
                     />
                   </span>
                 </td>

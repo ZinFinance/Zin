@@ -109,8 +109,8 @@ function TransactionDetailsModal() {
                         className="fas fa-info-circle"
                         data-toggle="tooltip"
                         data-placement="bottom"
-                        title="1 ETH = 100 TWZ"
-                        data-original-title="1 ETH = 100 TWZ"
+                        title="1 ETH = 100 ZIN"
+                        data-original-title="1 ETH = 100 ZIN"
                       />
                     </span>
                     <span>
@@ -118,8 +118,8 @@ function TransactionDetailsModal() {
                         className="fas fa-info-circle"
                         data-toggle="tooltip"
                         data-placement="bottom"
-                        title="1 ETH = 100 TWZ"
-                        data-original-title="1 ETH = 100 TWZ"
+                        title="1 ETH = 100 ZIN"
+                        data-original-title="1 ETH = 100 ZIN"
                       />{" "}
                       $2540.65
                     </span>

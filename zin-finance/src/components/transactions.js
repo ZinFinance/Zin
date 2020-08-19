@@ -39,7 +39,7 @@ function Transactions() {
                 </td>
                 <td className="data-col dt-token">
                   <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">TWZ</span>
+                  <span className="sub sub-symbol">ZIN</span>
                 </td>
                 <td className="data-col dt-amount">
                   <span className="lead amount-pay">50.00</span>
@@ -49,7 +49,7 @@ function Transactions() {
                       className="fas fa-info-circle"
                       data-toggle="tooltip"
                       data-placement="bottom"
-                      title="1 ETH = 1250 TWZ"
+                      title="1 ETH = 1250 ZIN"
                     />
                   </span>
                 </td>
@@ -139,7 +139,7 @@ function Transactions() {
                 </td>
                 <td className="data-col dt-token">
                   <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">TWZ</span>
+                  <span className="sub sub-symbol">ZIN</span>
                 </td>
                 <td className="data-col dt-amount">
                   <span className="lead amount-pay">50.00</span>
@@ -149,7 +149,7 @@ function Transactions() {
                       className="fas fa-info-circle"
                       data-toggle="tooltip"
                       data-placement="bottom"
-                      title="1 ETH = 1250 TWZ"
+                      title="1 ETH = 1250 ZIN"
                     />
                   </span>
                 </td>
@@ -203,7 +203,7 @@ function Transactions() {
                 </td>
                 <td className="data-col dt-token">
                   <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">TWZ</span>
+                  <span className="sub sub-symbol">ZIN</span>
                 </td>
                 <td className="data-col dt-amount">
                   <span className="lead amount-pay">50.00</span>
@@ -213,7 +213,7 @@ function Transactions() {
                       className="fas fa-info-circle"
                       data-toggle="tooltip"
                       data-placement="bottom"
-                      title="1 ETH = 1250 TWZ"
+                      title="1 ETH = 1250 ZIN"
                     />
                   </span>
                 </td>
@@ -265,7 +265,7 @@ function Transactions() {
                 </td>
                 <td className="data-col dt-token">
                   <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">TWZ</span>
+                  <span className="sub sub-symbol">ZIN</span>
                 </td>
                 <td className="data-col dt-amount">
                   <span className="lead amount-pay">50.00</span>
@@ -275,7 +275,7 @@ function Transactions() {
                       className="fas fa-info-circle"
                       data-toggle="tooltip"
                       data-placement="bottom"
-                      title="1 ETH = 1250 TWZ"
+                      title="1 ETH = 1250 ZIN"
                     />
                   </span>
                 </td>
@@ -327,7 +327,7 @@ function Transactions() {
                 </td>
                 <td className="data-col dt-token">
                   <span className="lead token-amount">1,050</span>
-                  <span className="sub sub-symbol">TWZ</span>
+                  <span className="sub sub-symbol">ZIN</span>
                 </td>
                 <td className="data-col dt-amount">
                   <span className="lead amount-pay">0.85</span>
@@ -337,7 +337,7 @@ function Transactions() {
                       className="fas fa-info-circle"
                       data-toggle="tooltip"
                       data-placement="bottom"
-                      title="1 ETH = 1250 TWZ"
+                      title="1 ETH = 1250 ZIN"
                     />
                   </span>
                 </td>
@@ -389,7 +389,7 @@ function Transactions() {
                 </td>
                 <td className="data-col dt-token">
                   <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">TWZ</span>
+                  <span className="sub sub-symbol">ZIN</span>
                 </td>
                 <td className="data-col dt-amount">
                   <span className="lead amount-pay">50.00</span>
@@ -399,7 +399,7 @@ function Transactions() {
                       className="fas fa-info-circle"
                       data-toggle="tooltip"
                       data-placement="bottom"
-                      title="1 ETH = 1250 TWZ"
+                      title="1 ETH = 1250 ZIN"
                     />
                   </span>
                 </td>
@@ -451,7 +451,7 @@ function Transactions() {
                 </td>
                 <td className="data-col dt-token">
                   <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">TWZ</span>
+                  <span className="sub sub-symbol">ZIN</span>
                 </td>
                 <td className="data-col dt-amount">
                   <span className="lead amount-pay">50.00</span>
@@ -461,7 +461,7 @@ function Transactions() {
                       className="fas fa-info-circle"
                       data-toggle="tooltip"
                       data-placement="bottom"
-                      title="1 ETH = 1250 TWZ"
+                      title="1 ETH = 1250 ZIN"
                     />
                   </span>
                 </td>
@@ -513,7 +513,7 @@ function Transactions() {
                 </td>
                 <td className="data-col dt-token">
                   <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">TWZ</span>
+                  <span className="sub sub-symbol">ZIN</span>
                 </td>
                 <td className="data-col dt-amount">
                   <span className="lead amount-pay">50.00</span>
@@ -523,7 +523,7 @@ function Transactions() {
                       className="fas fa-info-circle"
                       data-toggle="tooltip"
                       data-placement="bottom"
-                      title="1 ETH = 1250 TWZ"
+                      title="1 ETH = 1250 ZIN"
                     />
                   </span>
                 </td>

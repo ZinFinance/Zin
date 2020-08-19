@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useCheckEmailVerified } from "../utility";
+import { useCheckEmailVerified, getPrettyValue } from "../utility";
+import bigDecimal from "js-big-decimal";
 
 function Dashboard() {
   const user = useSelector((state) => state.userReducer.user);
+  const tokenInfo = useSelector((state) => state.tokenReducer);
   const disabled = useCheckEmailVerified(user);
+  const [ethCalculation, setEthCalculation] = useState(1);
 
   return (
     <div className="container">
@@ -20,7 +23,7 @@ function Dashboard() {
                 <div className="token-balance-text">
                   <h6 className="card-sub-title">Tokens Balance</h6>
                   <span className="lead">
-                    120,000,000 <span>TWZ</span>
+                    {getPrettyValue(tokenInfo.tokenBalance)} <span>ZIN</span>
                   </span>
                 </div>
               </div>
@@ -28,17 +31,24 @@ function Dashboard() {
                 <h6 className="card-sub-title">Your Contribution</h6>
                 <ul className="token-balance-list">
                   <li className="token-balance-sub">
-                    <span className="lead">2.646</span>
+                    <span className="lead">
+                      {getPrettyValue(
+                        bigDecimal.divide(
+                          tokenInfo.tokenBalance,
+                          tokenInfo.tokenRate
+                        )
+                      )}
+                    </span>
                     <span className="sub">ETH</span>
                   </li>
-                  <li className="token-balance-sub">
+                  {/* <li className="token-balance-sub">
                     <span className="lead">1.265</span>
                     <span className="sub">BTC</span>
                   </li>
                   <li className="token-balance-sub">
                     <span className="lead">6.506</span>
                     <span className="sub">LTC</span>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </div>
@@ -57,7 +67,7 @@ function Dashboard() {
                   />
                   <div className="gaps-2x" />
                   <h1 className="token-info-head text-light">
-                    1 ETH = 1000 TWZ
+                    1 ETH = {tokenInfo.tokenRate} ZIN
                   </h1>
                   <h5 className="token-info-sub">1 ETH = 254.05 USD</h5>
                 </div>
@@ -70,7 +80,7 @@ function Dashboard() {
                         <span>Token Name:</span>TokenWiz
                       </li>
                       <li>
-                        <span>Ticket Symbol:</span>TWZ
+                        <span>Ticket Symbol:</span>ZIN
                       </li>
                     </ul>
                     <a href="#/" className="btn btn-primary">
@@ -101,7 +111,7 @@ function Dashboard() {
               <table className="table tnx-table">
                 <thead>
                   <tr>
-                    <th>TWZ Tokens</th>
+                    <th>ZIN Tokens</th>
                     <th>Amount</th>
                     <th className="d-none d-sm-table-cell tnx-date">Date</th>
                     <th className="tnx-type">
@@ -235,14 +245,14 @@ function Dashboard() {
                   <input
                     id="token-base-amount"
                     className="input-bordered input-with-hint"
-                    type="text"
-                    defaultValue={1}
+                    type="number"
+                    value={ethCalculation}
+                    onChange={(e) => setEthCalculation(e.target.value)}
                   />
                   <div className="token-pay-currency">
-                    <span className="link ucap link-light toggle-tigger toggle-caret">
-                      ETH
-                    </span>
-                    <div className="toggle-class dropdown-content">
+                    {/* toggle-tigger toggle-caret */}
+                    <span className="link ucap link-light">ETH</span>
+                    {/* <div className="toggle-class dropdown-content">
                       <ul className="dropdown-list">
                         <li>
                           <a href="#/">BTC</a>
@@ -254,14 +264,16 @@ function Dashboard() {
                           <a href="#/">USD</a>
                         </li>
                       </ul>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="token-received">
                   <div className="token-eq-sign">=</div>
                   <div className="token-received-amount">
-                    <h5 className="token-amount">123,500.84</h5>
-                    <div className="token-symbol">TWZ</div>
+                    <h5 className="token-amount">
+                      {ethCalculation * tokenInfo.tokenRate}
+                    </h5>
+                    <div className="token-symbol">ZIN</div>
                   </div>
                 </div>
               </div>
@@ -319,10 +331,10 @@ function Dashboard() {
               </div>
               <ul className="progress-info">
                 <li>
-                  <span>Raised</span> 2,758 TWZ
+                  <span>Raised</span> 2,758 ZIN
                 </li>
                 <li className="text-right">
-                  <span>TOTAL</span> 1,500,000 TWZ
+                  <span>TOTAL</span> 1,500,000 ZIN
                 </li>
               </ul>
               <div className="progress-bar">

@@ -17,8 +17,8 @@ function GetPaymentAddressModal() {
             <h4 className="popup-title">Payment Address for Deposit</h4>
             <p>
               Please make deposit amount of <strong>1.0 ETH</strong> to our
-              address and receive <strong>18,750 TWZ</strong> tokens including{" "}
-              <strong>bonus 1,540 TWZ</strong> once we recevied payment.
+              address and receive <strong>18,750 ZIN</strong> tokens including{" "}
+              <strong>bonus 1,540 ZIN</strong> once we recevied payment.
             </p>
             <div className="gaps-1x" />
             <h6 className="font-bold">Payment to the following Address</h6>
@@ -78,7 +78,7 @@ function GetPaymentAddressModal() {
             <div className="note note-plane note-danger">
               <em className="fas fa-info-circle" />
               <p>
-                In case you send a different amount, number of TWZ tokens will
+                In case you send a different amount, number of ZIN tokens will
                 update accordingly.
               </p>
             </div>

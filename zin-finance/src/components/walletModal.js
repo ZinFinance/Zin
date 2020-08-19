@@ -58,11 +58,11 @@ function WalletModal(props) {
           <div className="popup-body">
             <h4 className="popup-title">Wallet Address</h4>
             <p>
-              In order to receive your <strong>TWZ Tokens</strong>, please
+              In order to receive your <strong>ZIN Tokens</strong>, please
               select your wallet address and you have to put the address below
               input box.{" "}
               <strong>
-                You will receive TWZ tokens to this address after the Token Sale
+                You will receive ZIN tokens to this address after the Token Sale
                 end.
               </strong>
             </p>
@@ -116,7 +116,7 @@ function WalletModal(props) {
                   Bitfinex, Bithumb, Binance etc. You can use MetaMask,
                   MayEtherWallet, Mist wallets etc. Do not use the address if
                   you don’t have a private key of the your address. You WILL NOT
-                  receive TWZ Tokens and WILL LOSE YOUR FUNDS if you do.
+                  receive ZIN Tokens and WILL LOSE YOUR FUNDS if you do.
                 </p>
               </div>
               <div className="gaps-3x" />

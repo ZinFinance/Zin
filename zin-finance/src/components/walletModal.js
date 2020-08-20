@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "../redux/actions/userActions";
 import AsyncButton from "./AsyncButton";
 
-function WalletModal(props) {
+function WalletModal() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userReducer.user);
   const [state, setState] = useReducer(reducer, {
@@ -67,30 +67,9 @@ function WalletModal(props) {
               </strong>
             </p>
             <form onSubmit={updateWallet}>
-              <div className="row">
-                <div className="col-md-6">
-                  <div className="input-item input-with-label">
-                    <label htmlFor="swalllet" className="input-item-label">
-                      Select Wallet{" "}
-                    </label>
-                    <select
-                      className="select-bordered select-block"
-                      name="swalllet"
-                      id="swalllet"
-                    >
-                      <option value="eth">Ethereum</option>
-                      <option value="dac">DashCoin</option>
-                      <option value="bic">BitCoin</option>
-                    </select>
-                  </div>
-                  {/* .input-item */}
-                </div>
-                {/* .col */}
-              </div>
-              {/* .row */}
               <div className="input-item input-with-label">
                 <label htmlFor="token-address" className="input-item-label">
-                  Your Address for tokens:
+                  Your Ethereum Address for tokens:
                 </label>
                 <input
                   required
@@ -111,7 +90,7 @@ function WalletModal(props) {
               {/* .input-item */}
               <div className="note note-plane note-danger">
                 <em className="fas fa-info-circle" />
-                <p>
+                <p style={{ fontWeight: "bold" }}>
                   DO NOT USE your exchange wallet address such as Kraken,
                   Bitfinex, Bithumb, Binance etc. You can use MetaMask,
                   MayEtherWallet, Mist wallets etc. Do not use the address if

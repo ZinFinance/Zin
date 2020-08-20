@@ -8,7 +8,6 @@ import AsyncButton from "./AsyncButton";
 
 function Navbar() {
   const user = useSelector((state) => state.userReducer.user);
-  const emailVerified = useSelector((state) => state.userReducer.emailVerified);
   const dispatch = useDispatch();
   const location = useLocation();
   const [resendEmailData, setResendEmailData] = useState({
@@ -54,7 +53,7 @@ function Navbar() {
         style={{ paddingLeft: 0, paddingRight: 0 }}
         className="topbar is-sticky"
       >
-        {!emailVerified && (
+        {!user.emailVerified && (
           <div
             style={{ borderRadius: 0, marginBottom: 0, textAlign: "center" }}
             className="alert alert-danger"
@@ -108,12 +107,21 @@ function Navbar() {
               </li>
             </ul>
             <Link to="/">
-              <span className="topbar-logo">
-                <img
-                  src="/images/logo-light.png"
-                  srcSet="/images/logo-light2x.png 2x"
-                  alt="logo"
-                />
+              <span
+                style={{ display: "flex", alignItems: "center" }}
+                className="topbar-logo"
+              >
+                <img src="/images/logo-light-sm.png" alt="logo" />
+                <span
+                  style={{
+                    fontFamily: "Libre Baskerville",
+                    color: "lightgray",
+                    marginLeft: "10px",
+                    fontSize: "20px",
+                  }}
+                >
+                  Zin
+                </span>
               </span>
             </Link>
             <ul className="topbar-nav">
@@ -137,11 +145,11 @@ function Navbar() {
                         <i className="ti ti-id-badge"></i>My Profile
                       </Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link to="/referral">
-                        <i className="ti ti-infinite"></i>Referral
+                        <i className="ti ti-infinite"></i>Bonus
                       </Link>
-                    </li>
+                    </li> */}
                   </ul>
                   <ul className="user-links bg-light">
                     <li>
@@ -160,7 +168,9 @@ function Navbar() {
         <div className="container">
           <div className="navbar-innr">
             <ul className="navbar-menu">
-              <li className={location.pathname === "/" ? "active" : ""}>
+              <li
+                className={location.pathname === "/tokensale" ? "active" : ""}
+              >
                 <Link to="/">
                   <em className="ikon ikon-dashboard"></em> Dashboard
                 </Link>
@@ -187,7 +197,7 @@ function Navbar() {
                   <em className="ikon ikon-transactions"></em> Transactions
                 </Link>
               </li>
-              <li
+              {/* <li
                 className={
                   location.pathname.replace(/\//g, "") === "buy-token"
                     ? "active"
@@ -197,7 +207,7 @@ function Navbar() {
                 <Link to="/buy-token">
                   <em className="ikon ikon-coins"></em> Buy Tokens
                 </Link>
-              </li>
+              </li> */}
               <li
                 className={
                   location.pathname.replace(/\//g, "") === "referral"
@@ -206,7 +216,7 @@ function Navbar() {
                 }
               >
                 <Link to="/referral">
-                  <em className="ikon ikon-exchange"></em> Referral
+                  <em className="ikon ikon-exchange"></em> Bonus
                 </Link>
               </li>
             </ul>

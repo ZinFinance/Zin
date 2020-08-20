@@ -5,20 +5,18 @@ import Profile from "../components/profile";
 import Transactions from "../components/transactions";
 import KYCApplication from "../components/kycApplication";
 import KYCForm from "../components/kycForm";
-import BuyToken from "../components/buyToken";
 import Referral from "../components/refferal";
 
 function AuthRoutes() {
   return (
     <Switch>
-      <Route exact path="/" component={Dashboard} />
+      <Route exact path="/tokensale" component={Dashboard} />
       <Route exact path="/profile" component={Profile} />
       <Route exact path="/transactions" component={Transactions} />
       <Route exact path="/kyc-application" component={KYCApplication} />
       <Route exact path="/kyc-form" component={KYCForm} />
-      <Route exact path="/buy-token" component={BuyToken} />
       <Route exact path="/referral" component={Referral} />
-      <Redirect path="*" to="/" />
+      <Redirect path="*" to="/tokensale" />
     </Switch>
   );
 }

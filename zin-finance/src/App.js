@@ -16,6 +16,7 @@ import {
   getKYCApplicationStatus,
 } from "./redux/actions/kycActions";
 import { setTokenBalance } from "./redux/actions/tokenActions";
+import { fetchTransactions } from "./redux/actions/transactionActions";
 
 import PageLoader from "./components/pageLoader";
 import EthService from "./ethService";
@@ -34,6 +35,10 @@ function App() {
       dispatch(setTokenBalance(balance));
     };
     getTokenBalance();
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchTransactions());
   }, [dispatch]);
 
   useEffect(() => {
@@ -61,7 +66,6 @@ function App() {
   }, [shouldFetchUser, dispatch]);
 
   useEffect(() => {
-    console.log("theme hook");
     const script = document.createElement("script");
     script.id = "_themeScript";
     script.src = "/assets/js/script.js?ver=104";
@@ -69,7 +73,6 @@ function App() {
     document.body.appendChild(script);
 
     return () => {
-      console.log("removing script");
       document.body.removeChild(script);
     };
   }, [user, location.pathname]);

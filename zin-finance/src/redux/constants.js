@@ -13,3 +13,7 @@ export const SET_KYC_APPLICATION_STATUS = "SET_KYC_APPLICATION_STATUS";
 
 //Token constants
 export const SET_TOKEN_BALANCE = "SET_TOKEN_BALANCE";
+
+//Transaction constants
+export const FETCH_TRANSACTIONS = "FETCH_TRANSACTIONS";
+export const SAVE_TRANSACTION = "SAVE_TRANSACTION";

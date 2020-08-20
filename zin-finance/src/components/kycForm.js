@@ -10,7 +10,9 @@ import ReactDOM from "react-dom";
 
 function KYCForm() {
   const userId = useSelector((state) => state.userReducer.user.email);
-  const emailVerified = useSelector((state) => state.userReducer.emailVerified);
+  const emailVerified = useSelector(
+    (state) => state.userReducer.user.emailVerified
+  );
   const accessToken = useSelector((state) => state.kycReducer.accessToken);
   const history = useHistory();
 
@@ -55,7 +57,6 @@ function KYCForm() {
     applicantEmail,
     applicantPhone
   ) {
-    console.log("accessToken", accessToken);
     let snsWebSdkInstance = snsWebSdk
       .Builder(apiUrl, flowName)
       .withAccessToken(accessToken, async (newAccessTokenCallback) => {
@@ -70,16 +71,16 @@ function KYCForm() {
         lang: "en",
         email: applicantEmail,
         applicantPhone: applicantPhone,
-        onMessage: (type, payload) => {
-          // see below what kind of messages the WebSDK generates
-          console.log("WebSDK onMessage", type, payload);
-        },
-        customCss: "url", // URL to css file in case you need change it dynamically from the code
-        // the similar setting at Applicant flow will rewrite customCss
-        // you may also use to pass string with plain styles `customCssStr:`
-        onError: (error) => {
-          console.error("WebSDK onError", error);
-        },
+        // onMessage: (type, payload) => {
+        //   // see below what kind of messages the WebSDK generates
+        //   console.log("WebSDK onMessage", type, payload);
+        // },
+        // customCss: "url", // URL to css file in case you need change it dynamically from the code
+        // // the similar setting at Applicant flow will rewrite customCss
+        // // you may also use to pass string with plain styles `customCssStr:`
+        // onError: (error) => {
+        //   console.error("WebSDK onError", error);
+        // },
       })
       .build();
 

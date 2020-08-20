@@ -9,8 +9,8 @@ namespace Zin.Repository.Models
         public string EthAddress { get; set; }
         public string TfaCode { get; set; }
         public string ReferralCode { get; set; }
+        public bool IsAdmin { get; set; }
 
-        
         //Those tokens that this user has actually bought
         public string ZinTokens { get; set; }
 

@@ -2,7 +2,6 @@ import * as ActionTypes from "../constants";
 
 const initialState = {
   user: null,
-  emailVerified: false,
 };
 
 export default function (state = initialState, action) {

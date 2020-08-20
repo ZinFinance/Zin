@@ -8,16 +8,34 @@ function Footer(props) {
           <div className="col-md-8">
             <ul className="footer-links">
               <li>
-                <a href="#/">Whitepaper</a>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://zinhome.azurewebsites.net/White%20paper%20v%201-4.pdf"
+                >
+                  Whitepaper
+                </a>
               </li>
-              <li>
+              {/* <li>
                 <a href="faq-page.html">FAQs</a>
+              </li> */}
+              <li>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://zinlandingpage.azurewebsites.net/privacy-policy/"
+                >
+                  Privacy Policy
+                </a>
               </li>
               <li>
-                <a href="regular-page.html">Privacy Policy</a>
-              </li>
-              <li>
-                <a href="regular-page.html">Terms of Condition</a>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://zinlandingpage.azurewebsites.net/terms-and-conditions/"
+                >
+                  Terms of Condition
+                </a>
               </li>
             </ul>
           </div>

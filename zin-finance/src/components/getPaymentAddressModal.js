@@ -1,11 +1,26 @@
 import React from "react";
+import AsyncButton from "./AsyncButton";
 
-function GetPaymentAddressModal() {
+function GetPaymentAddressModal({
+  confirmBuyToken,
+  contribution,
+  tokenRate,
+  referralCode,
+  setReferralCode,
+  loading,
+  closeRef,
+}) {
+  const onSubmit = (e) => {
+    e.preventDefault();
+    confirmBuyToken();
+  };
+
   return (
     <div className="modal fade" id="get-pay-address" tabIndex={-1}>
       <div className="modal-dialog modal-dialog-md modal-dialog-centered">
         <div className="modal-content">
           <span
+            ref={closeRef}
             style={{ cursor: "pointer" }}
             className="modal-close"
             data-dismiss="modal"
@@ -16,8 +31,9 @@ function GetPaymentAddressModal() {
           <div className="popup-body">
             <h4 className="popup-title">Payment Address for Deposit</h4>
             <p>
-              Please make deposit amount of <strong>1.0 ETH</strong> to our
-              address and receive <strong>18,750 ZIN</strong> tokens including{" "}
+              Please make deposit amount of <strong>{contribution} ETH</strong>{" "}
+              to our address and receive{" "}
+              <strong>{contribution * tokenRate} ZIN</strong> tokens including{" "}
               <strong>bonus 1,540 ZIN</strong> once we recevied payment.
             </p>
             <div className="gaps-1x" />
@@ -26,12 +42,14 @@ function GetPaymentAddressModal() {
               <span className="copy-feedback" />
               <em className="fab fa-ethereum" />
               <input
+                required
                 type="text"
                 className="copy-address"
                 defaultValue="0x4156d3342d5c385a87d264f90653733592000581"
                 disabled
               />
               <button
+                type="submit"
                 className="copy-trigger copy-clipboard"
                 data-clipboard-text="0x4156d3342d5c385a87d264f90653733592000581"
               >
@@ -39,34 +57,42 @@ function GetPaymentAddressModal() {
               </button>
             </div>
             {/* .copy-wrap */}
-            <ul className="pay-info-list row">
-              <li className="col-sm-6">
-                <span>SET GAS LIMIT:</span> 120 000
-              </li>
-              <li className="col-sm-6">
-                <span>SET GAS PRICE:</span> 95 Gwei
-              </li>
-            </ul>
-            {/* .pay-info-list */}
-            <div className="pdb-2-5x pdt-1-5x">
-              <input
-                type="checkbox"
-                className="input-checkbox input-checkbox-md"
-                id="agree-term"
+            <form onSubmit={onSubmit}>
+              <div className="input-item input-with-labe pdb-2-5x pdt-1-5x">
+                <label htmlFor="token-address" className="input-item-label">
+                  Referral Code:
+                </label>
+                <input
+                  className="input-bordered"
+                  type="text"
+                  id="referralCode"
+                  name="referralCode"
+                  value={referralCode}
+                  onChange={(e) => setReferralCode(e.target.value)}
+                />
+              </div>
+              <div className="pdb-2-5x pdt-1-5x">
+                <input
+                  required
+                  type="checkbox"
+                  className="input-checkbox input-checkbox-md"
+                  id="agree-term"
+                />
+                <label htmlFor="agree-term">
+                  I hereby agree to the{" "}
+                  <strong>
+                    token purchase aggrement &amp; token sale term
+                  </strong>
+                  .
+                </label>
+              </div>
+              <AsyncButton
+                loading={loading}
+                loadingText={"Buying Tokens..."}
+                defaultText={"Buy Tokens Now"}
+                buttonClasses="btn-primary"
               />
-              <label htmlFor="agree-term">
-                I hereby agree to the{" "}
-                <strong>token purchase aggrement &amp; token sale term</strong>.
-              </label>
-            </div>
-            <button
-              className="btn btn-primary"
-              data-dismiss="modal"
-              data-toggle="modal"
-              data-target="#pay-confirm"
-            >
-              Buy Tokens Now <em className="ti ti-arrow-right mgl-4-5x" />
-            </button>
+            </form>
             <div className="gaps-3x" />
             <div className="note note-plane note-light mgb-1x">
               <em className="fas fa-info-circle" />

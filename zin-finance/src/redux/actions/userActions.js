@@ -14,6 +14,10 @@ const verifiedTestAccount = {
   email: "admin@admin.com",
   userName: "admin@admin.com",
   ethAddress: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
+  emailVerified: true,
+  referralCode: "abc123",
+  totalBonusGenerated: 60,
+  totalTokenBought: 1200,
 };
 
 const unverifiedTestAccount = {
@@ -22,6 +26,10 @@ const unverifiedTestAccount = {
   email: "agent@agent.com",
   userName: "agent@agent.com",
   ethAddress: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
+  emailVerified: false,
+  referralCode: "xyz123",
+  totalBonusGenerated: 60,
+  totalTokenBought: 120,
 };
 
 export function logoutUser() {
@@ -34,11 +42,6 @@ export function logoutUser() {
 export function fetchUser(token) {
   return async (dispatch) => {
     let profile = await _fetchUser(token);
-    let emailConfirmed = await _getEmailConfirmStatus(
-      profile.data.email,
-      token
-    );
-    dispatch(_setEmailConfirmStatus(emailConfirmed));
     dispatch(_setUser(profile.data));
   };
 }
@@ -55,7 +58,7 @@ export async function registerUser(data) {
       return response.data.message;
     }
   } catch (err) {
-    console.log("error registering user", err);
+    console.warn("error registering user", err);
     return DEFAULT_ERROR;
   }
 }
@@ -76,7 +79,7 @@ export async function resetPassword(userName) {
       return response.data.message;
     }
   } catch (err) {
-    console.log("error resetting password", err);
+    console.warn("error resetting password", err);
     return DEFAULT_ERROR;
   }
 }
@@ -85,7 +88,6 @@ export function login(email, password, rememberMe, callback) {
   return async (dispatch) => {
     try {
       if (email === verifiedTestAccount.email) {
-        dispatch(_setEmailConfirmStatus(true));
         dispatch(_setUser(verifiedTestAccount));
         if (rememberMe) {
           Cookies.set("token", email, { expires: 7, path: "/" });
@@ -97,7 +99,6 @@ export function login(email, password, rememberMe, callback) {
         }
         return;
       } else if (email === unverifiedTestAccount.email) {
-        dispatch(_setEmailConfirmStatus(false));
         dispatch(_setUser(unverifiedTestAccount));
         if (rememberMe) {
           Cookies.set("token", email, { expires: 7, path: "/" });
@@ -115,9 +116,6 @@ export function login(email, password, rememberMe, callback) {
       });
       if (authResponse.status === 200) {
         let profile = await _fetchUser(authResponse.data.tempToken);
-        dispatch(
-          _setEmailConfirmStatus(!authResponse.data.data.isEmailUnVerified)
-        );
         dispatch(_setUser(profile.data));
         if (rememberMe) {
           Cookies.set("token", authResponse.data.tempToken, { path: "/" });
@@ -136,7 +134,7 @@ export function login(email, password, rememberMe, callback) {
         }
       }
     } catch (err) {
-      console.log("error logging in user", err);
+      console.warn("error logging in user", err);
       if (callback) {
         callback(DEFAULT_ERROR);
       }
@@ -170,7 +168,7 @@ export function updateUser(data, callback) {
         }
       }
     } catch (err) {
-      console.log("error updating user", err);
+      console.warn("error updating user", err);
       dispatch({
         type: ActionTypes.USER_UPDATE_ERROR,
         data: DEFAULT_ERROR,
@@ -199,7 +197,7 @@ export async function updatePassword(data) {
       return updateResponse.data.message;
     }
   } catch (err) {
-    console.log("error updating password", err);
+    console.warn("error updating password", err);
     return DEFAULT_ERROR;
   }
 }
@@ -223,17 +221,17 @@ export async function resendEmail(email) {
       return resendResponse.data.message;
     }
   } catch (err) {
-    console.log("error resending email", err);
+    console.warn("error resending email", err);
     return DEFAULT_ERROR;
   }
 }
 
-function _setEmailConfirmStatus(emailConfirmed) {
-  return {
-    type: ActionTypes.SET_EMAIL_CONFIRM,
-    data: emailConfirmed,
-  };
-}
+// function _setEmailConfirmStatus(emailConfirmed) {
+//   return {
+//     type: ActionTypes.SET_EMAIL_CONFIRM,
+//     data: emailConfirmed,
+//   };
+// }
 
 function _setUser(data) {
   return {
@@ -267,36 +265,36 @@ function _fetchUser(token) {
         reject(DEFAULT_ERROR);
       }
     } catch (err) {
-      console.log("error getting user info", err);
+      console.warn("error getting user info", err);
       reject(DEFAULT_ERROR);
     }
   });
 }
 
-function _getEmailConfirmStatus(userId, token) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      if (token === verifiedTestAccount.email) {
-        resolve(true);
-        return;
-      } else if (token === unverifiedTestAccount.email) {
-        resolve(false);
-        return;
-      }
-      let response = await axios.get("/api/Account/email/confirm", null, {
-        params: {
-          userId,
-          token,
-        },
-      });
-      if (response.status === "200") {
-        resolve(true);
-      } else {
-        resolve(false);
-      }
-    } catch (err) {
-      console.log("error getting user email confirm status", err);
-      reject(DEFAULT_ERROR);
-    }
-  });
-}
+// function _getEmailConfirmStatus(userId, token) {
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       if (token === verifiedTestAccount.email) {
+//         resolve(true);
+//         return;
+//       } else if (token === unverifiedTestAccount.email) {
+//         resolve(false);
+//         return;
+//       }
+//       let response = await axios.get("/api/Account/email/confirm", null, {
+//         params: {
+//           userId,
+//           token,
+//         },
+//       });
+//       if (response.status === "200") {
+//         resolve(true);
+//       } else {
+//         resolve(false);
+//       }
+//     } catch (err) {
+//       console.warn("error getting user email confirm status", err);
+//       reject(DEFAULT_ERROR);
+//     }
+//   });
+// }

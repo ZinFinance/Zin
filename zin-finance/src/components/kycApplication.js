@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function KYCApplication() {
-  const emailVerified = useSelector((state) => state.userReducer.emailVerified);
+  const emailVerified = useSelector(
+    (state) => state.userReducer.user.emailVerified
+  );
   const kycApplicationStatus = useSelector(
     (state) => state.kycReducer.applicationStatus
   );
@@ -18,7 +20,7 @@ function KYCApplication() {
     if (emailVerified) {
       if (kycApplicationStatus) {
         if (kycApplicationStatus.reviewStatus === "completed") {
-          if ((kycApplicationStatus.reviewResult.reviewAnswer = "RED")) {
+          if (kycApplicationStatus.reviewResult.reviewAnswer === "RED") {
             setKYCStatus({
               buttonText: "Click here to view more details",
               description: "Your application has been rejected",

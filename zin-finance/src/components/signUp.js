@@ -152,8 +152,23 @@ function SignUp() {
             type="checkbox"
           />
           <label htmlFor="term-condition">
-            I agree to Zin's <a href="regular-page.html">Privacy Policy</a>{" "}
-            &amp; <a href="regular-page.html"> Terms.</a>
+            I agree to Zin's{" "}
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://zinlandingpage.azurewebsites.net/privacy-policy/"
+            >
+              Privacy Policy
+            </a>{" "}
+            &amp;{" "}
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://zinlandingpage.azurewebsites.net/terms-and-conditions/"
+            >
+              {" "}
+              Terms.
+            </a>
           </label>
         </div>
         <AsyncButton

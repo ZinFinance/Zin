@@ -1,12 +1,12 @@
 import React, { useReducer } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 import { useCheckEmailVerified } from "../utility";
 import { updateUser } from "../redux/actions/userActions";
 
 import WalletModal from "./walletModal";
 import UpdatePassword from "./updatePassword";
 import AsyncButton from "./AsyncButton";
+import ReferralCard from "./referralCard";
 
 function Profile() {
   const user = useSelector((state) => state.userReducer.user);
@@ -20,7 +20,6 @@ function Profile() {
     error: false,
     loading: false,
   });
-  const emailVerified = useSelector((state) => state.userReducer.emailVerified);
   const disabled = useCheckEmailVerified();
   const kycApplicationStatus = useSelector(
     (state) => state.kycReducer.applicationStatus
@@ -299,7 +298,7 @@ function Profile() {
               <h6 className="card-title card-title-sm">Your Account Status</h6>
               <ul className="btn-grp">
                 <li>
-                  {emailVerified ? (
+                  {user.emailVerified ? (
                     <span
                       style={{ cursor: "initial" }}
                       className="btn btn-auto btn-xs btn-success"
@@ -350,7 +349,7 @@ function Profile() {
                     title="1 ETH = 100 ZIN"
                   />
                 </span>
-                {emailVerified ? (
+                {user.emailVerified ? (
                   <a
                     href="#edit-wallet"
                     data-toggle="modal"
@@ -370,35 +369,7 @@ function Profile() {
               </div>
             </div>
           </div>
-          <div className="referral-info card">
-            <div className="card-innr">
-              <h6 className="card-title card-title-sm">Earn with Referral</h6>
-              <p className=" pdb-0-5x">
-                Invite your friends &amp; family and receive a{" "}
-                <strong>
-                  <span className="text-primary">bonus - 15%</span> of the value
-                  of contribution.
-                </strong>
-              </p>
-              <div className="copy-wrap mgb-0-5x">
-                <span className="copy-feedback" />
-                <em className="fas fa-link" />
-                <input
-                  type="text"
-                  className="copy-address"
-                  defaultValue="https://demo.themenio.com/ico?ref=7d264f90653733592"
-                  disabled
-                />
-                <button
-                  className="copy-trigger copy-clipboard"
-                  data-clipboard-text="https://demo.themenio.com/ico?ref=7d264f90653733592"
-                >
-                  <em className="ti ti-files" />
-                </button>
-              </div>
-              {/* .copy-wrap */}
-            </div>
-          </div>
+          <ReferralCard />
           {/* <div className="kyc-info card">
             <div className="card-innr">
               <h6 className="card-title card-title-sm">

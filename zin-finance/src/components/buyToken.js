@@ -16,8 +16,9 @@ function BuyToken() {
   const kycApplicationStatus = useSelector(
     (state) => state.kycReducer.applicationStatus
   );
-  const [ethCalculation, setEthCalculation] = useState(1);
   const ethToUSDValue = useEthToUSDValue();
+
+  const [ethCalculation, setEthCalculation] = useState(1);
   const [txResult, setTxResult] = useState({});
   const [referralCode, setReferralCode] = useState("");
   const [buyTokenLoading, setBuyTokenLoading] = useState(false);

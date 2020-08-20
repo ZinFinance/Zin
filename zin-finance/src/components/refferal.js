@@ -5,6 +5,9 @@ import ReferralCard from "./referralCard";
 
 function Referral() {
   const user = useSelector((state) => state.userReducer.user);
+  const bonusTransactions = useSelector(
+    (state) => state.transactionReducer.bonusTransactions
+  );
   return (
     <div className="container">
       <TransactionDetailsModal />
@@ -55,7 +58,7 @@ function Referral() {
           <table className="data-table dt-init user-tnx">
             <thead>
               <tr className="data-item data-head">
-                <th className="data-col dt-tnxno">Tranx NO</th>
+                <th className="data-col dt-tnxno">Bonus ID</th>
                 <th className="data-col dt-token">Bonus Tokens Received</th>
                 <th className="data-col dt-type">
                   <div className="dt-type-text">Type</div>
@@ -63,214 +66,60 @@ function Referral() {
               </tr>
             </thead>
             <tbody>
-              <tr className="data-item">
-                <td className="data-col dt-tnxno">
-                  <div className="d-flex align-items-center">
-                    <div className="data-state data-state-pending">
-                      <span className="d-none">Pending</span>
-                    </div>
-                    <div className="fake-class">
-                      <span className="lead tnx-id">TNX1002</span>
-                      <span className="sub sub-date">2018-08-24 10:45PM</span>
-                    </div>
-                  </div>
-                </td>
-                <td className="data-col dt-token">
-                  <span className="lead token-amount">20,000</span>
-                  <span className="sub sub-symbol">ZIN</span>
-                </td>
-                <td className="data-col dt-type">
-                  <span className="dt-type-md badge badge-outline badge-success badge-md">
-                    Purchase
-                  </span>
-                  <span className="dt-type-sm badge badge-sq badge-outline badge-success badge-md">
-                    P
-                  </span>
-                </td>
-              </tr>
               {/* .data-item */}
-              <tr className="data-item">
-                <td className="data-col dt-tnxno">
-                  <div className="d-flex align-items-center">
-                    <div className="data-state data-state-approved">
-                      <span className="d-none">Approved</span>
+              {bonusTransactions.map((tx) => (
+                <tr className="data-item">
+                  <td className="data-col dt-tnxno">
+                    <div className="d-flex align-items-center">
+                      <div className="data-state data-state-approved">
+                        <span className="d-none">Approved</span>
+                      </div>
+                      <div className="fake-class">
+                        <span className="lead tnx-id">{tx.internalId}</span>
+                        <span className="sub sub-date">
+                          {tx.createDateTimeOffset}
+                        </span>
+                      </div>
                     </div>
-                    <div className="fake-class">
-                      <span className="lead tnx-id">TNX1002</span>
-                      <span className="sub sub-date">2018-08-24 10:45PM</span>
-                    </div>
-                  </div>
-                </td>
-                <td className="data-col dt-token">
-                  <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">ZIN</span>
-                </td>
-                <td className="data-col dt-type">
-                  <span className="dt-type-md badge badge-outline badge-success badge-md">
-                    Purchase
-                  </span>
-                  <span className="dt-type-sm badge badge-sq badge-outline badge-success badge-md">
-                    P
-                  </span>
-                </td>
-              </tr>
-              {/* .data-item */}
-              <tr className="data-item">
-                <td className="data-col dt-tnxno">
-                  <div className="d-flex align-items-center">
-                    <div className="data-state data-state-canceled">
-                      <span className="d-none">Canceled</span>
-                    </div>
-                    <div className="fake-class">
-                      <span className="lead tnx-id">TNX1002</span>
-                      <span className="sub sub-date">2018-08-24 10:45PM</span>
-                    </div>
-                  </div>
-                </td>
-                <td className="data-col dt-token">
-                  <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">ZIN</span>
-                </td>
-                <td className="data-col dt-type">
-                  <span className="dt-type-md badge badge-outline badge-success badge-md">
-                    Purchase
-                  </span>
-                  <span className="dt-type-sm badge badge-sq badge-outline badge-success badge-md">
-                    P
-                  </span>
-                </td>
-              </tr>
-              {/* .data-item */}
-              <tr className="data-item">
-                <td className="data-col dt-tnxno">
-                  <div className="d-flex align-items-center">
-                    <div className="data-state data-state-progress">
-                      <span className="d-none">Progress</span>
-                    </div>
-                    <div className="fake-class">
-                      <span className="lead tnx-id">TNX1002</span>
-                      <span className="sub sub-date">2018-08-24 10:45PM</span>
-                    </div>
-                  </div>
-                </td>
-                <td className="data-col dt-token">
-                  <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">ZIN</span>
-                </td>
-                <td className="data-col dt-type">
-                  <span className="dt-type-md badge badge-outline badge-success badge-md">
-                    Purchase
-                  </span>
-                  <span className="dt-type-sm badge badge-sq badge-outline badge-success badge-md">
-                    P
-                  </span>
-                </td>
-              </tr>
-              {/* .data-item */}
-              <tr className="data-item">
-                <td className="data-col dt-tnxno">
-                  <div className="d-flex align-items-center">
-                    <div className="data-state data-state-approved">
-                      <span className="d-none">Approved</span>
-                    </div>
-                    <div className="fake-class">
-                      <span className="lead tnx-id">TNX1002</span>
-                      <span className="sub sub-date">2018-08-24 10:45PM</span>
-                    </div>
-                  </div>
-                </td>
-                <td className="data-col dt-token">
-                  <span className="lead token-amount">1,050</span>
-                  <span className="sub sub-symbol">ZIN</span>
-                </td>
-                <td className="data-col dt-type">
-                  <span className="dt-type-md badge badge-outline badge-info badge-md">
-                    Bonus
-                  </span>
-                  <span className="dt-type-sm badge badge-sq badge-outline badge-info badge-md">
-                    B
-                  </span>
-                </td>
-              </tr>
-              {/* .data-item */}
-              <tr className="data-item">
-                <td className="data-col dt-tnxno">
-                  <div className="d-flex align-items-center">
-                    <div className="data-state data-state-progress">
-                      <span className="d-none">Progress</span>
-                    </div>
-                    <div className="fake-class">
-                      <span className="lead tnx-id">TNX1002</span>
-                      <span className="sub sub-date">2018-08-24 10:45PM</span>
-                    </div>
-                  </div>
-                </td>
-                <td className="data-col dt-token">
-                  <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">ZIN</span>
-                </td>
-                <td className="data-col dt-type">
-                  <span className="dt-type-md badge badge-outline badge-success badge-md">
-                    Purchase
-                  </span>
-                  <span className="dt-type-sm badge badge-sq badge-outline badge-success badge-md">
-                    P
-                  </span>
-                </td>
-              </tr>
-              {/* .data-item */}
-              <tr className="data-item">
-                <td className="data-col dt-tnxno">
-                  <div className="d-flex align-items-center">
-                    <div className="data-state data-state-canceled">
-                      <span className="d-none">Canceled</span>
-                    </div>
-                    <div className="fake-class">
-                      <span className="lead tnx-id">TNX1002</span>
-                      <span className="sub sub-date">2018-08-24 10:45PM</span>
-                    </div>
-                  </div>
-                </td>
-                <td className="data-col dt-token">
-                  <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">ZIN</span>
-                </td>
-                <td className="data-col dt-type">
-                  <span className="dt-type-md badge badge-outline badge-success badge-md">
-                    Purchase
-                  </span>
-                  <span className="dt-type-sm badge badge-sq badge-outline badge-success badge-md">
-                    P
-                  </span>
-                </td>
-              </tr>
-              {/* .data-item */}
-              <tr className="data-item">
-                <td className="data-col dt-tnxno">
-                  <div className="d-flex align-items-center">
-                    <div className="data-state data-state-progress">
-                      <span className="d-none">Progress</span>
-                    </div>
-                    <div className="fake-class">
-                      <span className="lead tnx-id">TNX1002</span>
-                      <span className="sub sub-date">2018-08-24 10:45PM</span>
-                    </div>
-                  </div>
-                </td>
-                <td className="data-col dt-token">
-                  <span className="lead token-amount">18,750</span>
-                  <span className="sub sub-symbol">ZIN</span>
-                </td>
-                <td className="data-col dt-type">
-                  <span className="dt-type-md badge badge-outline badge-success badge-md">
-                    Purchase
-                  </span>
-                  <span className="dt-type-sm badge badge-sq badge-outline badge-success badge-md">
-                    P
-                  </span>
-                </td>
-              </tr>
-              {/* .data-item */}
+                  </td>
+                  <td className="data-col dt-token">
+                    <span className="lead token-amount">
+                      {tx.bonusTokensGenerated}
+                    </span>
+                    <span className="sub sub-symbol">ZIN</span>
+                  </td>
+                  {tx.bonusType === 0 && (
+                    <td className="data-col dt-type">
+                      <span className="dt-type-md badge badge-outline badge-success badge-md">
+                        Inviter Bonus
+                      </span>
+                      <span className="dt-type-sm badge badge-sq badge-outline badge-success badge-md">
+                        I
+                      </span>
+                    </td>
+                  )}
+                  {tx.bonusType === 1 && (
+                    <td className="data-col dt-type">
+                      <span className="dt-type-md badge badge-outline badge-success badge-md">
+                        Invitee Bonus
+                      </span>
+                      <span className="dt-type-sm badge badge-sq badge-outline badge-success badge-md">
+                        I
+                      </span>
+                    </td>
+                  )}
+                  {tx.bonusType === 2 && (
+                    <td className="data-col dt-type">
+                      <span className="dt-type-md badge badge-outline badge-success badge-md">
+                        Presale Bonus
+                      </span>
+                      <span className="dt-type-sm badge badge-sq badge-outline badge-success badge-md">
+                        P
+                      </span>
+                    </td>
+                  )}
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

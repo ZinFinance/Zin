@@ -7,6 +7,7 @@ const DEFAULT_ERROR = "An error occurred. Please try again or contact support.";
 axios.defaults.headers.common["Content-Type"] = "application/json";
 // axios.defaults.baseURL =
 //   "https://cors-anywhere.herokuapp.com/http://localhost:5000";
+const API_URL = "https://stgzinapi.azurewebsites.net";
 
 const verifiedTestAccount = {
   firstName: "admin",
@@ -51,7 +52,7 @@ export async function registerUser(data) {
     if (data.email === verifiedTestAccount.email) {
       return null;
     }
-    let response = await axios.post("/api/Account/register", data);
+    let response = await axios.post(API_URL + "/api/Account/register", data);
     if (response.status === 201) {
       return null;
     } else {
@@ -68,7 +69,7 @@ export async function resetPassword(userName) {
     if (userName === verifiedTestAccount.email) {
       return null;
     }
-    let response = await axios.get("/api/Account/reset", null, {
+    let response = await axios.get(API_URL + "/api/Account/reset", null, {
       params: {
         userName,
       },
@@ -80,6 +81,31 @@ export async function resetPassword(userName) {
     }
   } catch (err) {
     console.warn("error resetting password", err);
+    return DEFAULT_ERROR;
+  }
+}
+
+export async function resetAccount(data) {
+  try {
+    if (data.userId === verifiedTestAccount.email) {
+      return null;
+    }
+    let response = await axios.get(
+      API_URL + "/api/Account/reset/confirm",
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${data.tempToken}`,
+        },
+      }
+    );
+    if (response.status === 200) {
+      return null;
+    } else {
+      return response.data.message;
+    }
+  } catch (err) {
+    console.warn("error resetting account", err);
     return DEFAULT_ERROR;
   }
 }
@@ -110,7 +136,7 @@ export function login(email, password, rememberMe, callback) {
         }
         return;
       }
-      let authResponse = await axios.get("/api/Auth/login", {
+      let authResponse = await axios.get(API_URL + "/api/Auth/login", {
         email,
         password,
       });
@@ -152,7 +178,7 @@ export function updateUser(data, callback) {
         }
         return;
       }
-      let updateResponse = await axios.put("/api/Profile", data, {
+      let updateResponse = await axios.put(API_URL + "/api/Profile", data, {
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
@@ -183,7 +209,7 @@ export function updateUser(data, callback) {
 export async function updatePassword(data) {
   try {
     let updateResponse = await axios.post(
-      "/api​/Account/updatePassword",
+      API_URL + "/api​/Account/updatePassword",
       data,
       {
         headers: {
@@ -207,14 +233,18 @@ export async function resendEmail(email) {
     if (email === unverifiedTestAccount.email) {
       return null;
     }
-    let resendResponse = await axios.post("/api/Account/email/resend", null, {
-      headers: {
-        Authorization: `Bearer ${Cookies.get("token")}`,
-      },
-      params: {
-        email,
-      },
-    });
+    let resendResponse = await axios.post(
+      API_URL + "/api/Account/email/resend",
+      null,
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+        params: {
+          email,
+        },
+      }
+    );
     if (resendResponse.status === 200) {
       return null;
     } else {
@@ -254,7 +284,7 @@ function _fetchUser(token) {
         });
         return;
       }
-      let profileResponse = await axios.get("/api/Profile", null, {
+      let profileResponse = await axios.get(API_URL + "/api/Profile", null, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -270,31 +300,3 @@ function _fetchUser(token) {
     }
   });
 }
-
-// function _getEmailConfirmStatus(userId, token) {
-//   return new Promise(async (resolve, reject) => {
-//     try {
-//       if (token === verifiedTestAccount.email) {
-//         resolve(true);
-//         return;
-//       } else if (token === unverifiedTestAccount.email) {
-//         resolve(false);
-//         return;
-//       }
-//       let response = await axios.get("/api/Account/email/confirm", null, {
-//         params: {
-//           userId,
-//           token,
-//         },
-//       });
-//       if (response.status === "200") {
-//         resolve(true);
-//       } else {
-//         resolve(false);
-//       }
-//     } catch (err) {
-//       console.warn("error getting user email confirm status", err);
-//       reject(DEFAULT_ERROR);
-//     }
-//   });
-// }

@@ -6,6 +6,8 @@ import Transactions from "../components/transactions";
 import KYCApplication from "../components/kycApplication";
 import KYCForm from "../components/kycForm";
 import Referral from "../components/refferal";
+import EmailSuccessAuth from "../components/emailSuccessAuth";
+import EmailFailAuth from "../components/emailFailAuth";
 
 function AuthRoutes() {
   return (
@@ -16,6 +18,8 @@ function AuthRoutes() {
       <Route exact path="/kyc-application" component={KYCApplication} />
       <Route exact path="/kyc-form" component={KYCForm} />
       <Route exact path="/referral" component={Referral} />
+      <Route exact path="/emailsuccess" component={EmailSuccessAuth} />
+      <Route exact path="/emailfail" component={EmailFailAuth} />
       <Redirect path="*" to="/tokensale" />
     </Switch>
   );

@@ -37,8 +37,15 @@ function Transactions() {
                         <span className="d-none">Approved</span>
                       </div>
                       <div className="fake-class">
-                        <span className="lead tnx-id">{transaction.txId}</span>
-                        <span className="sub sub-date">{transaction.date}</span>
+                        <a
+                          href={`https://etherscan.io/tx/${transaction.txId}`}
+                          className="lead tnx-id"
+                        >
+                          {transaction.txId}
+                        </a>
+                        <span className="sub sub-date">
+                          {transaction.createDateTimeOffset}
+                        </span>
                       </div>
                     </div>
                   </td>

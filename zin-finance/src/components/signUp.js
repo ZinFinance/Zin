@@ -55,9 +55,8 @@ function SignUp() {
       let error = await registerUser({
         userName: email,
         email,
-        // firstName,
-        // lastName,
-        // ethAddress,
+        password,
+        confirmPassword,
       });
       if (error) {
         setState({ error, loading: false });

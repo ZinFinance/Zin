@@ -10,6 +10,13 @@ namespace Zin.Services.Models
         public string LastName { get; set; }
         public string EthAddress { get; set; }
 
+        public string ReferralCode { get; set; }
+        public string ZinTokens { get; set; }
+        public string ReferralZinTokens { get; set; }
+        public string BonusZinTokens { get; set; }
+        public string PresaleZinTokens { get; set; }
+
+
         public AppUser ToCore()
         {
             return new AppUser
@@ -33,7 +40,12 @@ namespace Zin.Services.Models
                 Email = appUser.Email,
                 FirstName = appUser.FirstName,
                 LastName = appUser.LastName,
-                EthAddress = appUser.EthAddress
+                EthAddress = appUser.EthAddress,
+                ReferralCode = appUser.ReferralCode,
+                ZinTokens = appUser.ZinTokens,
+                ReferralZinTokens = appUser.ReferralZinTokens,
+                PresaleZinTokens = appUser.PresaleZinTokens,
+                BonusZinTokens = appUser.BonusZinTokens
             };
         }
 

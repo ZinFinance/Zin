@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,6 +38,7 @@ namespace Zin.Repository.Implementation
 
         public async Task SaveRegisteredTxAsync(RegisteredTx registeredTx)
         {
+            registeredTx.CreateDateTimeOffset = DateTimeOffset.UtcNow;
             appDbContext.RegisteredTx.Add(registeredTx);
             await appDbContext.SaveChangesAsync();
         }

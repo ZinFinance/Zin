@@ -1,6 +1,7 @@
 ﻿using Zin.Services.Models;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Zin.Repository.Models;
 
 namespace Zin.Services.Services
 {
@@ -10,5 +11,6 @@ namespace Zin.Services.Services
         Task<Result> UpdateAsync(string userId, UserDetails userDetails);
         Task<Result> RegisterTxUsingReferalCodeAsync(string userId, string txId, string referralCode, string AmountTransferredInEther, string AmountTransferredInToken, string EtherToUsdRateAtThatTime);
         Task<List<RegisteredTx>> GetRegisteredTxAsync(string userId, bool onlyReferral);
+        Task<List<BonusTx>> GetBonusTxAsync(string userId);
     }
 }

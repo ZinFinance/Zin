@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Zin.Repository.Models
 {
@@ -14,5 +15,7 @@ namespace Zin.Repository.Models
         public string EtherToUsdRateAtThatTime { get; set; }
         public string BonusTokensGenerated { get; set; }
         public BonusType BonusType { get; set; }
+
+        public DateTimeOffset CreateDateTimeOffset { get; set; }
     }
 }

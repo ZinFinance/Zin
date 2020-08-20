@@ -58,27 +58,63 @@ namespace Zin.Controllers
             return BadRequest(result);
         }
 
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<List<RegisterEthTx>>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<List<GetPurchaseTx>>))]
         [HttpGet("getregisteredtxs")]
         public async Task<ActionResult> GetReferralTransactionAsync(bool onlyReferral)
         {
             var data = await profileService.GetRegisteredTxAsync(User.Id(), onlyReferral);
 
             if (data == null)
-                return Ok(new Result<List<RegisterEthTx>>(new List<RegisterEthTx>(), true));
+                return Ok(new Result<List<GetPurchaseTx>>(new List<GetPurchaseTx>(), true));
 
-            List<RegisterEthTx> list = new List<RegisterEthTx>();
+            List<GetPurchaseTx> list = new List<GetPurchaseTx>();
             foreach (var tx in data) {
-                list.Add(new RegisterEthTx { 
+                list.Add(new GetPurchaseTx
+                { 
                     TxId = tx.TxId,
                     ReferralCode = tx.ReferralCode,
                     AmountTransferredInEther = tx.AmountTransferredInEther,
                     AmountTransferredInToken = tx.AmountTransferredInToken,
-                    EtherToUsdRateAtThatTime = tx.EtherToUsdRateAtThatTime
+                    EtherToUsdRateAtThatTime = tx.EtherToUsdRateAtThatTime,
+                    UserId = tx.UserId,
+                    BonusZinTokensGenerated = tx.BonusZinTokensGenerated,
+                    CreateDateTimeOffset = tx.CreateDateTimeOffset,
+                    PresaleZinTokensGenerated = tx.PresaleZinTokensGenerated,
+                    ReferralZinTokensGenerated = tx.ReferralZinTokensGenerated
                 });
             }
 
-            return Ok(new Result<List<RegisterEthTx>>(list, true));
+            return Ok(new Result<List<GetPurchaseTx>>(list, true));
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<List<GetBonusTxs>>))]
+        [HttpGet("getbonustxs")]
+        public async Task<ActionResult> GetBonusTransactionsAsync()
+        {
+            var data = await profileService.GetBonusTxAsync(User.Id());
+
+            if (data == null)
+                return Ok(new Result<List<GetBonusTxs>>(new List<GetBonusTxs>(), true));
+
+            List<GetBonusTxs> list = new List<GetBonusTxs>();
+            foreach (var tx in data)
+            {
+                list.Add(new GetBonusTxs
+                {
+                    TxId = tx.TxId,
+                    ReferralCode = tx.ReferralCode,
+                    AmountTransferredInEther = tx.AmountTransferredInEther,
+                    AmountTransferredInToken = tx.AmountTransferredInToken,
+                    EtherToUsdRateAtThatTime = tx.EtherToUsdRateAtThatTime,
+                    UserId = tx.UserId,
+                    BonusTokensGenerated = tx.BonusTokensGenerated,
+                    BonusType = tx.BonusType,
+                    CreateDateTimeOffset = tx.CreateDateTimeOffset,
+                    InternalId = tx.InternalId
+                });
+            }
+
+            return Ok(new Result<List<GetBonusTxs>>(list, true));
         }
     }
 }

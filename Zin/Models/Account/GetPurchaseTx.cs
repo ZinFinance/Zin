@@ -1,11 +1,9 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace Zin.Repository.Models
+namespace Zin.Models.Account
 {
-    public class RegisteredTx
+    public class GetPurchaseTx
     {
-        [Key]
         public string TxId { get; set; }
         public string UserId { get; set; }
         public string ReferralCode { get; set; }

@@ -111,25 +111,21 @@ namespace Zin.Services.Implementation
             return new Result(true, "PROFILE_UPDATED");
         }
 
-        public async Task<List<Models.RegisteredTx>> GetRegisteredTxAsync(string userId, bool onlyReferral)
+        public async Task<List<RegisteredTx>> GetRegisteredTxAsync(string userId, bool onlyReferral)
         {
             var data = await registeredTxRepository.GetRegisteredTxOfUserAsync(userId, onlyReferral);
             if (data == null)
-                return new List<Models.RegisteredTx>();
+                return new List<RegisteredTx>();
+            return data;
+        }
 
-            List<Models.RegisteredTx> list = new List<Models.RegisteredTx>();
-            foreach (var tx in data)
-            {
-                list.Add(new Models.RegisteredTx
-                {
-                    TxId = tx.TxId,
-                    ReferralCode = tx.ReferralCode,
-                    AmountTransferredInEther = tx.AmountTransferredInEther,
-                    AmountTransferredInToken = tx.AmountTransferredInToken,
-                    EtherToUsdRateAtThatTime = tx.EtherToUsdRateAtThatTime
-                });
-            }
-            return list;
+        public async Task<List<BonusTx>> GetBonusTxAsync(string userId)
+        {
+            var data = await bonusTxRepository.GetBonusTxOfUserAsync(userId);
+            if (data == null)
+                return new List<BonusTx>();
+            
+            return data;
         }
 
         /// <summary>

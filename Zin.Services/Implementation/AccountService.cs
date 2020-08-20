@@ -34,6 +34,11 @@ namespace Zin.Services.Implementation
             AppUser appUser = userDetails.ToCore();
             appUser.ReferralCode = await referralCodeRepository.GetNewReferralCodeAsync();
 
+            appUser.BonusZinTokens = "0";
+            appUser.PresaleZinTokens = "0";
+            appUser.ReferralZinTokens = "0";
+            appUser.ZinTokens = "0";
+
             IdentityResult result = await userManager.CreateAsync(appUser, password);
             if (!result.Succeeded)
             {

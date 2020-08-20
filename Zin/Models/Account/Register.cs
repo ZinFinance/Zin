@@ -17,7 +17,7 @@ namespace Zin.Models.Account
         public string Password { get; set; }
         [Required, Compare(nameof(Password))]
         public string ConfirmPassword { get; set; }
-        [Required]
+        
         public string EthAddress { get; set; }
 
         internal UserDetails ToDto()

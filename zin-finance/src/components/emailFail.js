@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 
-function EmailFail(props) {
+function EmailFail() {
   return (
     <div className="page-ath-text">
       <h2 className="page-ath-heading">

@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
-function EmailSuccess(props) {
+function EmailSuccess() {
   return (
     <div className="page-ath-text">
       <h2 className="page-ath-heading">

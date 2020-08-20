@@ -1,5 +1,4 @@
 import React from "react";
-import EmailSuccess from "./emailSuccess";
 
 function EmailFailAuth() {
   return (

@@ -15,7 +15,7 @@ namespace Zin.Services.Models
         public string ReferralZinTokens { get; set; }
         public string BonusZinTokens { get; set; }
         public string PresaleZinTokens { get; set; }
-
+        public bool IsAdmin { get; set; }
 
         public AppUser ToCore()
         {
@@ -40,6 +40,7 @@ namespace Zin.Services.Models
                 Email = appUser.Email,
                 FirstName = appUser.FirstName,
                 LastName = appUser.LastName,
+                IsAdmin = appUser.IsAdmin,
                 EthAddress = appUser.EthAddress,
                 ReferralCode = appUser.ReferralCode,
                 ZinTokens = appUser.ZinTokens,

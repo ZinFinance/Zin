@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -111,6 +112,26 @@ namespace Zin
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // add default admin
+            using (IServiceScope service = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var dbContext = service.ServiceProvider.GetRequiredService<AppDbContext>();
+                if (!dbContext.Users.Where(x => x.IsAdmin).Any())
+                {
+                    var userManager = service.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+                    userManager.CreateAsync(new AppUser
+                    {
+                        UserName = "admin",
+                        Email = "adminzin@mailinator.com",
+                        FirstName = "Admin",
+                        LastName = "User",
+                        IsAdmin = true,
+                        EmailConfirmed = true
+                    }, "ABcde@11").Wait();
+                }
+            }
+            // end default admin
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

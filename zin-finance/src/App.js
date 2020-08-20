@@ -16,7 +16,10 @@ import {
   getKYCApplicationStatus,
 } from "./redux/actions/kycActions";
 import { setTokenBalance } from "./redux/actions/tokenActions";
-import { fetchTransactions } from "./redux/actions/transactionActions";
+import {
+  fetchTransactions,
+  fetchBonusTransactions,
+} from "./redux/actions/transactionActions";
 
 import PageLoader from "./components/pageLoader";
 import EthService from "./ethService";
@@ -30,16 +33,21 @@ function App() {
   const [redirect, setRedirect] = useState("");
 
   useEffect(() => {
-    const getTokenBalance = async () => {
-      let balance = await new EthService().getTokenBalance();
-      dispatch(setTokenBalance(balance));
-    };
-    getTokenBalance();
-  }, [dispatch]);
+    if (user) {
+      const getTokenBalance = async () => {
+        let balance = await new EthService().getTokenBalance();
+        dispatch(setTokenBalance(balance));
+      };
+      getTokenBalance();
+    }
+  }, [user, dispatch]);
 
   useEffect(() => {
-    dispatch(fetchTransactions());
-  }, [dispatch]);
+    if (user) {
+      dispatch(fetchTransactions());
+      dispatch(fetchBonusTransactions());
+    }
+  }, [user, dispatch]);
 
   useEffect(() => {
     if (!user && location.search && !redirect) {

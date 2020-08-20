@@ -85,7 +85,8 @@ namespace Zin.Services.Implementation
               audience: configuration["Jwt:Issuer"],
               claims: new List<Claim>
               {
-                  new Claim(JwtRegisteredClaimNames.Sub, appUser.Id)
+                  new Claim(JwtRegisteredClaimNames.Sub, appUser.Id),
+                  new Claim("role", appUser.IsAdmin ? "ADMIN" : "USER"),
               },
               notBefore: DateTime.UtcNow,
               expires: accessTokenExpiry,

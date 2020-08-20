@@ -56,6 +56,10 @@ class EthService {
     return this.web3.toWei(value, "ether");
   }
 
+  convertFromWei(value) {
+    return this.web3.fromWei(value, "ether");
+  }
+
   async getTokenBalance() {
     var balance = await this.promisify((cb) =>
       this.tokenContract.balanceOf(this.coinbase, cb)

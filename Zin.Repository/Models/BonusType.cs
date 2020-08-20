@@ -4,6 +4,7 @@
     {
         Inviter = 0,
         Invitee = 1,
-        Presale = 2
+        Presale = 2,
+        None = 3
     }
 }

@@ -10,6 +10,7 @@ namespace Zin.Repository
         {
             services.AddTransient<IReferralCodeRepository, ReferralCodeRepository>();
             services.AddTransient<IRegisteredTxRepository, RegisteredTxRepository>();
+            services.AddTransient<IBonusTxRepository, BonusTxRepository>();
             services.AddTransient<IUserBalanceRepository, UserBalanceRepository>();
             services.AddTransient<IBonusCalculationRepository, BonusCalculationRepository>();
         }

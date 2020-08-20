@@ -6,6 +6,7 @@ using Zin.Repository.Models;
 using Zin.Repository.Repository;
 using System.Numerics;
 using System.Collections.Generic;
+using System;
 
 namespace Zin.Services.Implementation
 {
@@ -17,6 +18,7 @@ namespace Zin.Services.Implementation
         private readonly IEthTxCheckService ethTxCheckService;
         private readonly IUserBalanceRepository userBalanceRepository;
         private readonly IReferralCodeRepository referralCodeRepository;
+        private readonly IBonusTxRepository bonusTxRepository;
         private readonly IBonusCalculationRepository bonusCalculationRepository;
 
         public ProfileService(UserManager<AppUser> userManager,
@@ -25,6 +27,7 @@ namespace Zin.Services.Implementation
             IEthTxCheckService ethTxCheckService,
             IUserBalanceRepository userBalanceRepository,
             IReferralCodeRepository referralCodeRepository,
+            IBonusTxRepository bonusTxRepository,
             IBonusCalculationRepository bonusCalculationRepository)
         {
             this.userManager = userManager;
@@ -33,6 +36,7 @@ namespace Zin.Services.Implementation
             this.ethTxCheckService = ethTxCheckService;
             this.userBalanceRepository = userBalanceRepository;
             this.referralCodeRepository = referralCodeRepository;
+            this.bonusTxRepository = bonusTxRepository;
             this.bonusCalculationRepository = bonusCalculationRepository;
         }
 
@@ -68,16 +72,22 @@ namespace Zin.Services.Implementation
             //register transaction wrt user and include all the extra properties as well
             txFromBlockchain.UserId = userId;
             txFromBlockchain.EtherToUsdRateAtThatTime = EtherToUsdRateAtThatTime;
-            await registeredTxRepository.SaveRegisteredTxAsync(txFromBlockchain);
+            txFromBlockchain.ReferralCode = referralCode;
 
-            //update the user the amount of tokens transferred
-            await userBalanceRepository.AddUserTokenBalance(userId, BigInteger.Parse(txFromBlockchain.AmountTransferredInToken));
-
+            //maintain all bonuses before saving it to db
             //calculate and add the referral bonusses.
-            var presaleResponse = await CalculateAndAddPresaleBonuses(userId, BigInteger.Parse(txFromBlockchain.AmountTransferredInToken));
-            var referralResponse = await CalculateAndAddReferralBonuses(userId, referralCode, BigInteger.Parse(txFromBlockchain.AmountTransferredInToken));
+            BigInteger presaleBonus = await SaveCalculateAndReturnPresaleBonus(txFromBlockchain);
+            var (inviterBonus, inviteeBonus) = await SaveCalculateAndReturnReferralBonuses(txFromBlockchain);
 
-            return referralResponse;
+            txFromBlockchain.ReferralZinTokensGenerated = inviterBonus.ToString();
+            txFromBlockchain.BonusZinTokensGenerated = inviteeBonus.ToString();
+            txFromBlockchain.PresaleZinTokensGenerated = presaleBonus.ToString();
+
+            await registeredTxRepository.SaveRegisteredTxAsync(txFromBlockchain);
+            //update the user the amount of tokens transferred
+            await userBalanceRepository.AddUserTokenBalance(userId, BigInteger.Parse(txFromBlockchain.AmountTransferredInToken), BonusType.None);
+
+            return new Result(true, "TRANSACTION_REGISTERED_SUCCESSFULLY");
         }
 
         public async Task<Result> UpdateAsync(string userId, UserDetails userDetails)
@@ -129,36 +139,81 @@ namespace Zin.Services.Implementation
         /// <param name="referralCode"></param>
         /// <param name="originalAmount"></param>
         /// <returns></returns>
-        private async Task<Result> CalculateAndAddReferralBonuses(string userId, string referralCode, BigInteger originalAmount)
+        private async Task<(BigInteger, BigInteger)> SaveCalculateAndReturnReferralBonuses(Repository.Models.RegisteredTx registeredTx)
         {
             //now check if the referral code is present or not
-            if (string.IsNullOrWhiteSpace(referralCode))
-                return new Result(true, "TRANSACTION_REGISTERED_SUCCESSFULLY");
+            if (string.IsNullOrWhiteSpace(registeredTx.ReferralCode))
+                return (0, 0);
 
             //if present then go and find out if it is correct and is assigned to a user (Case Sensitive)
             //get the user details
-            var referredUser = await referralCodeRepository.GetUserByReferralCodeAsync(referralCode);
+            var referredUser = await referralCodeRepository.GetUserByReferralCodeAsync(registeredTx.ReferralCode);
             if (referredUser == null)
-                return new Result(true, "TRANSACTION_REGISTERED_SUCCESSFULLY");
+                return (0, 0);
 
             //calculate related amount of tokens that should be assigned to that user and assign the user that amount of tokens and update the user in db.
-            BigInteger calculatedInviterBonus = await CalculateBonus(BonusType.Inviter, originalAmount);
-            await userBalanceRepository.AddUserTokenBalance(referredUser.Id, calculatedInviterBonus);
+            BigInteger calculatedInviterBonus = await CalculateBonus(BonusType.Inviter, BigInteger.Parse(registeredTx.AmountTransferredInToken));
+            if (calculatedInviterBonus > 0)
+            {
+                await userBalanceRepository.AddUserTokenBalance(referredUser.Id, calculatedInviterBonus, BonusType.Inviter);
+                await bonusTxRepository.SaveBonusTxAsync(new BonusTx
+                {
+                    InternalId = (new Guid()).ToString(),
+                    TxId = registeredTx.TxId,
+                    UserId = referredUser.Id,
+                    BonusType = BonusType.Inviter,
+                    ReferralCode = registeredTx.ReferralCode,
+                    EtherToUsdRateAtThatTime = registeredTx.EtherToUsdRateAtThatTime,
+                    AmountTransferredInEther = registeredTx.AmountTransferredInEther,
+                    AmountTransferredInToken = registeredTx.AmountTransferredInToken,
+                    BonusTokensGenerated = calculatedInviterBonus.ToString()
+                });
+            }
 
             //calculate related amount of tokens that should be assigned to that user and assign the user that amount of tokens and update the user in db.
-            BigInteger calculatedInviteeBonus = await CalculateBonus(BonusType.Invitee, originalAmount);
-            await userBalanceRepository.AddUserTokenBalance(userId, calculatedInviteeBonus);
+            BigInteger calculatedInviteeBonus = await CalculateBonus(BonusType.Invitee, BigInteger.Parse(registeredTx.AmountTransferredInToken));
+            if (calculatedInviteeBonus > 0)
+            {
+                await userBalanceRepository.AddUserTokenBalance(registeredTx.UserId, calculatedInviteeBonus, BonusType.Invitee);
+                await bonusTxRepository.SaveBonusTxAsync(new BonusTx
+                {
+                    InternalId = (new Guid()).ToString(),
+                    TxId = registeredTx.TxId,
+                    UserId = registeredTx.UserId,
+                    BonusType = BonusType.Inviter,
+                    ReferralCode = registeredTx.ReferralCode,
+                    EtherToUsdRateAtThatTime = registeredTx.EtherToUsdRateAtThatTime,
+                    AmountTransferredInEther = registeredTx.AmountTransferredInEther,
+                    AmountTransferredInToken = registeredTx.AmountTransferredInToken,
+                    BonusTokensGenerated = calculatedInviterBonus.ToString()
+                });
+            }
 
-            return new Result(true, "TRANSACTION_REGISTERED_SUCCESSFULLY_WITH_REFERRAL_CODE");
+            return (calculatedInviterBonus, calculatedInviteeBonus);
         }
 
-        private async Task<Result> CalculateAndAddPresaleBonuses(string userId, BigInteger originalAmount)
+        private async Task<BigInteger> SaveCalculateAndReturnPresaleBonus(Repository.Models.RegisteredTx registeredTx)
         {
-            //calculate related amount of tokens that should be assigned to that user and assign the user that amount of tokens and update the user in db.
-            BigInteger calculatedInviterBonus = await CalculateBonus(BonusType.Presale, originalAmount);
-            await userBalanceRepository.AddUserTokenBalance(userId, calculatedInviterBonus);
-
-            return new Result(true, "TRANSACTION_REGISTERED_SUCCESSFULLY_WITH_PRESALE_BONUS");
+            //calculate related amount of tokens that should be assigned to that user
+            //and assign the user that amount of tokens and update the user in db.
+            BigInteger calculatedPresaleBonus = await CalculateBonus(BonusType.Presale, BigInteger.Parse(registeredTx.AmountTransferredInToken));
+            if (calculatedPresaleBonus > 0)
+            {
+                await userBalanceRepository.AddUserTokenBalance(registeredTx.UserId, calculatedPresaleBonus, BonusType.Presale);
+                await bonusTxRepository.SaveBonusTxAsync(new BonusTx
+                {
+                    InternalId = (new Guid()).ToString(),
+                    TxId = registeredTx.TxId,
+                    UserId = registeredTx.UserId,
+                    BonusType = BonusType.Presale,
+                    ReferralCode = registeredTx.ReferralCode,
+                    EtherToUsdRateAtThatTime = registeredTx.EtherToUsdRateAtThatTime,
+                    AmountTransferredInEther = registeredTx.AmountTransferredInEther,
+                    AmountTransferredInToken = registeredTx.AmountTransferredInToken,
+                    BonusTokensGenerated = calculatedPresaleBonus.ToString()
+                });
+            }
+            return calculatedPresaleBonus;
         }
 
         private async Task<BigInteger> CalculateBonus(BonusType bonusType, BigInteger originalAmount)

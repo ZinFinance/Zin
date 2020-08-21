@@ -24,6 +24,13 @@ function ResetAccount() {
   }
 
   const onChange = (e) => {
+    if (e.target.name === "confirmNewPassword") {
+      if (e.target.value !== newPassword) {
+        e.target.setCustomValidity("Please enter the same password as above");
+      } else {
+        e.target.setCustomValidity("");
+      }
+    }
     setState({
       [e.target.name]: e.target.value,
       error: false,

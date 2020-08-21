@@ -122,13 +122,13 @@ function UpdatePassword() {
           {/* .col */}
         </div>
         {/* .row */}
-        <div className="note note-plane note-info pdb-1x">
+        {/* <div className="note note-plane note-info pdb-1x">
           <em className="fas fa-info-circle" />
           <p>
             Password should be minmum 8 letter and include lower and uppercase
             letter.
           </p>
-        </div>
+        </div> */}
         <div className="gaps-1x" />
         {/* 10px gap */}
         <div className="d-sm-flex justify-content-between align-items-center">

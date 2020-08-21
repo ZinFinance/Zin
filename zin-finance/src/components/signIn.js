@@ -7,8 +7,8 @@ import AsyncButton from "./AsyncButton";
 function SignIn() {
   const dispatch = useDispatch();
   const [state, setState] = useReducer(reducer, {
-    email: "admin@admin.com",
-    password: "admin",
+    email: "",
+    password: "",
     rememberMe: false,
     error: false,
     loading: false,

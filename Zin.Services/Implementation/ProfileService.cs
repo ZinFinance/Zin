@@ -144,7 +144,7 @@ namespace Zin.Services.Implementation
             //if present then go and find out if it is correct and is assigned to a user (Case Sensitive)
             //get the user details
             var referredUser = await referralCodeRepository.GetUserByReferralCodeAsync(registeredTx.ReferralCode);
-            if (referredUser == null)
+            if (referredUser == null || referredUser.UserName == registeredTx.UserId)
                 return (0, 0);
 
             //calculate related amount of tokens that should be assigned to that user and assign the user that amount of tokens and update the user in db.

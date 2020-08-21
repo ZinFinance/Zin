@@ -148,7 +148,7 @@ export function login(email, password, rememberMe, callback) {
         return;
       }
       let authResponse = await axios.post(API_URL + "/api/Auth/login", {
-        email,
+        userName: email,
         password,
       });
       if (authResponse.status === 200) {
@@ -220,7 +220,7 @@ export function updateUser(data, callback) {
 export async function updatePassword(data) {
   try {
     let updateResponse = await axios.post(
-      API_URL + "/api​/Account/updatePassword",
+      API_URL + "/api/Account/changePassword",
       data,
       {
         headers: {

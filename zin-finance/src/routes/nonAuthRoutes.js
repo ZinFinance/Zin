@@ -18,6 +18,7 @@ function NonAuthRoutes() {
       <Route exact path="/emailsuccess" component={EmailSuccess} />
       <Route exact path="/emailfail" component={EmailFail} />
       <Route exact path="/resetaccount" component={ResetAccount} />
+      <Redirect exact path="/" to="/sign-up" />
       <Redirect
         path="*"
         to={{

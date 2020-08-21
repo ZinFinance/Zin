@@ -1,6 +1,7 @@
 import * as ActionTypes from "../constants";
 import axios from "axios";
 import Cookies from "js-cookie";
+import EthService from "../../ethService";
 
 const DEFAULT_ERROR = "An error occurred. Please try again or contact support.";
 
@@ -16,7 +17,7 @@ const verifiedTestAccount = {
   email: "admin@admin.com",
   userName: "admin@admin.com",
   ethAddress: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
-  emailVerified: true,
+  isEmailVerified: true,
   referralCode: "abc123",
   totalBonusGenerated: 60,
   totalTokenBought: 1200,
@@ -28,11 +29,18 @@ const unverifiedTestAccount = {
   email: "agent@agent.com",
   userName: "agent@agent.com",
   ethAddress: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
-  emailVerified: false,
+  isEmailVerified: false,
   referralCode: "xyz123",
   totalBonusGenerated: 60,
   totalTokenBought: 120,
 };
+
+export function setTokenBalance(data) {
+  return {
+    type: ActionTypes.SET_TOKEN_BALANCE,
+    data,
+  };
+}
 
 export function logoutUser() {
   Cookies.remove("token");
@@ -45,6 +53,8 @@ export function fetchUser(token) {
   return async (dispatch) => {
     let profile = await _fetchUser(token);
     dispatch(_setUser(profile.data));
+    let balance = await new EthService().getTokenBalance();
+    dispatch(setTokenBalance(balance));
   };
 }
 
@@ -290,8 +300,14 @@ function _fetchUser(token) {
           Authorization: `Bearer ${token}`,
         },
       });
+      let ethService = new EthService();
+      let user = profileResponse.data;
+      user.totalBonusGenerated = ethService.convertFromWei(
+        user.totalBonusGenerated
+      );
+      user.totalTokenBought = ethService.convertFromWei(user.totalTokenBought);
       if (profileResponse.status === 200) {
-        resolve(profileResponse.data);
+        resolve(user);
       } else {
         reject(DEFAULT_ERROR);
       }

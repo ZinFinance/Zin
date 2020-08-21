@@ -26,15 +26,13 @@ function SignIn() {
   function signIn(e) {
     e.preventDefault();
     setState({ loading: true });
-    setTimeout(() => {
-      dispatch(
-        login(email, password, rememberMe, (error) => {
-          if (error) {
-            setState({ loading: false, error });
-          }
-        })
-      );
-    }, 1000);
+    dispatch(
+      login(email, password, rememberMe, (error) => {
+        if (error) {
+          setState({ loading: false, error });
+        }
+      })
+    );
   }
 
   return (

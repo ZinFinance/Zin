@@ -34,7 +34,7 @@ function Footer(props) {
                   rel="noopener noreferrer"
                   href="https://zinlandingpage.azurewebsites.net/terms-and-conditions/"
                 >
-                  Terms of Condition
+                  Terms and Conditions
                 </a>
               </li>
             </ul>

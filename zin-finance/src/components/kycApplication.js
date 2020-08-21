@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 function KYCApplication() {
   const emailVerified = useSelector(
-    (state) => state.userReducer.user.emailVerified
+    (state) => state.userReducer.user.isEmailVerified
   );
   const kycApplicationStatus = useSelector(
     (state) => state.kycReducer.applicationStatus
@@ -102,10 +102,10 @@ function KYCApplication() {
             </div>
           </div>
           {/* .card */}
-          <p className="text-light text-center">
+          {/* <p className="text-light text-center">
             If you have any question, please contact our support team{" "}
             <a href="mailto:info@tokenwiz.com">info@tokenwiz.com</a>.
-          </p>
+          </p> */}
           <div className="gaps-1x" />
           <div className="gaps-3x d-none d-sm-block" />
         </div>

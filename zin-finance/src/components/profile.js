@@ -49,26 +49,24 @@ function Profile() {
   const updateProfile = (e) => {
     e.preventDefault();
     setState({ loading: true });
-    setTimeout(() => {
-      dispatch(
-        updateUser(
-          {
-            firstName,
-            lastName,
-            email,
-            ethAddress,
-          },
-          (error) => {
-            debugger;
-            if (error) {
-              setState({ error, loading: false });
-            } else {
-              setState({ success: true, loading: false });
-            }
+    dispatch(
+      updateUser(
+        {
+          firstName,
+          lastName,
+          email,
+          ethAddress,
+        },
+        (error) => {
+          debugger;
+          if (error) {
+            setState({ error, loading: false });
+          } else {
+            setState({ success: true, loading: false });
           }
-        )
-      );
-    }, 1000);
+        }
+      )
+    );
   };
 
   return (
@@ -298,7 +296,7 @@ function Profile() {
               <h6 className="card-title card-title-sm">Your Account Status</h6>
               <ul className="btn-grp">
                 <li>
-                  {user.emailVerified ? (
+                  {user.isEmailVerified ? (
                     <span
                       style={{ cursor: "initial" }}
                       className="btn btn-auto btn-xs btn-success"
@@ -338,25 +336,27 @@ function Profile() {
               <div className="d-flex justify-content-between">
                 <span>
                   <span>
-                    {ethAddress.substr(0, 8) +
-                      "....." +
-                      ethAddress.substr(ethAddress.length - 8)}
+                    {ethAddress
+                      ? ethAddress.substr(0, 8) +
+                        "....." +
+                        ethAddress.substr(ethAddress.length - 8)
+                      : "No Wallet Added"}
                   </span>{" "}
-                  <em
+                  {/* <em
                     className="fas fa-info-circle text-exlight"
                     data-toggle="tooltip"
                     data-placement="bottom"
-                    title="1 ETH = 100 ZIN"
-                  />
+                    title={'"1 ETH = 100 ZIN"'}
+                  /> */}
                 </span>
-                {user.emailVerified ? (
+                {user.isEmailVerified ? (
                   <a
                     href="#edit-wallet"
                     data-toggle="modal"
                     data-target="#edit-wallet"
                     className="link link-ucap"
                   >
-                    Edit
+                    {ethAddress ? "Edit" : "Add"}
                   </a>
                 ) : (
                   <span

@@ -29,23 +29,22 @@ function WalletModal() {
   const updateWallet = (e) => {
     e.preventDefault();
     setState({ loading: true });
-    setTimeout(() => {
-      dispatch(
-        updateUser(
-          {
-            ...user,
-            ethAddress,
-          },
-          (error) => {
-            if (error) {
-              setState({ error, loading: false });
-            } else {
-              setState({ success: true, loading: false });
-            }
+
+    dispatch(
+      updateUser(
+        {
+          ...user,
+          ethAddress,
+        },
+        (error) => {
+          if (error) {
+            setState({ error, loading: false });
+          } else {
+            setState({ success: true, loading: false });
           }
-        )
-      );
-    }, 1000);
+        }
+      )
+    );
   };
 
   return (

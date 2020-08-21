@@ -10,15 +10,16 @@ export default function (state = initialState, action) {
       return {
         ...state,
         user: action.data,
-        loginError: false,
-        updateError: false,
       };
     }
     case ActionTypes.LOGOUT_USER: {
-      return { ...state, user: null, emailVerified: false };
+      return { ...state, user: null };
     }
-    case ActionTypes.SET_EMAIL_CONFIRM: {
-      return { ...state, emailVerified: action.data };
+    case ActionTypes.SET_TOKEN_BALANCE: {
+      return {
+        ...state,
+        user: state.user ? { ...state.user, tokenBalance: action.data } : null,
+      };
     }
     default:
       return state;

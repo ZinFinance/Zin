@@ -15,32 +15,19 @@ import {
   getKYCAccessToken,
   getKYCApplicationStatus,
 } from "./redux/actions/kycActions";
-import { setTokenBalance } from "./redux/actions/tokenActions";
 import {
   fetchTransactions,
   fetchBonusTransactions,
 } from "./redux/actions/transactionActions";
 
 import PageLoader from "./components/pageLoader";
-import EthService from "./ethService";
 
 function App() {
   const user = useSelector((state) => state.userReducer.user);
-  const emailVerified = useSelector((state) => state.userReducer.emailVerified);
   const dispatch = useDispatch();
   const location = useLocation();
   const history = useHistory();
   const [redirect, setRedirect] = useState("");
-
-  useEffect(() => {
-    if (user) {
-      const getTokenBalance = async () => {
-        let balance = await new EthService().getTokenBalance();
-        dispatch(setTokenBalance(balance));
-      };
-      getTokenBalance();
-    }
-  }, [user, dispatch]);
 
   useEffect(() => {
     if (user) {
@@ -58,7 +45,7 @@ function App() {
     }
   }, [user, location.search, redirect, history]);
 
-  const kycApplicant = emailVerified && user && user.email;
+  const kycApplicant = user && user.isEmailVerified && user.email;
   useEffect(() => {
     if (kycApplicant) {
       dispatch(getKYCAccessToken(kycApplicant));
@@ -69,7 +56,7 @@ function App() {
   const shouldFetchUser = !user && Cookies.get("token");
   useEffect(() => {
     if (shouldFetchUser) {
-      setTimeout(() => dispatch(fetchUser(Cookies.get("token"))), 1000);
+      dispatch(fetchUser(Cookies.get("token")));
     }
   }, [shouldFetchUser, dispatch]);
 

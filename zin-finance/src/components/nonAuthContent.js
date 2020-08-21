@@ -19,10 +19,16 @@ function NonAuthContent(props) {
           <div className="page-ath-footer">
             <ul className="footer-links">
               <li>
-                <a href="regular-page.html">Privacy Policy</a>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://zinlandingpage.azurewebsites.net/terms-and-conditions/"
+                >
+                  Privacy Policy
+                </a>
               </li>
               <li>
-                <a href="regular-page.html">Terms</a>
+                <a href="regular-page.html">Terms and Conditions</a>
               </li>
               <li>© {new Date().getFullYear()} Zin.</li>
             </ul>

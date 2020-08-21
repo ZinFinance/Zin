@@ -3,15 +3,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { useCheckEmailVerified, useEthToUSDValue } from "../utility";
 import WalletModal from "./walletModal";
-import GetPaymentAddressModal from "./getPaymentAddressModal";
+import BuyWithOtherModal from "./buyWithOtherModal";
+import BuyWithMetaMaskModal from "./buyWithMetaMaskModal";
 import TransactionResultModal from "./transactionResultModal";
 import { saveTransaction } from "../redux/actions/transactionActions";
 import EthService from "../ethService";
 
+const tokenRate = process.env.REACT_APP_API_TOKEN_RATE;
+
 function BuyToken() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userReducer.user);
-  const tokenInfo = useSelector((state) => state.tokenReducer);
   const disabled = useCheckEmailVerified();
   const kycApplicationStatus = useSelector(
     (state) => state.kycReducer.applicationStatus
@@ -20,59 +22,91 @@ function BuyToken() {
 
   const [ethCalculation, setEthCalculation] = useState(1);
   const [txResult, setTxResult] = useState({});
-  const [referralCode, setReferralCode] = useState("");
   const [buyTokenLoading, setBuyTokenLoading] = useState(false);
 
   let walletToggle = null;
-  let paymentToggle = null;
+  let buyWithOtherToggle = null;
+  let buyWithMetaMaskToggle = null;
+  let closeBuyWithOtherModal = null;
+  let closeBuyWithMetaMaskModal = null;
   let transactionResultToggle = null;
-  let closePaymentModal = null;
 
-  const buyTokens = () => {
+  const buyTokensWithOther = () => {
     if (!user.ethAddress && walletToggle) {
       walletToggle.click();
-    } else if (paymentToggle) {
-      paymentToggle.click();
+    } else if (buyWithOtherToggle) {
+      buyWithOtherToggle.click();
     }
   };
 
-  const confirmBuyToken = async () => {
+  const buyTokensWithMetaMask = () => {
+    if (!user.ethAddress && walletToggle) {
+      walletToggle.click();
+    } else if (buyWithMetaMaskToggle) {
+      buyWithMetaMaskToggle.click();
+    }
+  };
+
+  const confirmBuyTokenWithOther = async (txId, referralCode) => {
+    let ethService = new EthService();
+    setBuyTokenLoading(true);
+    dispatch(
+      saveTransaction(
+        {
+          txId,
+          amountTransferredInEther: ethService.convertToWei(ethCalculation),
+          amountTransferredInToken: ethService.convertToWei(
+            ethCalculation * tokenRate
+          ),
+          etherToUsdRateAtThatTime: "" + ethToUSDValue,
+          referralCode: referralCode,
+        },
+        (err) => {
+          if (err) {
+            setTxResult({ err });
+          } else {
+            setTxResult({ success: txId });
+          }
+        }
+      )
+    );
+  };
+
+  const confirmBuyTokenWithMetaMask = async (referralCode) => {
     let ethService = new EthService();
     let txId = await ethService.buyToken(ethCalculation, user.ethAddress);
     setBuyTokenLoading(true);
-    setTimeout(() => {
-      if (txId) {
-        dispatch(
-          saveTransaction(
-            {
-              txId,
-              amountTransferredInEther: ethService.convertToWei(ethCalculation),
-              amountTransferredInToken: ethService.convertToWei(
-                ethCalculation * tokenInfo.tokenRate
-              ),
-              etherToUsdRateAtThatTime: "" + ethToUSDValue,
-              referralCode: referralCode,
-            },
-            (err) => {
-              if (err) {
-                setTxResult({ err });
-              } else {
-                setTxResult({ success: txId });
-              }
+    if (txId) {
+      dispatch(
+        saveTransaction(
+          {
+            txId,
+            amountTransferredInEther: ethService.convertToWei(ethCalculation),
+            amountTransferredInToken: ethService.convertToWei(
+              ethCalculation * tokenRate
+            ),
+            etherToUsdRateAtThatTime: "" + ethToUSDValue,
+            referralCode: referralCode,
+          },
+          (err) => {
+            if (err) {
+              setTxResult({ err });
+            } else {
+              setTxResult({ success: txId });
             }
-          )
-        );
-      } else {
-        setTxResult({
-          err: "Your Wallet address doesn't match MetaMask address",
-        });
-      }
-    }, 1000);
+          }
+        )
+      );
+    } else {
+      setTxResult({
+        err: "Your Wallet address doesn't match MetaMask address",
+      });
+    }
   };
 
   const checkBuyTokenCondition = () => {
     let userReachedThreshold =
-      (user.totalTokenBought / tokenInfo.tokenRate) * ethToUSDValue > 2000;
+      (user.totalTokenBought / tokenRate) * ethToUSDValue > 2000;
     let kycStatus =
       kycApplicationStatus &&
       kycApplicationStatus.reviewStatus === "completed" &&
@@ -91,12 +125,20 @@ function BuyToken() {
   useEffect(() => {
     if (txResult.success || txResult.err) {
       setBuyTokenLoading(false);
-      if (closePaymentModal) {
-        closePaymentModal.click();
+      if (closeBuyWithMetaMaskModal) {
+        closeBuyWithMetaMaskModal.click();
+      }
+      if (closeBuyWithOtherModal) {
+        closeBuyWithOtherModal.click();
       }
       transactionResultToggle.click();
     }
-  }, [txResult, closePaymentModal, transactionResultToggle]);
+  }, [
+    txResult,
+    closeBuyWithMetaMaskModal,
+    closeBuyWithOtherModal,
+    transactionResultToggle,
+  ]);
 
   return (
     <div className="col-lg-12">
@@ -111,21 +153,35 @@ function BuyToken() {
       <WalletModal />
 
       <button
-        ref={(el) => (paymentToggle = el)}
+        ref={(el) => (buyWithMetaMaskToggle = el)}
         style={{ display: "none" }}
         data-toggle="modal"
-        data-target="#get-pay-address"
+        data-target="#buy-with-metamask"
       >
-        Get Address for Payment
+        Pay with MetaMask
       </button>
-      <GetPaymentAddressModal
+      <BuyWithMetaMaskModal
         contribution={ethCalculation}
-        tokenRate={tokenInfo.tokenRate}
-        referralCode={referralCode}
-        setReferralCode={setReferralCode}
-        confirmBuyToken={confirmBuyToken}
+        tokenRate={tokenRate}
+        confirmBuyToken={confirmBuyTokenWithMetaMask}
         loading={buyTokenLoading}
-        closeRef={(el) => (closePaymentModal = el)}
+        closeRef={(el) => (closeBuyWithMetaMaskModal = el)}
+      />
+
+      <button
+        ref={(el) => (buyWithOtherToggle = el)}
+        style={{ display: "none" }}
+        data-toggle="modal"
+        data-target="#buy-with-other"
+      >
+        Buy with other
+      </button>
+      <BuyWithOtherModal
+        contribution={ethCalculation}
+        tokenRate={tokenRate}
+        confirmBuyToken={confirmBuyTokenWithOther}
+        loading={buyTokenLoading}
+        closeRef={(el) => (closeBuyWithOtherModal = el)}
       />
 
       <button
@@ -151,6 +207,7 @@ function BuyToken() {
                 type="number"
                 value={ethCalculation}
                 onChange={(e) => setEthCalculation(e.target.value)}
+                min="1"
               />
               <div className="token-pay-currency">
                 {/* toggle-tigger toggle-caret */}
@@ -173,9 +230,7 @@ function BuyToken() {
             <div className="token-received">
               <div className="token-eq-sign">=</div>
               <div className="token-received-amount">
-                <h5 className="token-amount">
-                  {ethCalculation * tokenInfo.tokenRate}
-                </h5>
+                <h5 className="token-amount">{ethCalculation * tokenRate}</h5>
                 <div className="token-symbol">ZIN</div>
               </div>
             </div>
@@ -202,13 +257,28 @@ function BuyToken() {
                 </button>
               </Link>
             ) : (
-              <button
-                onClick={buyTokens}
-                {...disabled}
-                className="btn btn-primary"
-              >
-                Buy Tokens
-              </button>
+              <div>
+                <button
+                  onClick={buyTokensWithMetaMask}
+                  {...disabled}
+                  style={{ marginRight: "10px" }}
+                  className="btn btn-primary"
+                >
+                  <img
+                    alt="metamask-logo"
+                    style={{ height: "20px", marginRight: "10px" }}
+                    src="/images/metamask-logo.png"
+                  />
+                  Buy with MetaMask
+                </button>{" "}
+                <button
+                  onClick={buyTokensWithOther}
+                  {...disabled}
+                  className="btn btn-primary"
+                >
+                  Buy with other Ethereum Wallets
+                </button>
+              </div>
             )}
           </div>
         </div>

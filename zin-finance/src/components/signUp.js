@@ -51,19 +51,17 @@ function SignUp() {
   const onSubmit = async (e) => {
     e.preventDefault();
     setState({ loading: true });
-    setTimeout(async () => {
-      let error = await registerUser({
-        userName: email,
-        email,
-        password,
-        confirmPassword,
-      });
-      if (error) {
-        setState({ error, loading: false });
-      } else {
-        history.push("/sign-up-success", { justRegistered: true });
-      }
-    }, 1000);
+    let error = await registerUser({
+      userName: email,
+      email,
+      password,
+      confirmPassword,
+    });
+    if (error) {
+      setState({ error, loading: false });
+    } else {
+      history.push("/sign-up-success", { justRegistered: true });
+    }
   };
 
   return (

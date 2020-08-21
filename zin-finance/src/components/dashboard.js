@@ -1,12 +1,13 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { getPrettyValue } from "../utility";
-import bigDecimal from "js-big-decimal";
 import BuyToken from "./buyToken";
 import { useEthToUSDValue } from "../utility";
 
+const tokenRate = process.env.REACT_APP_API_TOKEN_RATE;
+
 function Dashboard() {
-  const tokenInfo = useSelector((state) => state.tokenReducer);
+  const user = useSelector((state) => state.userReducer.user);
   const ethToUSDValue = useEthToUSDValue();
 
   return (
@@ -22,7 +23,7 @@ function Dashboard() {
                 <div className="token-balance-text">
                   <h6 className="card-sub-title">Tokens Balance</h6>
                   <span className="lead">
-                    {getPrettyValue(tokenInfo.tokenBalance)} <span>ZIN</span>
+                    {getPrettyValue(user.tokenBalance)} <span>ZIN</span>
                   </span>
                 </div>
               </div>
@@ -34,18 +35,13 @@ function Dashboard() {
                     className="fas fa-question-circle"
                     data-toggle="tooltip"
                     data-placement="bottom"
-                    title="These are all the bonus tokens awarded"
+                    title="Bonus tokens will be distributed one week after the token sale ends."
                   />
                 </h6>
                 <ul className="token-balance-list">
                   <li className="token-balance-sub">
                     <span className="lead">
-                      {getPrettyValue(
-                        bigDecimal.divide(
-                          tokenInfo.tokenBalance,
-                          tokenInfo.tokenRate
-                        )
-                      )}
+                      {getPrettyValue(user.totalBonusGenerated)}
                     </span>
                     <span className="sub">ZIN</span>
                   </li>
@@ -75,7 +71,7 @@ function Dashboard() {
                   />
                   <div className="gaps-2x" />
                   <h1 className="token-info-head text-light">
-                    1 ETH = {tokenInfo.tokenRate} ZIN
+                    1 ETH = {tokenRate} ZIN
                   </h1>
                   <h5 className="token-info-sub">
                     1 ETH = {ethToUSDValue} USD

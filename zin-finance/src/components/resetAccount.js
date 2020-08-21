@@ -34,21 +34,19 @@ function ResetAccount() {
   const submitForm = async (e) => {
     e.preventDefault();
     setState({ loading: true });
-    setTimeout(async () => {
-      let tempToken = new URLSearchParams(location.search).get("tempToken");
-      let userId = new URLSearchParams(location.search).get("userId");
-      let error = await resetAccount({
-        tempToken,
-        userId,
-        newPassword,
-        confirmNewPassword,
-      });
-      if (error) {
-        setState({ success: false, loading: false, error });
-      } else {
-        setState({ success: true, loading: false, error: false });
-      }
-    }, 1000);
+    let tempToken = new URLSearchParams(location.search).get("tempToken");
+    let userId = new URLSearchParams(location.search).get("userId");
+    let error = await resetAccount({
+      tempToken,
+      userId,
+      newPassword,
+      confirmNewPassword,
+    });
+    if (error) {
+      setState({ success: false, loading: false, error });
+    } else {
+      setState({ success: true, loading: false, error: false });
+    }
   };
 
   return (

@@ -31,14 +31,12 @@ function ForgotPassword() {
   const submitForm = async (e) => {
     e.preventDefault();
     setState({ loading: true });
-    setTimeout(async () => {
-      let error = await resetPassword(email);
-      if (error) {
-        setState({ success: false, loading: false, error });
-      } else {
-        setState({ success: true, loading: false, error: false });
-      }
-    }, 1000);
+    let error = await resetPassword(email);
+    if (error) {
+      setState({ success: false, loading: false, error });
+    } else {
+      setState({ success: true, loading: false, error: false });
+    }
   };
 
   return (

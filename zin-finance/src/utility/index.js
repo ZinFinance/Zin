@@ -5,7 +5,7 @@ import price from "crypto-price";
 
 export const useCheckEmailVerified = () => {
   const emailVerified = useSelector(
-    (state) => state.userReducer.user.emailVerified
+    (state) => state.userReducer.user.isEmailVerified
   );
   return {
     disabled: !emailVerified ? true : null,

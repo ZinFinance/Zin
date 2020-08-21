@@ -27,7 +27,9 @@ function Referral() {
 
           <p>*10% of the amount bought by the invitee.</p>
 
-          <p>Bonus tokens will be distributed by the end of the token sale.</p>
+          <p>
+            Bonus tokens will be distributed one week after the token sale ends.
+          </p>
         </div>
         {/* .card-innr */}
       </div>

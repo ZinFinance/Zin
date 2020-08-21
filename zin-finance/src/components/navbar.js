@@ -27,24 +27,23 @@ function Navbar() {
       disabled: true,
       loading: true,
     });
-    setTimeout(async () => {
-      let error = await resendEmail(user.email);
-      if (error) {
-        setResendEmailData({
-          text: "Resend Email",
-          disabled: false,
-          loading: false,
-          error,
-        });
-      } else {
-        setResendEmailData({
-          text: "Email sent",
-          disabled: true,
-          loading: false,
-          error: false,
-        });
-      }
-    }, 1000);
+
+    let error = await resendEmail(user.email);
+    if (error) {
+      setResendEmailData({
+        text: "Resend Email",
+        disabled: false,
+        loading: false,
+        error,
+      });
+    } else {
+      setResendEmailData({
+        text: "Email sent",
+        disabled: true,
+        loading: false,
+        error: false,
+      });
+    }
   }
 
   return (
@@ -53,7 +52,7 @@ function Navbar() {
         style={{ paddingLeft: 0, paddingRight: 0 }}
         className="topbar is-sticky"
       >
-        {!user.emailVerified && (
+        {!user.isEmailVerified && (
           <div
             style={{ borderRadius: 0, marginBottom: 0, textAlign: "center" }}
             className="alert alert-danger"
@@ -106,7 +105,7 @@ function Navbar() {
                 </span>
               </li>
             </ul>
-            <Link to="/">
+            <Link to="/tokensale">
               <span
                 style={{ display: "flex", alignItems: "center" }}
                 className="topbar-logo"

@@ -11,7 +11,7 @@ import ReactDOM from "react-dom";
 function KYCForm() {
   const userId = useSelector((state) => state.userReducer.user.email);
   const emailVerified = useSelector(
-    (state) => state.userReducer.user.emailVerified
+    (state) => state.userReducer.user.isEmailVerified
   );
   const accessToken = useSelector((state) => state.kycReducer.accessToken);
   const history = useHistory();

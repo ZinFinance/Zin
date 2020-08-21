@@ -46,18 +46,17 @@ function UpdatePassword() {
   const changePassword = async (e) => {
     e.preventDefault();
     setState({ loading: true });
-    setTimeout(async () => {
-      let error = await updatePassword({
-        currentPassword,
-        newPassword,
-        confirmNewPassword,
-      });
-      if (error) {
-        setState({ error, loading: false });
-      } else {
-        setState({ success: true, loading: false });
-      }
-    }, 1000);
+
+    let error = await updatePassword({
+      currentPassword,
+      newPassword,
+      confirmNewPassword,
+    });
+    if (error) {
+      setState({ error, loading: false });
+    } else {
+      setState({ success: true, loading: false });
+    }
   };
 
   return (

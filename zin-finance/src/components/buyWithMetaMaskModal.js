@@ -1,22 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import AsyncButton from "./AsyncButton";
 
-function GetPaymentAddressModal({
+function BuyWithMetaMask({
   confirmBuyToken,
-  contribution,
   tokenRate,
-  referralCode,
-  setReferralCode,
   loading,
   closeRef,
+  contribution,
 }) {
+  const [referralCode, setReferralCode] = useState("");
   const onSubmit = (e) => {
     e.preventDefault();
-    confirmBuyToken();
+    confirmBuyToken(referralCode);
   };
 
   return (
-    <div className="modal fade" id="get-pay-address" tabIndex={-1}>
+    <div className="modal fade" id="buy-with-metamask" tabIndex={-1}>
       <div className="modal-dialog modal-dialog-md modal-dialog-centered">
         <div className="modal-content">
           <span
@@ -29,12 +28,13 @@ function GetPaymentAddressModal({
             <em className="ti ti-close" />
           </span>
           <div className="popup-body">
-            <h4 className="popup-title">Payment Address for Deposit</h4>
+            <h4 className="popup-title">Buy ZIN with MetaMask</h4>
             <p>
-              Please make deposit amount of <strong>{contribution} ETH</strong>{" "}
-              to our address and receive{" "}
-              <strong>{contribution * tokenRate} ZIN</strong> tokens including{" "}
-              <strong>bonus 1,540 ZIN</strong> once we recevied payment.
+              Please make the deposit at the following address at the rate of{" "}
+              <strong>
+                {contribution} ETH = {tokenRate * contribution} ZIN
+              </strong>
+              . Your bonus tokens will be <strong>{`<X> ZIN`}</strong>.
             </p>
             <div className="gaps-1x" />
             <h6 className="font-bold">Payment to the following Address</h6>
@@ -58,15 +58,15 @@ function GetPaymentAddressModal({
             </div>
             {/* .copy-wrap */}
             <form onSubmit={onSubmit}>
-              <div className="input-item input-with-labe pdb-2-5x pdt-1-5x">
+              <div className="input-item input-with-labe pdb-1-5x pdt-1-5x">
                 <label htmlFor="token-address" className="input-item-label">
                   Referral Code:
                 </label>
                 <input
                   className="input-bordered"
                   type="text"
-                  id="referralCode"
-                  name="referralCode"
+                  id="referralCodeMetaMask"
+                  name="referralCodeMetaMask"
                   value={referralCode}
                   onChange={(e) => setReferralCode(e.target.value)}
                 />
@@ -76,14 +76,23 @@ function GetPaymentAddressModal({
                   required
                   type="checkbox"
                   className="input-checkbox input-checkbox-md"
-                  id="agree-term"
+                  id="agree-term-buy-with-metamask"
                 />
-                <label htmlFor="agree-term">
+                <label
+                  style={{ textTransform: "none" }}
+                  htmlFor="agree-term-buy-with-metamask"
+                >
                   I hereby agree to the{" "}
                   <strong>
-                    token purchase aggrement &amp; token sale term
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href="https://zinlandingpage.azurewebsites.net/terms-and-conditions/"
+                    >
+                      terms and conditions{" "}
+                    </a>
                   </strong>
-                  .
+                  of the token sale.
                 </label>
               </div>
               <AsyncButton
@@ -94,13 +103,6 @@ function GetPaymentAddressModal({
               />
             </form>
             <div className="gaps-3x" />
-            <div className="note note-plane note-light mgb-1x">
-              <em className="fas fa-info-circle" />
-              <p>
-                Do not make payment through exchange (Kraken, Bitfinex). You can
-                use MayEtherWallet, MetaMask, Mist wallets etc.
-              </p>
-            </div>
             <div className="note note-plane note-danger">
               <em className="fas fa-info-circle" />
               <p>
@@ -117,4 +119,4 @@ function GetPaymentAddressModal({
   );
 }
 
-export default GetPaymentAddressModal;
+export default BuyWithMetaMask;

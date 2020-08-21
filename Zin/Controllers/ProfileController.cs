@@ -45,14 +45,7 @@ namespace Zin.Controllers
         [HttpPost("registertx")]
         public async Task<ActionResult> RegisterTxUsingReferalCodeAsync(RegisterEthTx registerEthTx)
         {
-            Result result = await profileService.RegisterTxUsingReferalCodeAsync(
-                User.Id(),
-                registerEthTx.TxId,
-                registerEthTx.ReferralCode,
-                registerEthTx.AmountTransferredInEther,
-                registerEthTx.AmountTransferredInToken,
-                registerEthTx.EtherToUsdRateAtThatTime
-            );
+            Result result = await profileService.RegisterTxUsingReferalCodeAsync(registerEthTx.TxId, registerEthTx.ReferralCode, registerEthTx.EtherToUsdRateAtThatTime);
             if (result.Status)
                 return Ok(result);
             return BadRequest(result);

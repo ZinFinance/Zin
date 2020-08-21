@@ -46,6 +46,15 @@ namespace Zin.Repository.Implementation
             return existedUsers.First();
         }
 
+        public async Task<AppUser> GetUserByEthAddressAsync(string ethAddress)
+        {
+            if (string.IsNullOrWhiteSpace(ethAddress))
+                return null;
+            var existedUsers = await appDbContext.Users.Where(x => x.EthAddress.Equals(ethAddress)).ToListAsync();
+            if (existedUsers.Count <= 0)
+                return null;
+            return existedUsers.First();
+        }
 
         /// <summary>
         /// private helper method

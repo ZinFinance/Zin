@@ -5,6 +5,6 @@ namespace Zin.Services.Services
 {
     public interface IEthTxCheckService
     {
-        Task<RegisteredTx> GetEthTxFromBlockChainUsingTxId(string txId);
+        Task<(string, RegisteredTx)> GetEthTxFromBlockChainUsingTxId(string txId);
     }
 }

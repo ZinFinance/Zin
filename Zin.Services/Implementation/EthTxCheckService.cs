@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
+using Nethereum.Web3;
+using System.Numerics;
+using System.Threading.Tasks;
 using Zin.Repository.Models;
 using Zin.Services.Services;
 
@@ -6,15 +9,32 @@ namespace Zin.Services.Implementation
 {
     class EthTxCheckService : IEthTxCheckService
     {
-        public EthTxCheckService()
-        {
+        private readonly Web3 _web3;
+        private readonly IConfiguration configuration;
 
+        public EthTxCheckService(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+            _web3 = new Web3(configuration["ConnectionStrings:RpcAddress"]);
         }
 
-        public async Task<RegisteredTx> GetEthTxFromBlockChainUsingTxId(string txId)
+        public async Task<(string, RegisteredTx)> GetEthTxFromBlockChainUsingTxId(string txId)
         {
-            //TODO: get the data from blockchain
-            return new RegisteredTx() { };
+            string crowdsaleTokenAddress = configuration["Settings:CrowdsaleTokenAddress"];
+
+            var txData = await _web3.Eth.Transactions.GetTransactionByHash.SendRequestAsync(txId);
+            if (txData == null || !txData.To.Equals(crowdsaleTokenAddress))
+                return (null, null);
+
+            BigInteger rate = BigInteger.Parse(configuration["Settings:TokenRate"]);
+
+            return (txData.From, new RegisteredTx()
+            {
+                TxId = txData.TransactionHash,
+                AmountTransferredInEther = txData.Value.Value.ToString(),
+                AmountTransferredInToken = BigInteger.Divide(txData.Value.Value, rate).ToString()
+            });
         }
+
     }
 }

@@ -10,12 +10,6 @@ namespace Zin.Models.Account
         public string ReferralCode { get; set; }
 
         [Required]
-        public string AmountTransferredInEther { get; set; }
-
-        [Required]
-        public string AmountTransferredInToken { get; set; }
-
-        [Required]
         public string EtherToUsdRateAtThatTime { get; set; }
     }
 }

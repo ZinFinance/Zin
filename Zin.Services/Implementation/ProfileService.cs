@@ -47,7 +47,7 @@ namespace Zin.Services.Implementation
             return new Result<UserDetails>(appUser.ToDto());
         }
 
-        public async Task<Result> RegisterTxUsingReferalCodeAsync(string userId, string txId, string referralCode, string AmountTransferredInEther, string AmountTransferredInToken, string EtherToUsdRateAtThatTime)
+        public async Task<Result> RegisterTxUsingReferalCodeAsync(string txId, string referralCode, string EtherToUsdRateAtThatTime)
         {
             //check if tx id is not null or empty
             if (string.IsNullOrWhiteSpace(txId))
@@ -60,17 +60,18 @@ namespace Zin.Services.Implementation
 
             //check using infura if valid transaction, success transaction
             //also return the values of the transaction
-            var txFromBlockchain = await ethTxCheckService.GetEthTxFromBlockChainUsingTxId(txId);
-            //TODO: THIS WILL BE REMOVED WHEN BLOCKCHAIN IS INTEGRATED!!!
-            txFromBlockchain.AmountTransferredInEther = AmountTransferredInEther;
-            txFromBlockchain.AmountTransferredInToken = AmountTransferredInToken;
-            txFromBlockchain.TxId = txId;
+            var (fromAddress, txFromBlockchain) = await ethTxCheckService.GetEthTxFromBlockChainUsingTxId(txId);
 
             if (txFromBlockchain == null)
                 return new Result(false, "TRANSACTION_NOT_FOUND");
 
             //register transaction wrt user and include all the extra properties as well
-            txFromBlockchain.UserId = userId;
+            //check if the from address is the user id or not.
+            var userData = await referralCodeRepository.GetUserByEthAddressAsync(fromAddress);
+            if(userData == null)
+                return new Result(false, "UNKNOWN_USER_TRANSACTION");
+
+            txFromBlockchain.UserId = userData.Id; 
             txFromBlockchain.EtherToUsdRateAtThatTime = EtherToUsdRateAtThatTime;
             txFromBlockchain.ReferralCode = referralCode;
 
@@ -85,7 +86,7 @@ namespace Zin.Services.Implementation
 
             await registeredTxRepository.SaveRegisteredTxAsync(txFromBlockchain);
             //update the user the amount of tokens transferred
-            await userBalanceRepository.AddUserTokenBalance(userId, BigInteger.Parse(txFromBlockchain.AmountTransferredInToken), BonusType.None);
+            await userBalanceRepository.AddUserTokenBalance(txFromBlockchain.UserId, BigInteger.Parse(txFromBlockchain.AmountTransferredInToken), BonusType.None);
 
             return new Result(true, "TRANSACTION_REGISTERED_SUCCESSFULLY");
         }

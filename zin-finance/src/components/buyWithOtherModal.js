@@ -35,7 +35,7 @@ function BuyWithOtherModal({
               <strong>
                 {contribution} ETH = {contribution * tokenRate} ZIN
               </strong>
-              . Your bonus tokens will be <strong>{`<X> ZIN`}</strong>.
+              . Your bonus tokens will show on your dashboard.
             </p>
             <div className="gaps-1x" />
             <h6 className="font-bold">Payment to the following Address</h6>
@@ -58,6 +58,18 @@ function BuyWithOtherModal({
               </button>
             </div>
             {/* .copy-wrap */}
+            <div className="gaps-1x" />
+            <div className="note note-plane note-danger mgb-1x">
+              <em className="fas fa-info-circle" />
+              <p>
+                <strong>Warning</strong>: Do not make payment through an
+                exchange wallet (e.g. Bitfinex, Kraken, Binance, Coinbase etc.).
+                Transactions from exchange wallets will LOSE your ZIN and FUNDS.
+                It will not be possible for us to recover them. You can use only
+                those wallets whose private keys are owned by you e.g.
+                MyEtherWallet, Mist Wallet, Exodus wallet etc.
+              </p>
+            </div>
             <form onSubmit={onSubmit}>
               <div className="input-item input-with-labe pdb-1-5x pdt-1-5x">
                 <label htmlFor="token-address" className="input-item-label">
@@ -69,9 +81,16 @@ function BuyWithOtherModal({
                   type="text"
                   id="transactionId"
                   name="transactionId"
+                  pattern="^0x([A-Fa-f0-9]{64})$"
+                  title="Please enter a valid transaction hash"
                   value={transactionId}
                   onChange={(e) => setTransactionId(e.target.value)}
                 />
+                <span className="input-note">
+                  <strong>Note</strong>: Please submit your transaction ID here
+                  after making the payment in order to receive the relevant
+                  bonuses
+                </span>
               </div>
               <div className="input-item input-with-labe pdb-1-5x pdt-1-5x">
                 <label htmlFor="token-address" className="input-item-label">
@@ -86,7 +105,7 @@ function BuyWithOtherModal({
                   onChange={(e) => setReferralCode(e.target.value)}
                 />
               </div>
-              <div className="pdb-2-5x pdt-1-5x">
+              <div className="pdb-1-5x pdt-1-5x">
                 <input
                   required
                   type="checkbox"
@@ -110,6 +129,21 @@ function BuyWithOtherModal({
                   of the token sale.
                 </label>
               </div>
+              <div className="pdb-2-5x pdt-1-5x">
+                <input
+                  required
+                  type="checkbox"
+                  className="input-checkbox input-checkbox-md"
+                  id="agree-term-buy-with-other"
+                />
+                <label
+                  style={{ textTransform: "none" }}
+                  htmlFor="agree-term-buy-with-other"
+                >
+                  I confirm that the transaction is done through a wallet whose
+                  private keys are owned by me and it is not an exchange wallet.
+                </label>
+              </div>
               <AsyncButton
                 loading={loading}
                 loadingText={"Submitting Transaction..."}
@@ -118,7 +152,7 @@ function BuyWithOtherModal({
               />
             </form>
             <div className="gaps-3x" />
-            <div className="note note-plane note-light mgb-1x">
+            <div className="note note-plane note-danger mgb-1x">
               <em className="fas fa-info-circle" />
               <p>
                 Do not make payment through exchange (Kraken, Bitfinex, etc.).

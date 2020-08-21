@@ -30,11 +30,12 @@ function BuyWithMetaMask({
           <div className="popup-body">
             <h4 className="popup-title">Buy ZIN with MetaMask</h4>
             <p>
-              Please make the deposit at the following address at the rate of{" "}
+              Please approve the transaction on your MetaMask after clicking the
+              'Buy Tokens Now' button. You will get the rate of{" "}
               <strong>
                 {contribution} ETH = {tokenRate * contribution} ZIN
               </strong>
-              . Your bonus tokens will be <strong>{`<X> ZIN`}</strong>.
+              . Your bonus tokens will show in your dashboard.
             </p>
             <div className="gaps-1x" />
             <h6 className="font-bold">Payment to the following Address</h6>

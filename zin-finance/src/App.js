@@ -76,7 +76,7 @@ function App() {
 
   if (shouldFetchUser) {
     return <PageLoader />;
-  } else if (user.admin) {
+  } else if (user && user.admin) {
     return (
       <AdminContent>
         <AdminRoutes />

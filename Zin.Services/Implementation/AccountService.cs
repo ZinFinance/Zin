@@ -32,8 +32,16 @@ namespace Zin.Services.Implementation
         {
             // register user
             AppUser appUser = userDetails.ToCore();
-            appUser.ReferralCode = await referralCodeRepository.GetNewReferralCodeAsync();
 
+            //save and update eth address only when it is already not registered with some user.
+            if (!string.IsNullOrWhiteSpace(userDetails.EthAddress))
+            {
+                var alreadySavedData = await referralCodeRepository.GetUserByEthAddressAsync(userDetails.EthAddress);
+                if (alreadySavedData == null)
+                    appUser.EthAddress = userDetails.EthAddress;
+            }
+
+            appUser.ReferralCode = await referralCodeRepository.GetNewReferralCodeAsync();
             appUser.BonusZinTokens = "0";
             appUser.PresaleZinTokens = "0";
             appUser.ReferralZinTokens = "0";

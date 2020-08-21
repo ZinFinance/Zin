@@ -9,7 +9,7 @@ namespace Zin.Services.Services
     {
         Task<Result<UserDetails>> GetAsync(string userId);
         Task<Result> UpdateAsync(string userId, UserDetails userDetails);
-        Task<Result> RegisterTxUsingReferalCodeAsync(string userId, string txId, string referralCode, string AmountTransferredInEther, string AmountTransferredInToken, string EtherToUsdRateAtThatTime);
+        Task<Result> RegisterTxUsingReferalCodeAsync(string txId, string referralCode, string EtherToUsdRateAtThatTime);
         Task<List<RegisteredTx>> GetRegisteredTxAsync(string userId, bool onlyReferral);
         Task<List<BonusTx>> GetBonusTxAsync(string userId);
     }

@@ -8,5 +8,6 @@ namespace Zin.Repository.Repository
         Task<string> GetNewReferralCodeAsync();
         Task<string> GetReferralCodeByUserNameAsync(string userName);
         Task<AppUser> GetUserByReferralCodeAsync(string referralCode);
+        Task<AppUser> GetUserByEthAddressAsync(string ethAddress);
     }
 }

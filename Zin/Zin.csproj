@@ -13,5 +13,9 @@
     <ProjectReference Include="..\Zin.Services\Zin.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="SmartContracts\" />
+  </ItemGroup>
+
 
 </Project>

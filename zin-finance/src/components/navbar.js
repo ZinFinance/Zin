@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { resendEmail } from "../redux/actions/userActions";
 import AsyncButton from "./AsyncButton";
+import { getPrettyValue } from "../utility";
 
 function Navbar() {
   const user = useSelector((state) => state.userReducer.user);
@@ -135,7 +136,7 @@ function Navbar() {
                   <div className="user-status">
                     <h6 className="user-status-title">Token balance</h6>
                     <div className="user-status-balance">
-                      12,000,000 <small>ZIN</small>
+                      {getPrettyValue(user.tokenBalance)} <small>ZIN</small>
                     </div>
                   </div>
                   <ul className="user-links">

@@ -4,9 +4,11 @@ import { useLocation, useHistory } from "react-router-dom";
 
 import AppContent from "./components/appContent";
 import NonAuthContent from "./components/nonAuthContent";
+import AdminContent from "./components/adminContent";
 
 import AuthRoutes from "./routes/authRoutes";
 import NonAuthRoutes from "./routes/nonAuthRoutes";
+import AdminRoutes from "./routes/adminRoutes";
 
 import Cookies from "js-cookie";
 
@@ -74,6 +76,12 @@ function App() {
 
   if (shouldFetchUser) {
     return <PageLoader />;
+  } else if (user.admin) {
+    return (
+      <AdminContent>
+        <AdminRoutes />
+      </AdminContent>
+    );
   } else if (user) {
     return (
       <AppContent>

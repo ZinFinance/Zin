@@ -14,7 +14,7 @@ function Dashboard() {
     <div className="container">
       <div className="row">
         <div className="col-lg-4">
-          <div className="token-statistics card card-token height-auto">
+          <div className="token-statistics card card-token card-full-height">
             <div className="card-innr">
               <div className="token-balance token-balance-with-icon">
                 <div className="token-balance-icon">

@@ -80,7 +80,7 @@ export async function resetPassword(userName) {
     if (userName === verifiedTestAccount.email) {
       return null;
     }
-    let response = await axios.get(API_URL + "/api/Account/reset", null, {
+    let response = await axios.get(API_URL + `/api/Account/reset`, {
       params: {
         userName,
       },

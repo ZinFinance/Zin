@@ -147,7 +147,7 @@ export function login(email, password, rememberMe, callback) {
         }
         return;
       }
-      let authResponse = await axios.get(API_URL + "/api/Auth/login", {
+      let authResponse = await axios.post(API_URL + "/api/Auth/login", {
         email,
         password,
       });

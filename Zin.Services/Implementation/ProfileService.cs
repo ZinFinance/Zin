@@ -96,8 +96,14 @@ namespace Zin.Services.Implementation
             // find account
             AppUser appUser = await userManager.FindByIdAsync(userId);
 
-            if (string.IsNullOrWhiteSpace(appUser.EthAddress))
+            if (string.IsNullOrWhiteSpace(appUser.EthAddress) && !string.IsNullOrWhiteSpace(userDetails.EthAddress))
+            {
+                var alreadySavedData = await referralCodeRepository.GetUserByEthAddressAsync(userDetails.EthAddress);
+                if (alreadySavedData != null)
+                    return new Result(false, "ETH_ADDRESS_ALREADY_SAVED");
+
                 appUser.EthAddress = userDetails.EthAddress;
+            }
 
             // update details
             appUser.EmailConfirmed = userDetails.Email == appUser.Email;

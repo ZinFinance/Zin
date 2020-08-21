@@ -16,6 +16,7 @@ namespace Zin.Services.Models
         public string BonusZinTokens { get; set; }
         public string PresaleZinTokens { get; set; }
         public bool IsAdmin { get; set; }
+        public bool IsEmailVerified { get; set; }
 
         public AppUser ToCore()
         {
@@ -25,7 +26,6 @@ namespace Zin.Services.Models
                 Email = Email,
                 FirstName = FirstName,
                 LastName = LastName,
-                EthAddress = EthAddress
             };
         }
     }
@@ -46,7 +46,8 @@ namespace Zin.Services.Models
                 ZinTokens = appUser.ZinTokens,
                 ReferralZinTokens = appUser.ReferralZinTokens,
                 PresaleZinTokens = appUser.PresaleZinTokens,
-                BonusZinTokens = appUser.BonusZinTokens
+                BonusZinTokens = appUser.BonusZinTokens,
+                IsEmailVerified = appUser.EmailConfirmed
             };
         }
 
@@ -54,7 +55,6 @@ namespace Zin.Services.Models
         {
             appUser.FirstName = userDetails.FirstName;
             appUser.LastName = userDetails.LastName;
-            appUser.EthAddress = userDetails.EthAddress;
             appUser.UserName = userDetails.UserName;
             appUser.Email = userDetails.Email;
             return appUser;

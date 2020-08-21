@@ -101,7 +101,7 @@ export async function resetAccount(data) {
     if (data.userId === verifiedTestAccount.email) {
       return null;
     }
-    let response = await axios.get(
+    let response = await axios.post(
       API_URL + "/api/Account/reset/confirm",
       data,
       {
@@ -295,7 +295,7 @@ function _fetchUser(token) {
         });
         return;
       }
-      let profileResponse = await axios.get(API_URL + "/api/Profile", null, {
+      let profileResponse = await axios.get(API_URL + "/api/Profile", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

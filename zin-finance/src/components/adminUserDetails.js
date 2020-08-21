@@ -26,12 +26,9 @@ function AdminUserDetails() {
                 </a>
               </div>
               <div className="relative d-inline-block">
-                <a
-                  href="#"
-                  className="btn btn-dark btn-sm btn-icon toggle-tigger"
-                >
+                <span className="btn btn-dark btn-sm btn-icon toggle-tigger">
                   <em className="ti ti-more-alt" />
-                </a>
+                </span>
                 <div className="toggle-class dropdown-content dropdown-content-top-left">
                   <ul className="dropdown-list">
                     <li>

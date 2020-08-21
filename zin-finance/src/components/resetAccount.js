@@ -34,7 +34,7 @@ function ResetAccount() {
   const submitForm = async (e) => {
     e.preventDefault();
     setState({ loading: true });
-    let tempToken = new URLSearchParams(location.search).get("tempToken");
+    let tempToken = new URLSearchParams(location.search).get("token");
     let userId = new URLSearchParams(location.search).get("userId");
     let error = await resetAccount({
       tempToken,

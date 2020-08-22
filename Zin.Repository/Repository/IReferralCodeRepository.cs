@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Zin.Repository.Models;
 
 namespace Zin.Repository.Repository
@@ -6,7 +7,7 @@ namespace Zin.Repository.Repository
     public interface IReferralCodeRepository
     {
         Task<string> GetNewReferralCodeAsync();
-        Task<string> GetReferralCodeByUserNameAsync(string userName);
+        Task<List<AppUser>> GetAllUsersAsync();
         Task<AppUser> GetUserByReferralCodeAsync(string referralCode);
         Task<AppUser> GetUserByEthAddressAsync(string ethAddress);
     }

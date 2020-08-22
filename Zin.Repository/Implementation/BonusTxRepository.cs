@@ -20,6 +20,9 @@ namespace Zin.Repository.Implementation
 
         public async Task<List<BonusTx>> GetBonusTxOfUserAsync(string userId)
         {
+            if (string.IsNullOrWhiteSpace(userId))
+                return await appDbContext.BonusTx.OrderBy(x => x.CreateDateTimeOffset).ToListAsync();
+
             return await appDbContext.BonusTx.Where(x => x.UserId.Equals(userId)).ToListAsync();
         }
 

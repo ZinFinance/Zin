@@ -4,6 +4,7 @@ namespace Zin.Services.Models
 {
     public class UserDetails
     {
+        public string UserId { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
@@ -47,7 +48,8 @@ namespace Zin.Services.Models
                 ReferralZinTokens = appUser.ReferralZinTokens,
                 PresaleZinTokens = appUser.PresaleZinTokens,
                 BonusZinTokens = appUser.BonusZinTokens,
-                IsEmailVerified = appUser.EmailConfirmed
+                IsEmailVerified = appUser.EmailConfirmed,
+                UserId = appUser.Id
             };
         }
 

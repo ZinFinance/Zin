@@ -20,6 +20,9 @@ namespace Zin.Repository.Implementation
 
         public async Task<List<RegisteredTx>> GetRegisteredTxOfUserAsync(string userId, bool referralOnly)
         {
+            if (string.IsNullOrWhiteSpace(userId))
+                return await appDbContext.RegisteredTx.OrderBy(x => x.CreateDateTimeOffset).ToListAsync();
+
             if (referralOnly)
             {
                 return await appDbContext.RegisteredTx.Where(x => x.UserId.Equals(userId) && !string.IsNullOrWhiteSpace(x.ReferralCode)).ToListAsync();

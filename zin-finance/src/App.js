@@ -35,7 +35,7 @@ function App() {
   const [redirect, setRedirect] = useState("");
 
   useEffect(() => {
-    if (user) {
+    if (user && !user.isAdmin) {
       dispatch(fetchTransactions());
       dispatch(fetchBonusTransactions());
     }
@@ -50,7 +50,8 @@ function App() {
     }
   }, [user, location.search, redirect, history]);
 
-  const kycApplicant = user && user.isEmailVerified && user.email;
+  const kycApplicant =
+    user && user.isEmailVerified && !user.isAdmin && user.email;
   useEffect(() => {
     if (kycApplicant) {
       dispatch(getKYCAccessToken(kycApplicant));

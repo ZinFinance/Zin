@@ -68,10 +68,10 @@ namespace Zin.Services.Implementation
             //register transaction wrt user and include all the extra properties as well
             //check if the from address is the user id or not.
             var userData = await referralCodeRepository.GetUserByEthAddressAsync(fromAddress);
-            if(userData == null)
+            if (userData == null)
                 return new Result(false, "UNKNOWN_USER_TRANSACTION");
 
-            txFromBlockchain.UserId = userData.Id; 
+            txFromBlockchain.UserId = userData.Id;
             txFromBlockchain.EtherToUsdRateAtThatTime = EtherToUsdRateAtThatTime;
             txFromBlockchain.ReferralCode = referralCode;
 
@@ -95,6 +95,9 @@ namespace Zin.Services.Implementation
         {
             // find account
             AppUser appUser = await userManager.FindByIdAsync(userId);
+
+            if (!appUser.EmailConfirmed)
+                return new Result(false, "EMAIL_NOT_CONFIRMED");
 
             if (string.IsNullOrWhiteSpace(appUser.EthAddress) && !string.IsNullOrWhiteSpace(userDetails.EthAddress))
             {
@@ -131,7 +134,7 @@ namespace Zin.Services.Implementation
             var data = await bonusTxRepository.GetBonusTxOfUserAsync(userId);
             if (data == null)
                 return new List<BonusTx>();
-            
+
             return data;
         }
 

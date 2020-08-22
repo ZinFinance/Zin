@@ -57,14 +57,14 @@ namespace Zin
             services.AddIdentity<AppUser, IdentityRole>(x =>
             {
                 x.User.RequireUniqueEmail = true;
-                x.SignIn.RequireConfirmedEmail = true;
+                x.SignIn.RequireConfirmedEmail = false;
 
                 x.Password.RequiredLength = 5;
                 x.Password.RequireNonAlphanumeric = false;
                 x.Password.RequireUppercase = false;
                 x.Password.RequireDigit = false;
 
-                x.Lockout.MaxFailedAccessAttempts = 3;
+                x.Lockout.MaxFailedAccessAttempts = 5;
                 x.Lockout.AllowedForNewUsers = true;
                 x.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
             })

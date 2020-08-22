@@ -20,15 +20,13 @@ export function logoutUser() {
 
 export function fetchTransactions(callback) {
   return async (dispatch) => {
+    let response = null;
     try {
-      let response = await axios.get(
-        API_URL + "/api/Profile/getregisteredtxs",
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("token")}`,
-          },
-        }
-      );
+      response = await axios.get(API_URL + "/api/Profile/getregisteredtxs", {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      });
       if (response.status === 200) {
         let transactions = response.data.data;
         let ethService = new EthService();
@@ -66,7 +64,11 @@ export function fetchTransactions(callback) {
     } catch (err) {
       console.warn("error fetching transactions", err);
       if (callback) {
-        callback(DEFAULT_ERROR);
+        if (response && response.data && response.data.message) {
+          callback(response.data.message);
+        } else {
+          callback(DEFAULT_ERROR);
+        }
       }
     }
   };
@@ -74,16 +76,13 @@ export function fetchTransactions(callback) {
 
 export function saveTransaction(data, callback) {
   return async (dispatch) => {
+    let response = null;
     try {
-      let response = await axios.post(
-        API_URL + "/api/Profile/registeredtx",
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("token")}`,
-          },
-        }
-      );
+      response = await axios.post(API_URL + "/api/Profile/registeredtx", null, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      });
       if (response.status === 200) {
         dispatch({
           type: ActionTypes.SAVE_TRANSACTION,
@@ -100,7 +99,11 @@ export function saveTransaction(data, callback) {
     } catch (err) {
       console.warn("error saving transaction", err);
       if (callback) {
-        callback(DEFAULT_ERROR);
+        if (response && response.data && response.data.message) {
+          callback(response.data.message);
+        } else {
+          callback(DEFAULT_ERROR);
+        }
       }
     }
   };
@@ -108,8 +111,9 @@ export function saveTransaction(data, callback) {
 
 export function fetchBonusTransactions(callback) {
   return async (dispatch) => {
+    let response = null;
     try {
-      let response = await axios.get(API_URL + "/api/Profile/getbonustxs", {
+      response = await axios.get(API_URL + "/api/Profile/getbonustxs", {
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
@@ -143,7 +147,11 @@ export function fetchBonusTransactions(callback) {
     } catch (err) {
       console.warn("error fetching bonus transactions", err);
       if (callback) {
-        callback(DEFAULT_ERROR);
+        if (response && response.data && response.data.message) {
+          callback(response.data.message);
+        } else {
+          callback(DEFAULT_ERROR);
+        }
       }
     }
   };

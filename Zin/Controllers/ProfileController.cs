@@ -61,9 +61,10 @@ namespace Zin.Controllers
                 return Ok(new Result<List<GetPurchaseTx>>(new List<GetPurchaseTx>(), true));
 
             List<GetPurchaseTx> list = new List<GetPurchaseTx>();
-            foreach (var tx in data) {
+            foreach (var tx in data)
+            {
                 list.Add(new GetPurchaseTx
-                { 
+                {
                     TxId = tx.TxId,
                     ReferralCode = tx.ReferralCode,
                     AmountTransferredInEther = tx.AmountTransferredInEther,
@@ -108,6 +109,104 @@ namespace Zin.Controllers
             }
 
             return Ok(new Result<List<GetBonusTxs>>(list, true));
+        }
+
+
+
+        /// <summary>
+        /// ADMIN ENDPOINTS
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+
+        [Authorize(Roles = "ADMIN")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<List<GetBonusTxs>>))]
+        [HttpGet("admin/getbonustxs")]
+        public async Task<ActionResult> GetBonusTransactionsForAdminAsync(string userId)
+        {
+            var data = await profileService.GetBonusTxAsync(userId);
+
+            if (data == null)
+                return Ok(new Result<List<GetBonusTxs>>(new List<GetBonusTxs>(), true));
+
+            List<GetBonusTxs> list = new List<GetBonusTxs>();
+            foreach (var tx in data)
+            {
+                list.Add(new GetBonusTxs
+                {
+                    TxId = tx.TxId,
+                    ReferralCode = tx.ReferralCode,
+                    AmountTransferredInEther = tx.AmountTransferredInEther,
+                    AmountTransferredInToken = tx.AmountTransferredInToken,
+                    EtherToUsdRateAtThatTime = tx.EtherToUsdRateAtThatTime,
+                    UserId = tx.UserId,
+                    BonusTokensGenerated = tx.BonusTokensGenerated,
+                    BonusType = tx.BonusType,
+                    CreateDateTimeOffset = tx.CreateDateTimeOffset,
+                    InternalId = tx.InternalId
+                });
+            }
+
+            return Ok(new Result<List<GetBonusTxs>>(list, true));
+        }
+
+        [Authorize(Roles = "ADMIN")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<List<GetPurchaseTx>>))]
+        [HttpGet("admin/getregisteredtxs")]
+        public async Task<ActionResult> GetReferralTransactionForAdminAsync(string userId)
+        {
+            var data = await profileService.GetRegisteredTxAsync(userId, false);
+
+            if (data == null)
+                return Ok(new Result<List<GetPurchaseTx>>(new List<GetPurchaseTx>(), true));
+
+            List<GetPurchaseTx> list = new List<GetPurchaseTx>();
+            foreach (var tx in data)
+            {
+                list.Add(new GetPurchaseTx
+                {
+                    TxId = tx.TxId,
+                    ReferralCode = tx.ReferralCode,
+                    AmountTransferredInEther = tx.AmountTransferredInEther,
+                    AmountTransferredInToken = tx.AmountTransferredInToken,
+                    EtherToUsdRateAtThatTime = tx.EtherToUsdRateAtThatTime,
+                    UserId = tx.UserId,
+                    BonusZinTokensGenerated = tx.BonusZinTokensGenerated,
+                    CreateDateTimeOffset = tx.CreateDateTimeOffset,
+                    PresaleZinTokensGenerated = tx.PresaleZinTokensGenerated,
+                    ReferralZinTokensGenerated = tx.ReferralZinTokensGenerated
+                });
+            }
+
+            return Ok(new Result<List<GetPurchaseTx>>(list, true));
+        }
+
+        [Authorize(Roles = "ADMIN")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<List<UserDetails>>))]
+        [HttpGet("admin/allprofiles")]
+        public async Task<ActionResult> AllProfileAsync()
+        {
+            Result<List<UserDetails>> result = await profileService.GetAllProfilesAsync();
+            return Ok(result);
+        }
+
+        [Authorize(Roles = "ADMIN")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Result))]
+        [HttpPost("admin/updatebonus")]
+        public async Task<ActionResult> UpdateBonusAsync()
+        {
+            Result<List<UserDetails>> result = await profileService.GetAllProfilesAsync();
+            return Ok(result);
+        }
+
+        [Authorize(Roles = "ADMIN")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Bonus>))]
+        [HttpGet("admin/allbonus")]
+        public async Task<ActionResult> AllBonusesAsync()
+        {
+            var result = await profileService.GetAllBonusRatesAsync();
+            return Ok(result);
         }
     }
 }

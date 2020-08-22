@@ -30,15 +30,9 @@ namespace Zin.Repository.Implementation
             return code;
         }
 
-        public async Task<string> GetReferralCodeByUserNameAsync(string userName)
-        {
-            var existedUser = await appDbContext.Users.FindAsync(userName);
-            return existedUser.ReferralCode;
-        }
-
         public async Task<AppUser> GetUserByReferralCodeAsync(string referralCode)
         {
-            if(string.IsNullOrWhiteSpace(referralCode))
+            if (string.IsNullOrWhiteSpace(referralCode))
                 return null;
             var existedUsers = await appDbContext.Users.Where(x => x.ReferralCode.Equals(referralCode)).ToListAsync();
             if (existedUsers.Count <= 0)
@@ -54,6 +48,11 @@ namespace Zin.Repository.Implementation
             if (existedUsers.Count <= 0)
                 return null;
             return existedUsers.First();
+        }
+
+        public async Task<List<AppUser>> GetAllUsersAsync()
+        {
+            return await appDbContext.Users.Where(x => !x.IsAdmin).ToListAsync();
         }
 
         /// <summary>

@@ -47,6 +47,18 @@ namespace Zin.Services.Implementation
             return new Result<UserDetails>(appUser.ToDto());
         }
 
+        public async Task<Result<List<UserDetails>>> GetAllProfilesAsync()
+        {
+            List<AppUser> appUsers = await referralCodeRepository.GetAllUsersAsync();
+
+            List<UserDetails> list = new List<UserDetails>();
+            foreach (var user in appUsers)
+            {
+                list.Add(user.ToDto());
+            }
+            return new Result<List<UserDetails>>(list);
+        }
+
         public async Task<Result> RegisterTxUsingReferalCodeAsync(string txId, string referralCode, string EtherToUsdRateAtThatTime)
         {
             //check if tx id is not null or empty
@@ -136,6 +148,23 @@ namespace Zin.Services.Implementation
                 return new List<BonusTx>();
 
             return data;
+        }
+
+        public async Task UpdateBonusAsync(BonusType bonusType, bool isActive, int bonusPercentage)
+        {
+            await bonusCalculationRepository.SaveNewBonusRate(new BonusRate
+            {
+                BonusRateId = (new Guid()).ToString(),
+                BonusPercentage = bonusPercentage,
+                BonusType = bonusType,
+                IsActive = isActive,
+                CreationDate = DateTimeOffset.UtcNow
+            });
+        }
+
+        public async Task<List<BonusRate>> GetAllBonusRatesAsync()
+        {
+            return await bonusCalculationRepository.GetAllBonusRatesAsync();
         }
 
         /// <summary>

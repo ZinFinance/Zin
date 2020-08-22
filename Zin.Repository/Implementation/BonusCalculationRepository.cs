@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Zin.Repository.DbContext;
@@ -19,17 +20,18 @@ namespace Zin.Repository.Implementation
 
         public async Task SaveNewBonusRate(BonusRate bonusRate)
         {
-            var existing = await GetActiveBonusRateWithType(bonusRate.BonusType);
-            if (existing != null)
-            {
-                existing.IsActive = false;
-                appDbContext.BonusRate.Update(existing);
-            }
-
-            bonusRate.IsActive = true;
-            bonusRate.CreationDate = DateTimeOffset.UtcNow;
+            var data = await appDbContext.BonusRate.Where(x => x.BonusType.Equals(bonusRate.BonusType)).ToListAsync();
+            
+            if (data.Count > 0)
+                appDbContext.BonusRate.Remove(data.First());
+            
             appDbContext.BonusRate.Add(bonusRate);
             await appDbContext.SaveChangesAsync();
+        }
+
+        public async Task<List<BonusRate>> GetAllBonusRatesAsync()
+        {
+            return await appDbContext.BonusRate.ToListAsync();
         }
 
         public async Task<BonusRate> GetActiveBonusRateWithType(BonusType bonusType)

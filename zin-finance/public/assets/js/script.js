@@ -331,8 +331,9 @@
         _items = $self.data("items") ? $self.data("items") : 5;
       $self.DataTable({
         destroy: true,
+        searching: true,
         ordering: false,
-        autoWidth: false,
+        autoWidth: true,
         dom:
           '<t><"row align-items-center"<"col-sm-6 text-left"p><"col-sm-6 text-sm-right"i>>',
         pageLength: _items,
@@ -357,10 +358,10 @@
 
   var $data_table_filter = $(".dt-filter-init");
   if ($data_table_filter.length > 0) {
-    var $data_table_fltr = $data_table_filter.DataTable({
+    var $data_table_filter = $data_table_filter.DataTable({
       destroy: true,
       ordering: false,
-      autoWidth: false,
+      autoWidth: true,
       dom:
         '<"row justify-content-between pdb-1x"<"col-9 col-sm-6 text-left"f><"col-3 text-right"<"data-table-filter relative d-inline-block">>><t><"row align-items-center"<"col-sm-6 text-left"p><"col-sm-6 text-sm-right"i>>',
       pageLength: 6,
@@ -381,18 +382,18 @@
       },
     });
 
-    $(".data-table-filter").append(
-      '<a href="#" class="btn btn-light-alt btn-xs btn-icon toggle-tigger"> <em class="ti ti-settings"></em> </a><div class="toggle-class toggle-datatable-filter dropdown-content dropdown-content-top-left text-left"><ul class="pdt-1x pdb-1x"><li class="pd-1x pdl-2x pdr-2x"> <input class="data-filter input-checkbox input-checkbox-sm" type="radio" name="filter" id="all" checked value=""> <label for="all">All</label></li><li class="pd-1x pdl-2x pdr-2x"> <input class="data-filter input-checkbox input-checkbox-sm" type="radio" name="filter" id="approved" value="approved"> <label for="approved">Approved</label></li><li class="pd-1x pdl-2x pdr-2x"> <input class="data-filter input-checkbox input-checkbox-sm" type="radio" name="filter" value="pending" id="pending"> <label for="pending">Pending</label></li><li class="pd-1x pdl-2x pdr-2x"> <input class="data-filter input-checkbox input-checkbox-sm" type="radio" name="filter" value="progress" id="progress"> <label for="progress">Progress</label></li><li class="pd-1x pdl-2x pdr-2x"> <input class="data-filter input-checkbox input-checkbox-sm" type="radio" name="filter" value="cancled" id="cancled"> <label for="cancled">Cancled</label></li></ul></div>'
-    );
+    // $(".data-table-filter").append(
+    //   '<a href="#" class="btn btn-light-alt btn-xs btn-icon toggle-tigger"> <em class="ti ti-settings"></em> </a><div class="toggle-class toggle-datatable-filter dropdown-content dropdown-content-top-left text-left"><ul class="pdt-1x pdb-1x"><li class="pd-1x pdl-2x pdr-2x"> <input class="data-filter input-checkbox input-checkbox-sm" type="radio" name="filter" id="all" checked value=""> <label for="all">All</label></li><li class="pd-1x pdl-2x pdr-2x"> <input class="data-filter input-checkbox input-checkbox-sm" type="radio" name="filter" id="approved" value="approved"> <label for="approved">Approved</label></li><li class="pd-1x pdl-2x pdr-2x"> <input class="data-filter input-checkbox input-checkbox-sm" type="radio" name="filter" value="pending" id="pending"> <label for="pending">Pending</label></li><li class="pd-1x pdl-2x pdr-2x"> <input class="data-filter input-checkbox input-checkbox-sm" type="radio" name="filter" value="progress" id="progress"> <label for="progress">Progress</label></li><li class="pd-1x pdl-2x pdr-2x"> <input class="data-filter input-checkbox input-checkbox-sm" type="radio" name="filter" value="cancled" id="cancled"> <label for="cancled">Cancled</label></li></ul></div>'
+    // );
 
-    var $data_filter = $(".data-filter");
-    $data_filter.on("change", function () {
-      var _thisval = $(this).val();
-      $data_table_fltr
-        .columns(".dt-tnxno")
-        .search(_thisval ? _thisval : "", true, false)
-        .draw();
-    });
+    // var $data_filter = $(".data-filter");
+    // $data_filter.on("change", function () {
+    //   var _thisval = $(this).val();
+    //   $data_table_fltr
+    //     .columns(".dt-tnxno")
+    //     .search(_thisval ? _thisval : "", true, false)
+    //     .draw();
+    // });
   }
 
   // Line Chart

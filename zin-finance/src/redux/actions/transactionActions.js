@@ -11,6 +11,8 @@ axios.defaults.headers.common["Content-Type"] = "application/json";
 const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
 const API_URL = CORS_PROXY + "https://stgzinapi.azurewebsites.net";
 
+const ethService = new EthService();
+
 export function logoutUser() {
   Cookies.remove("token");
   return {
@@ -29,7 +31,6 @@ export function fetchTransactions(callback) {
       });
       if (response.status === 200) {
         let transactions = response.data.data;
-        let ethService = new EthService();
         for (let i = 0; i < transactions.length; i++) {
           transactions[i].amountTransferredInEther = ethService.convertFromWei(
             transactions[i].amountTransferredInEther
@@ -120,7 +121,6 @@ export function fetchBonusTransactions(callback) {
       });
       if (response.status === 200) {
         let transactions = response.data.data;
-        let ethService = new EthService();
         for (let i = 0; i < transactions.length; i++) {
           transactions[i].amountTransferredInEther = ethService.convertFromWei(
             transactions[i].amountTransferredInEther

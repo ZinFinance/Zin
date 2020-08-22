@@ -323,19 +323,19 @@ function _setUser(data) {
 function _fetchUser(token) {
   return new Promise(async (resolve, reject) => {
     try {
-      verifiedTestAccount.zinTokens = ethService.convertFromWei(
-        verifiedTestAccount.zinTokens
-      );
-      verifiedTestAccount.referralZinTokens = ethService.convertFromWei(
-        verifiedTestAccount.referralZinTokens
-      );
-      verifiedTestAccount.bonusZinTokens = ethService.convertFromWei(
-        verifiedTestAccount.bonusZinTokens
-      );
-      verifiedTestAccount.presaleZinTokens = ethService.convertFromWei(
-        verifiedTestAccount.presaleZinTokens
-      );
       if (token === verifiedTestAccount.email) {
+        verifiedTestAccount.zinTokens = ethService.convertFromWei(
+          verifiedTestAccount.zinTokens
+        );
+        verifiedTestAccount.referralZinTokens = ethService.convertFromWei(
+          verifiedTestAccount.referralZinTokens
+        );
+        verifiedTestAccount.bonusZinTokens = ethService.convertFromWei(
+          verifiedTestAccount.bonusZinTokens
+        );
+        verifiedTestAccount.presaleZinTokens = ethService.convertFromWei(
+          verifiedTestAccount.presaleZinTokens
+        );
         resolve({
           data: verifiedTestAccount,
         });

@@ -122,10 +122,7 @@ function getApplicantStatus(applicantId) {
 export function getKYCApplicationStatus(externalUserId) {
   return async (dispatch) => {
     try {
-      let applicantData = await axios(getApplicantData(externalUserId));
-      let applicationStatus = await axios(
-        getApplicantStatus(applicantData.data.id)
-      );
+      let applicationStatus = await getUserKYCStatus(externalUserId);
       dispatch({
         type: ActionTypes.SET_KYC_APPLICATION_STATUS,
         data: applicationStatus.data,
@@ -134,4 +131,16 @@ export function getKYCApplicationStatus(externalUserId) {
       console.warn("error fetching kyc application status", err);
     }
   };
+}
+
+export async function getUserKYCStatus(externalUserId) {
+  try {
+    let applicantData = await axios(getApplicantData(externalUserId));
+    let applicationStatus = await axios(
+      getApplicantStatus(applicantData.data.id)
+    );
+    return applicationStatus;
+  } catch (err) {
+    throw new Error(err);
+  }
 }

@@ -59,7 +59,6 @@ function Profile() {
           ethAddress,
         },
         (error) => {
-          debugger;
           if (error) {
             setState({ error, loading: false });
           } else {
@@ -74,7 +73,11 @@ function Profile() {
     <div className="container">
       <WalletModal />
       <div className="row">
-        <div className="main-content col-lg-8">
+        <div
+          className={
+            user.isAdmin ? "main-content col-lg-12" : "main-content col-lg-8"
+          }
+        >
           <div className="content-area card">
             <div className="card-innr">
               <div className="card-head">
@@ -291,87 +294,90 @@ function Profile() {
           {/* .card */}
         </div>
         {/* .col */}
-        <div className="aside sidebar-right col-lg-4">
-          <div className="account-info card">
-            <div className="card-innr">
-              <h6 className="card-title card-title-sm">Your Account Status</h6>
-              <ul className="btn-grp">
-                <li>
-                  {user.isEmailVerified ? (
-                    <span
-                      style={{ cursor: "initial" }}
-                      className="btn btn-auto btn-xs btn-success"
-                    >
-                      Email Verified
-                    </span>
-                  ) : (
-                    <span
-                      style={{ cursor: "initial" }}
-                      className="btn btn-auto btn-xs btn-danger"
-                    >
-                      Email Not Verified
-                    </span>
-                  )}
-                </li>
-                <li>
-                  {kycApplicationStatus &&
-                  kycApplicationStatus.reviewStatus === "completed" ? (
-                    <span
-                      style={{ cursor: "initial" }}
-                      className="btn btn-auto btn-xs btn-success"
-                    >
-                      KYC Complete
-                    </span>
-                  ) : (
-                    <span
-                      style={{ cursor: "initial" }}
-                      className="btn btn-auto btn-xs btn-warning"
-                    >
-                      KYC Pending
-                    </span>
-                  )}
-                </li>
-              </ul>
-              <div className="gaps-2-5x" />
-              <h6 className="card-title card-title-sm">Receiving Wallet</h6>
-              <div className="d-flex justify-content-between">
-                <span>
+        {!user.isAdmin && (
+          <div className="aside sidebar-right col-lg-4">
+            <div className="account-info card">
+              <div className="card-innr">
+                <h6 className="card-title card-title-sm">
+                  Your Account Status
+                </h6>
+                <ul className="btn-grp">
+                  <li>
+                    {user.isEmailVerified ? (
+                      <span
+                        style={{ cursor: "initial" }}
+                        className="btn btn-auto btn-xs btn-success"
+                      >
+                        Email Verified
+                      </span>
+                    ) : (
+                      <span
+                        style={{ cursor: "initial" }}
+                        className="btn btn-auto btn-xs btn-danger"
+                      >
+                        Email Not Verified
+                      </span>
+                    )}
+                  </li>
+                  <li>
+                    {kycApplicationStatus &&
+                    kycApplicationStatus.reviewStatus === "completed" ? (
+                      <span
+                        style={{ cursor: "initial" }}
+                        className="btn btn-auto btn-xs btn-success"
+                      >
+                        KYC Complete
+                      </span>
+                    ) : (
+                      <span
+                        style={{ cursor: "initial" }}
+                        className="btn btn-auto btn-xs btn-warning"
+                      >
+                        KYC Pending
+                      </span>
+                    )}
+                  </li>
+                </ul>
+                <div className="gaps-2-5x" />
+                <h6 className="card-title card-title-sm">Receiving Wallet</h6>
+                <div className="d-flex justify-content-between">
                   <span>
-                    {ethAddress
-                      ? ethAddress.substr(0, 8) +
-                        "....." +
-                        ethAddress.substr(ethAddress.length - 8)
-                      : "No Wallet Added"}
-                  </span>{" "}
-                  {/* <em
+                    <span>
+                      {ethAddress
+                        ? ethAddress.substr(0, 8) +
+                          "....." +
+                          ethAddress.substr(ethAddress.length - 8)
+                        : "No Wallet Added"}
+                    </span>{" "}
+                    {/* <em
                     className="fas fa-info-circle text-exlight"
                     data-toggle="tooltip"
                     data-placement="bottom"
                     title={'"1 ETH = 100 ZIN"'}
                   /> */}
-                </span>
-                {user.isEmailVerified ? (
-                  <a
-                    href="#edit-wallet"
-                    data-toggle="modal"
-                    data-target="#edit-wallet"
-                    className="link link-ucap"
-                  >
-                    {ethAddress ? "Edit" : "Add"}
-                  </a>
-                ) : (
-                  <span
-                    style={{ cursor: "not-allowed" }}
-                    className="link link-ucap"
-                  >
-                    Edit
                   </span>
-                )}
+                  {user.isEmailVerified ? (
+                    <a
+                      href="#edit-wallet"
+                      data-toggle="modal"
+                      data-target="#edit-wallet"
+                      className="link link-ucap"
+                    >
+                      {ethAddress ? "Edit" : "Add"}
+                    </a>
+                  ) : (
+                    <span
+                      style={{ cursor: "not-allowed" }}
+                      className="link link-ucap"
+                    >
+                      Edit
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-          <ReferralCard />
-          {/* <div className="kyc-info card">
+            <ReferralCard />
+            {/* <div className="kyc-info card">
             <div className="card-innr">
               <h6 className="card-title card-title-sm">
                 Identity Verification - KYC
@@ -395,7 +401,8 @@ function Profile() {
               </h6>
             </div>
           </div> */}
-        </div>
+          </div>
+        )}
         {/* .col */}
       </div>
       {/* .container */}

@@ -1,5 +1,4 @@
 import React from "react";
-import TransactionDetailsModal from "./transactionDetailsModal";
 import { useSelector } from "react-redux";
 import { useEthToUSDValue } from "../utility";
 
@@ -12,7 +11,6 @@ function Transactions() {
 
   return (
     <div className="container">
-      <TransactionDetailsModal />
       <div className="card content-area">
         <div className="card-innr">
           <div className="card-head">

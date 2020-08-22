@@ -13,6 +13,8 @@ import AdminRoutes from "./routes/adminRoutes";
 import Cookies from "js-cookie";
 
 import { fetchUser } from "./redux/actions/userActions";
+import { fetchUsers, fetchBonuses } from "./redux/actions/adminActions";
+
 import {
   getKYCAccessToken,
   getKYCApplicationStatus,
@@ -26,6 +28,7 @@ import PageLoader from "./components/pageLoader";
 
 function App() {
   const user = useSelector((state) => state.userReducer.user);
+  const adminData = useSelector((state) => state.adminReducer);
   const dispatch = useDispatch();
   const location = useLocation();
   const history = useHistory();
@@ -74,7 +77,16 @@ function App() {
     };
   }, [user, location.pathname]);
 
-  if (shouldFetchUser) {
+  const shouldFetchAdminData =
+    user && user.isAdmin && !adminData.users && !adminData.bonuses;
+  useEffect(() => {
+    if (shouldFetchAdminData) {
+      dispatch(fetchUsers());
+      dispatch(fetchBonuses());
+    }
+  }, [shouldFetchAdminData, dispatch]);
+
+  if (shouldFetchUser || shouldFetchAdminData) {
     return <PageLoader />;
   } else if (user && user.isAdmin) {
     return (

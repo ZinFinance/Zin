@@ -3,10 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
 import { getPrettyValue } from "../utility";
+import { useLocation } from "react-router-dom";
 
 function AdminNavbar() {
   const user = useSelector((state) => state.userReducer.user);
   const dispatch = useDispatch();
+  const location = useLocation();
 
   function logout() {
     dispatch(logoutUser());
@@ -86,6 +88,47 @@ function AdminNavbar() {
                     </li>
                   </ul>
                 </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div className="navbar">
+        <div className="container">
+          <div className="navbar-innr">
+            <ul className="navbar-menu">
+              <li
+                className={
+                  location.pathname.replace(/\//g, "") === "admin-dashboard"
+                    ? "active"
+                    : ""
+                }
+              >
+                <Link to="/">
+                  <em className="ikon ikon-dashboard"></em> Dashboard
+                </Link>
+              </li>
+              <li
+                className={
+                  location.pathname.replace(/\//g, "") === "profile"
+                    ? "active"
+                    : ""
+                }
+              >
+                <Link to="/profile">
+                  <em className="ikon ikon-user"></em> Profile
+                </Link>
+              </li>
+              <li
+                className={
+                  location.pathname.replace(/\//g, "") === "user-list"
+                    ? "active"
+                    : ""
+                }
+              >
+                <Link to="/user-list">
+                  <em className="ikon ikon-distribution"></em> Users
+                </Link>
               </li>
             </ul>
           </div>

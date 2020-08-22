@@ -261,7 +261,7 @@ function BuyToken() {
                 <button
                   onClick={buyTokensWithMetaMask}
                   {...disabled}
-                  style={{ marginRight: "10px" }}
+                  style={{ marginRight: "10px", marginBottom: "10px" }}
                   className="btn btn-primary"
                 >
                   <img
@@ -274,6 +274,7 @@ function BuyToken() {
                 <button
                   onClick={buyTokensWithOther}
                   {...disabled}
+                  style={{ marginBottom: "10px" }}
                   className="btn btn-primary"
                 >
                   Buy with other Ethereum Wallets

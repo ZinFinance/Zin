@@ -46,13 +46,15 @@ function BuyWithMetaMask({
                 required
                 type="text"
                 className="copy-address"
-                defaultValue="0x4156d3342d5c385a87d264f90653733592000581"
+                defaultValue={process.env.REACT_APP_Crowdsale_Contract_Address}
                 disabled
               />
               <button
                 type="submit"
                 className="copy-trigger copy-clipboard"
-                data-clipboard-text="0x4156d3342d5c385a87d264f90653733592000581"
+                data-clipboard-text={
+                  process.env.REACT_APP_Crowdsale_Contract_Address
+                }
               >
                 <em className="ti ti-files" />
               </button>

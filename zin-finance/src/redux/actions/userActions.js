@@ -80,7 +80,7 @@ export async function resetPassword(userName) {
     if (userName === verifiedTestAccount.email) {
       return null;
     }
-    let response = await axios.get(API_URL + "/api/Account/reset", null, {
+    let response = await axios.get(API_URL + `/api/Account/reset`, {
       params: {
         userName,
       },
@@ -101,7 +101,7 @@ export async function resetAccount(data) {
     if (data.userId === verifiedTestAccount.email) {
       return null;
     }
-    let response = await axios.get(
+    let response = await axios.post(
       API_URL + "/api/Account/reset/confirm",
       data,
       {
@@ -147,17 +147,17 @@ export function login(email, password, rememberMe, callback) {
         }
         return;
       }
-      let authResponse = await axios.get(API_URL + "/api/Auth/login", {
-        email,
+      let authResponse = await axios.post(API_URL + "/api/Auth/login", {
+        userName: email,
         password,
       });
       if (authResponse.status === 200) {
-        let profile = await _fetchUser(authResponse.data.tempToken);
+        let profile = await _fetchUser(authResponse.data.data.tempToken);
         dispatch(_setUser(profile.data));
         if (rememberMe) {
-          Cookies.set("token", authResponse.data.tempToken, { path: "/" });
+          Cookies.set("token", authResponse.data.data.tempToken, { path: "/" });
         } else {
-          Cookies.set("token", authResponse.data.tempToken, {
+          Cookies.set("token", authResponse.data.data.tempToken, {
             expires: 7,
             path: "/",
           });
@@ -220,7 +220,7 @@ export function updateUser(data, callback) {
 export async function updatePassword(data) {
   try {
     let updateResponse = await axios.post(
-      API_URL + "/api​/Account/updatePassword",
+      API_URL + "/api/Account/changePassword",
       data,
       {
         headers: {
@@ -295,7 +295,7 @@ function _fetchUser(token) {
         });
         return;
       }
-      let profileResponse = await axios.get(API_URL + "/api/Profile", null, {
+      let profileResponse = await axios.get(API_URL + "/api/Profile", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

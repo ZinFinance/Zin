@@ -23,7 +23,6 @@ export function fetchTransactions(callback) {
     try {
       let response = await axios.get(
         API_URL + "/api/Profile/getregisteredtxs",
-        null,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("token")}`,
@@ -110,15 +109,11 @@ export function saveTransaction(data, callback) {
 export function fetchBonusTransactions(callback) {
   return async (dispatch) => {
     try {
-      let response = await axios.get(
-        API_URL + "/api/Profile/getbonustxs",
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("token")}`,
-          },
-        }
-      );
+      let response = await axios.get(API_URL + "/api/Profile/getbonustxs", {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      });
       if (response.status === 200) {
         let transactions = response.data.data;
         let ethService = new EthService();

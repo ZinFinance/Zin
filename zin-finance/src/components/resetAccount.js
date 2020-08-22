@@ -24,6 +24,13 @@ function ResetAccount() {
   }
 
   const onChange = (e) => {
+    if (e.target.name === "confirmNewPassword") {
+      if (e.target.value !== newPassword) {
+        e.target.setCustomValidity("Please enter the same password as above");
+      } else {
+        e.target.setCustomValidity("");
+      }
+    }
     setState({
       [e.target.name]: e.target.value,
       error: false,
@@ -34,7 +41,7 @@ function ResetAccount() {
   const submitForm = async (e) => {
     e.preventDefault();
     setState({ loading: true });
-    let tempToken = new URLSearchParams(location.search).get("tempToken");
+    let tempToken = new URLSearchParams(location.search).get("token");
     let userId = new URLSearchParams(location.search).get("userId");
     let error = await resetAccount({
       tempToken,

@@ -5,48 +5,28 @@ import { updateBonus } from "../redux/actions/adminActions";
 import AsyncButton from "./AsyncButton";
 
 const tokenRate = process.env.REACT_APP_API_TOKEN_RATE;
+const INVITER = 0;
+const INVITEE = 1;
+const PRESALE = 2;
 
 function AdminDashboard() {
   const dispatch = useDispatch();
   const adminData = useSelector((state) => state.adminReducer);
   const [totalTokensSold, setTotalTokensSold] = useState(0);
-
-  const initialInviterBonus = adminData.bonuses.find(
-    (bonus) => bonus.bonusType === 0
+  const [bonuses, setBonuses] = useState(
+    adminData.bonuses.map((bonus) => {
+      return {
+        ...bonus,
+        updating: false,
+        success: false,
+        error: false,
+        name:
+          (bonus.bonusType === INVITER && "Inviter") ||
+          (bonus.bonusType === INVITEE && "Invitee") ||
+          (bonus.bonusType === PRESALE && "Presale"),
+      };
+    })
   );
-  const initialInviteeBonus = adminData.bonuses.find(
-    (bonus) => bonus.bonusType === 1
-  );
-  const initialPresaleBonus = adminData.bonuses.find(
-    (bonus) => bonus.bonusType === 2
-  );
-
-  const [inviterBonus, setInviterBonus] = useState({
-    updating: false,
-    success: false,
-    error: false,
-    bonusType: initialInviterBonus.bonusType,
-    bonusPercentage: initialInviterBonus.bonusPercentage,
-    isActive: initialInviterBonus.isActive,
-  });
-
-  const [inviteeBonus, setInviteeBonus] = useState({
-    updating: false,
-    success: false,
-    error: false,
-    bonusType: initialInviteeBonus.bonusType,
-    bonusPercentage: initialInviteeBonus.bonusPercentage,
-    isActive: initialInviteeBonus.isActive,
-  });
-
-  const [presaleBonus, setPresaleBonus] = useState({
-    updating: false,
-    success: false,
-    error: false,
-    bonusType: initialPresaleBonus.bonusType,
-    bonusPercentage: initialPresaleBonus.bonusPercentage,
-    isActive: initialPresaleBonus.isActive,
-  });
 
   useEffect(() => {
     let totalTokens = 0;
@@ -56,100 +36,53 @@ function AdminDashboard() {
     setTotalTokensSold(totalTokens);
   }, [adminData.users]);
 
-  const updateInviterBonus = (e) => {
+  const submitUpdate = (e, bonusType) => {
     e.preventDefault();
-    setInviterBonus({
-      ...inviterBonus,
+    let bonusesCopy = bonuses;
+    bonusesCopy[bonusType] = {
+      ...bonusesCopy[bonusType],
       loading: true,
-    });
+    };
+    setBonuses(bonusesCopy);
     dispatch(
       updateBonus(
-        inviterBonus.bonusType,
-        inviterBonus.isActive,
-        inviterBonus.bonusPercentage,
+        bonusType,
+        bonuses[bonusType].isActive,
+        bonuses[bonusType].bonusPercentage,
         (err) => {
           if (err) {
-            setInviterBonus({
-              ...inviterBonus,
+            let bonusesCopy = bonuses;
+            bonusesCopy[bonusType] = {
+              ...bonusesCopy[bonusType],
               success: false,
               error: err,
               loading: false,
-            });
+            };
+            setBonuses(bonusesCopy);
           } else {
-            setInviterBonus({
-              ...inviterBonus,
+            let bonusesCopy = bonuses;
+            bonusesCopy[bonusType] = {
+              ...bonusesCopy[bonusType],
               success: true,
               error: false,
               loading: false,
-            });
+            };
+            setBonuses(bonusesCopy);
           }
         }
       )
     );
   };
 
-  const updateInviteeBonus = (e) => {
-    e.preventDefault();
-    setInviteeBonus({
-      ...inviteeBonus,
-      loading: true,
-    });
-    dispatch(
-      updateBonus(
-        inviteeBonus.bonusType,
-        inviteeBonus.isActive,
-        inviteeBonus.bonusPercentage,
-        (err) => {
-          if (err) {
-            setInviteeBonus({
-              ...inviteeBonus,
-              success: false,
-              error: err,
-              loading: false,
-            });
-          } else {
-            setInviteeBonus({
-              ...inviteeBonus,
-              success: true,
-              error: false,
-              loading: false,
-            });
-          }
-        }
-      )
-    );
-  };
-
-  const updatePresaleBonus = (e) => {
-    e.preventDefault();
-    setPresaleBonus({
-      ...presaleBonus,
-      loading: true,
-    });
-    dispatch(
-      updateBonus(
-        presaleBonus.bonusType,
-        presaleBonus.isActive,
-        presaleBonus.bonusPercentage,
-        (err) => {
-          if (err) {
-            setPresaleBonus({
-              ...presaleBonus,
-              success: false,
-              error: err,
-              loading: false,
-            });
-          } else {
-            setPresaleBonus({
-              ...presaleBonus,
-              success: false,
-              error: err,
-              loading: false,
-            });
-          }
-        }
-      )
-    );
+  const handleChange = (e, bonusType) => {
+    let bonusesCopy = bonuses;
+    bonusesCopy[bonusType] = {
+      ...bonusesCopy[bonusType],
+      [e.target.name]: e.target.value,
+      success: false,
+      error: false,
+    };
+    setBonuses(bonusesCopy);
   };
 
   return (
@@ -201,245 +134,74 @@ function AdminDashboard() {
                 className="pdt-1-5x tab-pane fade active show"
                 id="admin-configuration"
               >
-                <form onSubmit={updateInviterBonus}>
-                  <div style={{ display: "flex" }} className="input-item">
-                    <input
-                      type="checkbox"
-                      className="input-switch input-switch-sm"
-                      id="save-log"
-                      checked={inviterBonus.isActive}
-                      onChange={(e) => {
-                        setInviterBonus({
-                          ...inviterBonus,
-                          success: false,
-                          error: false,
-                          isActive: e.target.checked,
-                        });
-                      }}
-                    />
-                    <label
-                      style={{ display: "contents" }}
-                      className="input-item-label"
-                      htmlFor="save-log"
-                    >
-                      Inviter Bonus
-                    </label>
+                {bonuses.map((bonus) => (
+                  <form onSubmit={submitUpdate}>
+                    <div style={{ display: "flex" }} className="input-item">
+                      <input
+                        type="checkbox"
+                        name="isActive"
+                        className="input-switch input-switch-sm"
+                        id="save-log"
+                        checked={bonus.isActive}
+                        onChange={(e) => handleChange(e, bonus.bonusType)}
+                      />
 
-                    <div
-                      style={{ paddingBottom: "5px", paddingLeft: "30px" }}
-                      className="col-md-4"
-                    >
-                      <div className="input-item input-with-label">
-                        <label className="input-item-label">
-                          Bonus Percentage
-                        </label>
-                        <input
-                          required
-                          className="input-bordered"
-                          type="number"
-                          min="0"
-                          value={inviterBonus.bonusPercentage}
-                          onChange={(e) =>
-                            setInviterBonus({
-                              ...inviterBonus,
-                              error: false,
-                              success: false,
-                              bonusPercentage: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                    </div>
+                      <label
+                        style={{ display: "contents" }}
+                        className="input-item-label"
+                        htmlFor="save-log"
+                      >
+                        {bonus.name} Bonus
+                      </label>
 
-                    <div className="d-flex align-items-center col-md-3">
-                      <div className="flex-col">
-                        <AsyncButton
-                          loading={inviterBonus.loading}
-                          defaultText="Update"
-                          loadingText="Updating..."
-                          buttonClasses="btn-sm btn-auto btn-primary"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="d-flex justify-content-between align-items-center">
-                      {inviterBonus.success && (
-                        <span className="text-success">
-                          <em
-                            style={{ marginRight: "5px" }}
-                            className="ti ti-check-box"
+                      <div
+                        style={{ paddingBottom: "5px", paddingLeft: "30px" }}
+                        className="col-md-4"
+                      >
+                        <div className="input-item input-with-label">
+                          <label className="input-item-label">
+                            Bonus Percentage
+                          </label>
+                          <input
+                            required
+                            name="bonusPercentage"
+                            className="input-bordered"
+                            type="number"
+                            min="0"
+                            value={bonus.bonusPercentage}
+                            onChange={(e) => handleChange(e, bonus.bonusType)}
                           />
-                          Updated
-                        </span>
-                      )}
-                      {inviterBonus.error && (
-                        <span className="text-danger">
-                          {inviterBonus.error}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </form>
-
-                <form onSubmit={updateInviteeBonus}>
-                  <div style={{ display: "flex" }} className="input-item">
-                    <input
-                      type="checkbox"
-                      className="input-switch input-switch-sm"
-                      id="save-log"
-                      checked={inviteeBonus.isActive}
-                      onChange={(e) => {
-                        setInviteeBonus({
-                          ...inviteeBonus,
-                          success: false,
-                          error: false,
-                          isActive: e.target.checked,
-                        });
-                      }}
-                    />
-                    <label
-                      style={{ display: "contents" }}
-                      className="input-item-label"
-                      htmlFor="save-log"
-                    >
-                      Invitee Bonus
-                    </label>
-
-                    <div
-                      style={{ paddingBottom: "5px", paddingLeft: "30px" }}
-                      className="col-md-4"
-                    >
-                      <div className="input-item input-with-label">
-                        <label className="input-item-label">
-                          Bonus Percentage
-                        </label>
-                        <input
-                          required
-                          className="input-bordered"
-                          type="number"
-                          min="0"
-                          value={inviteeBonus.bonusPercentage}
-                          onChange={(e) =>
-                            setInviteeBonus({
-                              ...inviteeBonus,
-                              error: false,
-                              success: false,
-                              bonusPercentage: e.target.value,
-                            })
-                          }
-                        />
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="d-flex align-items-center col-md-3">
-                      <div className="flex-col">
-                        <AsyncButton
-                          loading={inviteeBonus.loading}
-                          defaultText="Update"
-                          loadingText="Updating..."
-                          buttonClasses="btn-sm btn-auto btn-primary"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="d-flex justify-content-between align-items-center">
-                      {inviteeBonus.success && (
-                        <span className="text-success">
-                          <em
-                            style={{ marginRight: "5px" }}
-                            className="ti ti-check-box"
+                      <div className="d-flex align-items-center col-md-3">
+                        <div className="flex-col">
+                          <AsyncButton
+                            loading={bonus.loading}
+                            defaultText="Update"
+                            loadingText="Updating..."
+                            buttonClasses="btn-sm btn-auto btn-primary"
                           />
-                          Updated
-                        </span>
-                      )}
-                      {inviteeBonus.error && (
-                        <span className="text-danger">
-                          {inviteeBonus.error}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </form>
+                        </div>
+                      </div>
 
-                <form onSubmit={updatePresaleBonus}>
-                  <div style={{ display: "flex" }} className="input-item">
-                    <input
-                      type="checkbox"
-                      className="input-switch input-switch-sm"
-                      id="save-log"
-                      checked={presaleBonus.isActive}
-                      onChange={(e) => {
-                        setPresaleBonus({
-                          ...presaleBonus,
-                          success: false,
-                          error: false,
-                          isActive: e.target.checked,
-                        });
-                      }}
-                    />
-                    <label
-                      style={{ display: "contents" }}
-                      className="input-item-label"
-                      htmlFor="save-log"
-                    >
-                      Presale Bonus
-                    </label>
-
-                    <div
-                      style={{ paddingBottom: "5px", paddingLeft: "30px" }}
-                      className="col-md-4"
-                    >
-                      <div className="input-item input-with-label">
-                        <label className="input-item-label">
-                          Bonus Percentage
-                        </label>
-                        <input
-                          required
-                          className="input-bordered"
-                          type="number"
-                          min="0"
-                          value={presaleBonus.bonusPercentage}
-                          onChange={(e) =>
-                            setPresaleBonus({
-                              ...presaleBonus,
-                              error: false,
-                              success: false,
-                              bonusPercentage: e.target.value,
-                            })
-                          }
-                        />
+                      <div className="d-flex justify-content-between align-items-center">
+                        {bonus.success && (
+                          <span className="text-success">
+                            <em
+                              style={{ marginRight: "5px" }}
+                              className="ti ti-check-box"
+                            />
+                            Updated
+                          </span>
+                        )}
+                        {bonus.error && (
+                          <span className="text-danger">{bonus.error}</span>
+                        )}
                       </div>
                     </div>
-
-                    <div className="d-flex align-items-center col-md-3">
-                      <div className="flex-col">
-                        <AsyncButton
-                          loading={presaleBonus.loading}
-                          defaultText="Update"
-                          loadingText="Updating..."
-                          buttonClasses="btn-sm btn-auto btn-primary"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="d-flex justify-content-between align-items-center">
-                      {presaleBonus.success && (
-                        <span className="text-success">
-                          <em
-                            style={{ marginRight: "5px" }}
-                            className="ti ti-check-box"
-                          />
-                          Updated
-                        </span>
-                      )}
-                      {presaleBonus.error && (
-                        <span className="text-danger">
-                          {presaleBonus.error}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </form>
+                  </form>
+                ))}
               </div>
             </div>
             {/* .card-innr */}

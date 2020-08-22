@@ -25,6 +25,7 @@ const verifiedTestAccount = {
   referralZinTokens: "0",
   bonusZinTokens: "0",
   presaleZinTokens: "0",
+  isAdmin: true,
 };
 
 const unverifiedTestAccount = {

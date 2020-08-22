@@ -13,7 +13,7 @@ namespace Zin.Services.Services
         Task<Result> RegisterTxUsingReferalCodeAsync(string txId, string referralCode, string EtherToUsdRateAtThatTime);
         Task<List<RegisteredTx>> GetRegisteredTxAsync(string userId, bool onlyReferral);
         Task<List<BonusTx>> GetBonusTxAsync(string userId);
-        Task UpdateBonusAsync(BonusType bonusType, bool isActive, int bonusPercentage);
+        Task<Result> UpdateBonusAsync(BonusType bonusType, bool isActive, int bonusPercentage);
         Task<List<BonusRate>> GetAllBonusRatesAsync();
 
     }

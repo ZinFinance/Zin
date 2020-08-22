@@ -150,7 +150,7 @@ namespace Zin.Services.Implementation
             return data;
         }
 
-        public async Task UpdateBonusAsync(BonusType bonusType, bool isActive, int bonusPercentage)
+        public async Task<Result> UpdateBonusAsync(BonusType bonusType, bool isActive, int bonusPercentage)
         {
             await bonusCalculationRepository.SaveNewBonusRate(new BonusRate
             {
@@ -160,6 +160,7 @@ namespace Zin.Services.Implementation
                 IsActive = isActive,
                 CreationDate = DateTimeOffset.UtcNow
             });
+            return new Result(true, "BONUS_UPDATED");
         }
 
         public async Task<List<BonusRate>> GetAllBonusRatesAsync()

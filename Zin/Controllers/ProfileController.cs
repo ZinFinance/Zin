@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Zin.Models.Account;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using Zin.Repository.Models;
 
 namespace Zin.Controllers
 {
@@ -193,11 +194,11 @@ namespace Zin.Controllers
         [Authorize(Roles = "ADMIN")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Result))]
-        [HttpPost("admin/updatebonus")]
-        public async Task<ActionResult> UpdateBonusAsync()
+        [HttpPost("admin/updatebonus/{bonusType}/{isActive}/{bonusPercentage}")]
+        public async Task<ActionResult> UpdateBonusAsync(BonusType bonusType, bool isActive, int bonusPercentage)
         {
-            Result<List<UserDetails>> result = await profileService.GetAllProfilesAsync();
-            return Ok(result);
+            var res = await profileService.UpdateBonusAsync(bonusType, isActive, bonusPercentage);
+            return Ok(res);
         }
 
         [Authorize(Roles = "ADMIN")]

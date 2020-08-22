@@ -152,12 +152,14 @@ export function login(email, password, rememberMe, callback) {
         password,
       });
       if (authResponse.status === 200) {
-        let profile = await _fetchUser(authResponse.data.data.tempToken);
+        let profile = await _fetchUser(authResponse.data.data.accessToken);
         dispatch(_setUser(profile.data));
         if (rememberMe) {
-          Cookies.set("token", authResponse.data.data.tempToken, { path: "/" });
+          Cookies.set("token", authResponse.data.data.accessToken, {
+            path: "/",
+          });
         } else {
-          Cookies.set("token", authResponse.data.data.tempToken, {
+          Cookies.set("token", authResponse.data.data.accessToken, {
             expires: 7,
             path: "/",
           });

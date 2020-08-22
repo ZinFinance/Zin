@@ -155,14 +155,12 @@ function AdminUserList() {
                       <div className="toggle-class dropdown-content dropdown-content-top-left">
                         <ul className="dropdown-list">
                           <li>
-                            <Link to={`/user-transactions/admin@admin.com`}>
+                            <Link to={`/user-transactions/${userId}`}>
                               <em className="ti ti-eye" /> View Transactions
                             </Link>
                           </li>
                           <li>
-                            <Link
-                              to={`/user-bonus-transactions/admin@admin.com`}
-                            >
+                            <Link to={`/user-bonus-transactions/${userId}`}>
                               <em className="ti ti-eye" /> View Bonus
                               Transactions
                             </Link>

@@ -52,6 +52,7 @@ function Profile() {
     dispatch(
       updateUser(
         {
+          userName: email,
           firstName,
           lastName,
           email,

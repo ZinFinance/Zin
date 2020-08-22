@@ -2,6 +2,7 @@ import React from "react";
 import TransactionDetailsModal from "./transactionDetailsModal";
 import { useSelector } from "react-redux";
 import ReferralCard from "./referralCard";
+import { getPrettyValue } from "../utility";
 
 function Referral() {
   const user = useSelector((state) => state.userReducer.user);
@@ -45,7 +46,12 @@ function Referral() {
                 Total Tokens Earned through Referrals
               </h6>
               <span className="lead">
-                {user.totalBonusGenerated} <span>ZIN</span>
+                {getPrettyValue(
+                  user.referralZinTokens +
+                    user.bonusZinTokens +
+                    user.presaleZinTokens
+                )}{" "}
+                <span>ZIN</span>
               </span>
             </div>
           </div>
@@ -60,7 +66,8 @@ function Referral() {
           <table className="data-table dt-init user-tnx">
             <thead>
               <tr className="data-item data-head">
-                <th className="data-col dt-tnxno">Bonus ID</th>
+                <th className="data-col dt-bonusid">Bonus ID</th>
+                <th className="data-col dt-tnxno">Transaction ID</th>
                 <th className="data-col dt-token">Bonus Tokens Received</th>
                 <th className="data-col dt-type">
                   <div className="dt-type-text">Type</div>
@@ -71,7 +78,7 @@ function Referral() {
               {/* .data-item */}
               {bonusTransactions.map((tx) => (
                 <tr className="data-item">
-                  <td className="data-col dt-tnxno">
+                  <td className="data-col dt-bonusid">
                     <div className="d-flex align-items-center">
                       <div className="data-state data-state-approved">
                         <span className="d-none">Approved</span>
@@ -81,6 +88,18 @@ function Referral() {
                         <span className="sub sub-date">
                           {tx.createDateTimeOffset}
                         </span>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="data-col dt-tnxno">
+                    <div className="d-flex align-items-center">
+                      <div className="fake-class">
+                        <a
+                          href={`https://etherscan.io/tx/${tx.txId}`}
+                          className="lead tnx-id"
+                        >
+                          {tx.txId}
+                        </a>
                       </div>
                     </div>
                   </td>

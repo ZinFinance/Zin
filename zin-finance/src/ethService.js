@@ -57,7 +57,7 @@ class EthService {
   }
 
   convertFromWei(value) {
-    return this.web3.fromWei(Number(value), "ether");
+    return Number(this.web3.fromWei(Number(value), "ether"));
   }
 
   async getTokenBalance() {

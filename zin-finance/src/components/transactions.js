@@ -3,11 +3,11 @@ import TransactionDetailsModal from "./transactionDetailsModal";
 import { useSelector } from "react-redux";
 import { useEthToUSDValue } from "../utility";
 
+const tokenRate = process.env.REACT_APP_API_TOKEN_RATE;
 function Transactions() {
   const transactions = useSelector(
     (state) => state.transactionReducer.transactions
   );
-  const tokenRate = useSelector((state) => state.tokenReducer.tokenRate);
   const ethToUSDValue = useEthToUSDValue();
 
   return (
@@ -21,7 +21,7 @@ function Transactions() {
           <table className="data-table dt-init user-tnx">
             <thead>
               <tr className="data-item data-head">
-                <th className="data-col dt-tnxno">Tranx NO</th>
+                <th className="data-col dt-tnxno">Transaction ID</th>
                 <th className="data-col dt-token">Tokens</th>
                 <th className="data-col dt-amount">Amount</th>
                 <th className="data-col dt-usd-amount">USD Amount</th>

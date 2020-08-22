@@ -11,6 +11,8 @@ axios.defaults.headers.common["Content-Type"] = "application/json";
 const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
 const API_URL = CORS_PROXY + "https://stgzinapi.azurewebsites.net";
 
+const ethService = new EthService();
+
 const verifiedTestAccount = {
   firstName: "admin",
   lastName: "zin",
@@ -19,8 +21,10 @@ const verifiedTestAccount = {
   ethAddress: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
   isEmailVerified: true,
   referralCode: "abc123",
-  totalBonusGenerated: 60,
-  totalTokenBought: 1200,
+  zinTokens: "0",
+  referralZinTokens: "0",
+  bonusZinTokens: "0",
+  presaleZinTokens: "0",
 };
 
 const unverifiedTestAccount = {
@@ -31,8 +35,10 @@ const unverifiedTestAccount = {
   ethAddress: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
   isEmailVerified: false,
   referralCode: "xyz123",
-  totalBonusGenerated: 60,
-  totalTokenBought: 120,
+  zinTokens: "0",
+  referralZinTokens: "0",
+  bonusZinTokens: "0",
+  presaleZinTokens: "0",
 };
 
 export function setTokenBalance(data) {
@@ -53,7 +59,7 @@ export function fetchUser(token) {
   return async (dispatch) => {
     let profile = await _fetchUser(token);
     dispatch(_setUser(profile.data));
-    let balance = await new EthService().getTokenBalance();
+    let balance = await ethService.getTokenBalance();
     dispatch(setTokenBalance(balance));
   };
 }
@@ -208,10 +214,6 @@ export function updateUser(data, callback) {
       }
     } catch (err) {
       console.warn("error updating user", err);
-      dispatch({
-        type: ActionTypes.USER_UPDATE_ERROR,
-        data: DEFAULT_ERROR,
-      });
       if (callback) {
         callback(DEFAULT_ERROR);
       }
@@ -286,6 +288,18 @@ function _setUser(data) {
 function _fetchUser(token) {
   return new Promise(async (resolve, reject) => {
     try {
+      verifiedTestAccount.zinTokens = ethService.convertFromWei(
+        verifiedTestAccount.zinTokens
+      );
+      verifiedTestAccount.referralZinTokens = ethService.convertFromWei(
+        verifiedTestAccount.referralZinTokens
+      );
+      verifiedTestAccount.bonusZinTokens = ethService.convertFromWei(
+        verifiedTestAccount.bonusZinTokens
+      );
+      verifiedTestAccount.presaleZinTokens = ethService.convertFromWei(
+        verifiedTestAccount.presaleZinTokens
+      );
       if (token === verifiedTestAccount.email) {
         resolve({
           data: verifiedTestAccount,
@@ -302,12 +316,13 @@ function _fetchUser(token) {
           Authorization: `Bearer ${token}`,
         },
       });
-      let ethService = new EthService();
       let user = profileResponse.data;
-      user.totalBonusGenerated = ethService.convertFromWei(
-        user.totalBonusGenerated
+      user.zinTokens = ethService.convertFromWei(user.zinTokens);
+      user.referralZinTokens = ethService.convertFromWei(
+        user.referralZinTokens
       );
-      user.totalTokenBought = ethService.convertFromWei(user.totalTokenBought);
+      user.bonusZinTokens = ethService.convertFromWei(user.bonusZinTokens);
+      user.presaleZinTokens = ethService.convertFromWei(user.presaleZinTokens);
       if (profileResponse.status === 200) {
         resolve(user);
       } else {

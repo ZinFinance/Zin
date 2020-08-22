@@ -9,7 +9,7 @@ export default function (state = initialState, action) {
     case ActionTypes.SET_USER: {
       return {
         ...state,
-        user: action.data,
+        user: !state.user ? action.data : { ...state.user, ...action.data },
       };
     }
     case ActionTypes.LOGOUT_USER: {

@@ -121,10 +121,10 @@ namespace Zin
                     var userManager = service.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
                     userManager.CreateAsync(new AppUser
                     {
-                        UserName = "admin",
-                        Email = "adminzin@mailinator.com",
-                        FirstName = "Admin",
-                        LastName = "User",
+                        UserName = "admin@zin.finance",
+                        Email = "admin@zin.finance",
+                        FirstName = "Super",
+                        LastName = "Admin",
                         IsAdmin = true,
                         EmailConfirmed = true
                     }, "ABcde@11").Wait();

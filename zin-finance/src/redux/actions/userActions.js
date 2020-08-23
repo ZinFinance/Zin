@@ -41,23 +41,34 @@ export function fetchUser() {
   };
 }
 
-export async function registerUser(data) {
-  let response = null;
-  try {
-    response = await axios.post(API_URL + "/api/Account/register", data);
-    if (response.status === 201) {
-      return null;
-    } else {
-      return response.data.message;
+export function registerUser(data, callback) {
+  return async (dispatch) => {
+    let response = null;
+    try {
+      response = await axios.post(API_URL + "/api/Account/register", data);
+      if (response.status === 201) {
+        if (callback) {
+          dispatch(login(data.email, data.password, false));
+          callback();
+        }
+      } else {
+        if (callback) {
+          callback(response.data.message);
+        }
+      }
+    } catch (err) {
+      console.warn("error registering user", err);
+      if (response && response.data && response.data.message) {
+        if (callback) {
+          callback(response.data.message);
+        }
+      } else {
+        if (callback) {
+          callback(DEFAULT_ERROR);
+        }
+      }
     }
-  } catch (err) {
-    console.warn("error registering user", err);
-    if (response && response.data && response.data.message) {
-      return response.data.message;
-    } else {
-      return DEFAULT_ERROR;
-    }
-  }
+  };
 }
 
 export async function resetPassword(userName) {

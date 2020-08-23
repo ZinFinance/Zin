@@ -151,7 +151,10 @@ function AdminDashboard() {
                   id="admin-configuration"
                 >
                   {bonuses.map((bonus) => (
-                    <form onSubmit={(e) => submitUpdate(e, bonus.bonusType)}>
+                    <form
+                      key={bonus.bonusType}
+                      onSubmit={(e) => submitUpdate(e, bonus.bonusType)}
+                    >
                       <div style={{ display: "flex" }} className="input-item">
                         <input
                           type="checkbox"

@@ -76,11 +76,11 @@ class EthService {
   }
 
   convertToWei(value) {
-    return web3.utils.toWei(String(value), "ether");
+    return web3.utils.toWei(String(value ? value : 0), "ether");
   }
 
   convertFromWei(value) {
-    return Number(web3.utils.fromWei(String(value), "ether"));
+    return Number(web3.utils.fromWei(String(value ? value : 0), "ether"));
   }
 
   async getTokenBalance() {

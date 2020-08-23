@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams, useHistory, Link } from "react-router-dom";
 import { fetchUserBonusTransactions } from "../redux/actions/adminActions";
 import PageLoader from "./pageLoader";
 import { ExportToCsv } from "export-to-csv";
 
 function AdminUserBonusTransactions() {
+  const dispatch = useDispatch();
   const params = useParams();
   const history = useHistory();
   const userBonusTransactions = useSelector(
@@ -33,11 +34,13 @@ function AdminUserBonusTransactions() {
       if (userBonusTransactions[params.email]) {
         setUserTransactions(userBonusTransactions[params.email]);
       } else {
-        fetchUserBonusTransactions(params.email, (err) => {
-          if (err) {
-            setUserTransactions([]);
-          }
-        });
+        dispatch(
+          fetchUserBonusTransactions(params.email, (err) => {
+            if (err) {
+              setUserTransactions([]);
+            }
+          })
+        );
       }
     } else {
       history.push("/user-list");

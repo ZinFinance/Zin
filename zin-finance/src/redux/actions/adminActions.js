@@ -16,19 +16,30 @@ const ethService = new EthService();
 
 export function fetchUsers() {
   return async (dispatch) => {
-    let users = await _fetchUsers();
-    dispatch({
-      type: ActionTypes.SET_USERS,
-      data: users,
-    });
-    for (let user of users) {
-      let kycStatus = await getUserKYCStatus(user.userId);
-      if (kycStatus && kycStatus.reviewStatus) {
-        dispatch({
-          type: ActionTypes.SET_USER_KYC_STATUS,
-          data: { userId: user.userId, kycStatus },
-        });
+    try {
+      let users = await _fetchUsers();
+      dispatch({
+        type: ActionTypes.SET_USERS,
+        data: users,
+      });
+      for (let user of users) {
+        try {
+          let kycStatus = await getUserKYCStatus(user.userId);
+          if (kycStatus && kycStatus.reviewStatus) {
+            dispatch({
+              type: ActionTypes.SET_USER_KYC_STATUS,
+              data: { userId: user.userId, kycStatus },
+            });
+          }
+        } catch (err) {
+          dispatch({
+            type: ActionTypes.SET_USER_KYC_STATUS,
+            data: { userId: user.userId, kycStatus: "notStarted" },
+          });
+        }
       }
+    } catch (err) {
+      console.warn("error fetching users", err);
     }
   };
 }

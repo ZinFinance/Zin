@@ -79,7 +79,7 @@ function App() {
   }, [user, location.pathname]);
 
   const shouldFetchAdminData =
-    user && user.isAdmin && !adminData.users && !adminData.bonuses;
+    user && user.isAdmin && (!adminData.users || !adminData.bonuses);
   useEffect(() => {
     if (shouldFetchAdminData) {
       dispatch(fetchUsers());

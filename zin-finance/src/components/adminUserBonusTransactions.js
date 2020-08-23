@@ -20,7 +20,7 @@ function AdminUserBonusTransactions() {
       quoteStrings: '"',
       decimalSeparator: ".",
       showLabels: true,
-      filename: `${params.email}-bonus-transactions`,
+      filename: `${params.userId}-bonus-transactions`,
       useTextFile: false,
       useBom: true,
       useKeysAsHeaders: true,
@@ -30,22 +30,26 @@ function AdminUserBonusTransactions() {
   };
 
   useEffect(() => {
-    if (params.email) {
-      if (userBonusTransactions[params.email]) {
-        setUserTransactions(userBonusTransactions[params.email]);
-      } else {
-        dispatch(
-          fetchUserBonusTransactions(params.email, (err) => {
-            if (err) {
-              setUserTransactions([]);
-            }
-          })
-        );
+    if (params.userId && !userTransactions) {
+      dispatch(
+        fetchUserBonusTransactions(params.userId, (err) => {
+          if (err) {
+            setUserTransactions([]);
+          }
+        })
+      );
+    }
+  }, [userTransactions, params.userId, dispatch]);
+
+  useEffect(() => {
+    if (params.userId) {
+      if (userBonusTransactions[params.userId]) {
+        setUserTransactions(userBonusTransactions[params.userId]);
       }
     } else {
       history.push("/user-list");
     }
-  }, [userBonusTransactions, params.email, history]);
+  }, [userBonusTransactions, params.userId, history]);
 
   return (
     <div className="container">

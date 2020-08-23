@@ -58,10 +58,15 @@ export function logoutUser() {
 
 export function fetchUser(token) {
   return async (dispatch) => {
-    let profile = await _fetchUser(token);
-    dispatch(_setUser(profile.data));
-    let balance = await ethService.getTokenBalance();
-    dispatch(setTokenBalance(balance));
+    try {
+      let profile = await _fetchUser(token);
+      dispatch(_setUser(profile.data));
+      let balance = await ethService.getTokenBalance();
+      dispatch(setTokenBalance(balance));
+    } catch (err) {
+      console.warn("err in fetching user", err);
+      dispatch(logoutUser());
+    }
   };
 }
 

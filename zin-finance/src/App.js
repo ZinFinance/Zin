@@ -78,16 +78,18 @@ function App() {
     };
   }, [user, location.pathname]);
 
-  const shouldFetchAdminData =
-    user && user.isAdmin && (!adminData.users || !adminData.bonuses);
+  const shouldFetchUsers = user && user.isAdmin && !adminData.users;
+  const shouldFetchBonuses = user && user.isAdmin && !adminData.bonuses;
   useEffect(() => {
-    if (shouldFetchAdminData) {
+    if (shouldFetchUsers) {
       dispatch(fetchUsers());
+    }
+    if (shouldFetchBonuses) {
       dispatch(fetchBonuses());
     }
-  }, [shouldFetchAdminData, dispatch]);
+  }, [shouldFetchUsers, shouldFetchBonuses, dispatch]);
 
-  if (shouldFetchUser || shouldFetchAdminData) {
+  if (shouldFetchUser) {
     return <PageLoader />;
   } else if (user && user.isAdmin) {
     return (

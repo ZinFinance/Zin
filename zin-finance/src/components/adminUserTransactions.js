@@ -19,22 +19,32 @@ function AdminUserTransactions() {
   const ethToUSDValue = useEthToUSDValue();
 
   useEffect(() => {
-    if (params.email) {
-      if (adminUserTransactions[params.email]) {
-        setUserTransactions(adminUserTransactions[params.email]);
-      } else {
-        dispatch(
-          fetchUserTransactions(params.email, (err) => {
-            if (err) {
-              setUserTransactions([]);
-            }
-          })
-        );
+    if (params.userId && !userTransactions) {
+      dispatch(
+        fetchUserTransactions(params.userId, (err) => {
+          if (err) {
+            setUserTransactions([]);
+          }
+        })
+      );
+    }
+  }, [userTransactions, params.userId, dispatch]);
+
+  useEffect(() => {
+    if (params.userId) {
+      if (adminUserTransactions[params.userId]) {
+        setUserTransactions(adminUserTransactions[params.userId]);
       }
     } else {
       history.push("/user-list");
     }
-  }, [adminUserTransactions, params.email, history, dispatch]);
+  }, [
+    userTransactions,
+    adminUserTransactions,
+    params.userId,
+    history,
+    dispatch,
+  ]);
 
   const exportData = () => {
     const options = {
@@ -42,7 +52,7 @@ function AdminUserTransactions() {
       quoteStrings: '"',
       decimalSeparator: ".",
       showLabels: true,
-      filename: `${params.email}-transactions`,
+      filename: `${params.userId}-transactions`,
       useTextFile: false,
       useBom: true,
       useKeysAsHeaders: true,

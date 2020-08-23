@@ -13,12 +13,12 @@ function AdminRoutes() {
       <Route exact path="/user-list/" component={AdminUserList} />
       <Route
         exact
-        path="/user-transactions/:email?"
+        path="/user-transactions/:userId?"
         component={AdminUserTransactions}
       />
       <Route
         exact
-        path="/user-bonus-transactions/:email?"
+        path="/user-bonus-transactions/:userId?"
         component={AdminUserBonusTransactions}
       />
 

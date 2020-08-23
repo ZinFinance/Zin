@@ -2,7 +2,6 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
-import { getPrettyValue } from "../utility";
 import { useLocation } from "react-router-dom";
 
 function AdminNavbar() {

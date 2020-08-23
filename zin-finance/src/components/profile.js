@@ -370,7 +370,7 @@ function Profile() {
                       style={{ cursor: "not-allowed" }}
                       className="link link-ucap"
                     >
-                      Edit
+                      Add
                     </span>
                   )}
                 </div>

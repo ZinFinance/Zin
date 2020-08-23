@@ -5,6 +5,14 @@ function TransactionResultModal({ txResult }) {
     <div className="modal fade" id="pay-confirm" tabIndex={-1}>
       <div className="modal-dialog modal-dialog-md modal-dialog-centered">
         <div className="modal-content">
+          <span
+            style={{ cursor: "pointer" }}
+            className="modal-close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <em className="ti ti-close" />
+          </span>
           <div className="popup-body">
             {txResult.success ? (
               <div>

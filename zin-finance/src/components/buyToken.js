@@ -7,6 +7,7 @@ import BuyWithOtherModal from "./buyWithOtherModal";
 import BuyWithMetaMaskModal from "./buyWithMetaMaskModal";
 import TransactionResultModal from "./transactionResultModal";
 import { saveTransaction } from "../redux/actions/transactionActions";
+import InfoModal from "./infoModal";
 import EthService from "../ethService";
 
 const tokenRate = process.env.REACT_APP_API_TOKEN_RATE;
@@ -30,9 +31,17 @@ function BuyToken() {
   let closeBuyWithOtherModal = null;
   let closeBuyWithMetaMaskModal = null;
   let transactionResultToggle = null;
+  let infoModalToggle = null;
+
+  const checkIfTransactionsOpened = () => {
+    let transactionsOpenDate = new Date("2020-09-01T12:00:00.000Z");
+    return new Date() > transactionsOpenDate;
+  };
 
   const buyTokensWithOther = () => {
-    if (!user.ethAddress && walletToggle) {
+    if (!checkIfTransactionsOpened()) {
+      infoModalToggle.click();
+    } else if (!user.ethAddress && walletToggle) {
       walletToggle.click();
     } else if (buyWithOtherToggle) {
       buyWithOtherToggle.click();
@@ -40,7 +49,9 @@ function BuyToken() {
   };
 
   const buyTokensWithMetaMask = () => {
-    if (!user.ethAddress && walletToggle) {
+    if (!checkIfTransactionsOpened()) {
+      infoModalToggle.click();
+    } else if (!user.ethAddress && walletToggle) {
       walletToggle.click();
     } else if (buyWithMetaMaskToggle) {
       buyWithMetaMaskToggle.click();
@@ -142,6 +153,19 @@ function BuyToken() {
 
   return (
     <div className="col-lg-12">
+      <button
+        ref={(el) => (infoModalToggle = el)}
+        style={{ display: "none" }}
+        data-toggle="modal"
+        data-target="#info-modal"
+      >
+        Info Modal
+      </button>
+      <InfoModal
+        title="Transactions will open soon"
+        description="You should only make the transaction after our token sale starts on 1st September 2020 12:00:00 (UTC)"
+      />
+
       <button
         ref={(el) => (walletToggle = el)}
         style={{ display: "none" }}
@@ -260,8 +284,12 @@ function BuyToken() {
               <div>
                 <button
                   onClick={buyTokensWithMetaMask}
-                  {...disabled}
-                  style={{ marginRight: "10px", marginBottom: "10px" }}
+                  disabled={disabled.disabled}
+                  style={{
+                    marginRight: "10px",
+                    marginBottom: "10px",
+                    ...disabled.style,
+                  }}
                   className="btn btn-primary"
                 >
                   <img
@@ -273,8 +301,8 @@ function BuyToken() {
                 </button>{" "}
                 <button
                   onClick={buyTokensWithOther}
-                  {...disabled}
-                  style={{ marginBottom: "10px" }}
+                  disabled={disabled.disabled}
+                  style={{ marginBottom: "10px", ...disabled.style }}
                   className="btn btn-primary"
                 >
                   Buy with other Ethereum Wallets

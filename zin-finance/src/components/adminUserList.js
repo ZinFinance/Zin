@@ -102,9 +102,21 @@ function AdminUserList() {
                           )}{" "}
                           Email
                         </li>
-                        {user.kycStatus && (
+                        {user.kycStatus === "pending" && (
                           <li>
                             <div className="data-state data-state-sm data-state-pending" />{" "}
+                            KYC
+                          </li>
+                        )}
+                        {user.kycStatus === "rejected" && (
+                          <li>
+                            <div className="data-state data-state-sm data-state-canceled" />{" "}
+                            KYC
+                          </li>
+                        )}
+                        {user.kycStatus === "approved" && (
+                          <li>
+                            <div className="data-state data-state-sm data-state-approved" />{" "}
                             KYC
                           </li>
                         )}

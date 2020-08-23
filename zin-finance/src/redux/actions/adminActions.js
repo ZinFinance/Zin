@@ -24,17 +24,31 @@ export function fetchUsers() {
       });
       for (let user of users) {
         try {
-          let kycStatus = await getUserKYCStatus(user.email);
-          if (kycStatus && kycStatus.reviewStatus) {
-            dispatch({
-              type: ActionTypes.SET_USER_KYC_STATUS,
-              data: { userId: user.userId, kycStatus },
-            });
+          let kycApplicationStatus = await getUserKYCStatus(user.email);
+          kycApplicationStatus = kycApplicationStatus.data;
+          let kycStatus = "";
+          if (kycApplicationStatus.reviewStatus === "completed") {
+            if (kycApplicationStatus.reviewResult.reviewAnswer === "RED") {
+              kycStatus = "rejected";
+            } else {
+              kycStatus = "approved";
+            }
+          } else if (
+            kycApplicationStatus.reviewStatus === "pending" ||
+            kycApplicationStatus.reviewStatus === "queued" ||
+            kycApplicationStatus.reviewStatus === "onHold" ||
+            kycApplicationStatus.reviewStatus === "init"
+          ) {
+            kycStatus = "pending";
           }
+          dispatch({
+            type: ActionTypes.SET_USER_KYC_STATUS,
+            data: { userId: user.userId, kycStatus },
+          });
         } catch (err) {
           dispatch({
             type: ActionTypes.SET_USER_KYC_STATUS,
-            data: { userId: user.userId, kycStatus: "notStarted" },
+            data: { userId: user.userId, kycStatus: "pending" },
           });
         }
       }

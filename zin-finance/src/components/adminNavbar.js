@@ -62,24 +62,24 @@ function AdminNavbar() {
                 </span>
 
                 <div className="toggle-class dropdown-content dropdown-content-right dropdown-arrow-right user-dropdown">
-                  <div className="user-status">
+                  {/* <div className="user-status">
                     <h6 className="user-status-title">Token balance</h6>
                     <div className="user-status-balance">
                       {getPrettyValue(user.tokenBalance)} <small>ZIN</small>
                     </div>
-                  </div>
-                  {/* <ul className="user-links">
+                  </div> */}
+                  <ul className="user-links">
                     <li>
                       <Link to="/profile">
                         <i className="ti ti-id-badge"></i>My Profile
                       </Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link to="/referral">
                         <i className="ti ti-infinite"></i>Bonus
                       </Link>
-                    </li>
-                  </ul> */}
+                    </li> */}
+                  </ul>
                   <ul className="user-links bg-light">
                     <li>
                       <Link to="/sign-in" onClick={logout}>

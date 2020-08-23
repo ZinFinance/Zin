@@ -1,3 +1,5 @@
+import web3 from "web3";
+
 const Token_ABI = JSON.parse(process.env.REACT_APP_API_Token_Contract_ABI);
 const Token_Address = process.env.REACT_APP_API_Token_Contract_Address;
 const Crowdsale_ABI = JSON.parse(process.env.REACT_APP_Crowdsale_Contract_ABI);
@@ -5,19 +7,25 @@ const Crowdsale_Address = process.env.REACT_APP_Crowdsale_Contract_Address;
 
 class EthService {
   constructor() {
-    try {
-      this.web3 = window.web3;
-      this.web3.eth.getAccounts((error, accounts) => {
-        this.coinbase = this.web3.currentProvider.selectedAddress;
-        this.web3.eth.defaultAccount = this.coinbase;
-      });
-      this.tokenContract = this.web3.eth.contract(Token_ABI).at(Token_Address);
+    if (window.web3) {
+      try {
+        this.web3 = window.web3;
+        this.web3.eth.getAccounts((error, accounts) => {
+          if (accounts.length > 0) {
+            this.coinbase = this.web3.currentProvider.selectedAddress;
+            this.web3.eth.defaultAccount = this.coinbase;
+          }
+        });
+        this.tokenContract = this.web3.eth
+          .contract(Token_ABI)
+          .at(Token_Address);
 
-      this.crowdsaleContract = this.web3.eth
-        .contract(Crowdsale_ABI)
-        .at(Crowdsale_Address);
-    } catch (err) {
-      console.warn(err);
+        this.crowdsaleContract = this.web3.eth
+          .contract(Crowdsale_ABI)
+          .at(Crowdsale_Address);
+      } catch (err) {
+        console.warn(err);
+      }
     }
   }
 
@@ -33,19 +41,22 @@ class EthService {
     );
 
   async getTotalContribution() {
-    var balance = await this.promisify((cb) => {
-      if (this.crowdsaleContract) {
-        return this.crowdsaleContract.weiRaised(cb);
-      } else {
-        return "0";
-      }
-    });
-    return this.web3.fromWei(Number(balance), "ether");
+    if (this.crowdsaleContract) {
+      var balance = await this.promisify((cb) =>
+        this.crowdsaleContract.weiRaised(cb)
+      );
+      return web3.utils.fromWei(String(balance), "ether");
+    } else {
+      return 0;
+    }
   }
 
   async buyToken(eth, fromAddress) {
     try {
-      if (this.coinbase.toLowerCase() !== fromAddress.toLowerCase()) {
+      if (
+        !this.coinbase ||
+        this.coinbase.toLowerCase() !== fromAddress.toLowerCase()
+      ) {
         return "";
       }
       var tx = await this.promisify((cb) =>
@@ -65,18 +76,22 @@ class EthService {
   }
 
   convertToWei(value) {
-    return this.web3.toWei(Number(value), "ether");
+    return web3.utils.toWei(String(value), "ether");
   }
 
   convertFromWei(value) {
-    return Number(this.web3.fromWei(Number(value), "ether"));
+    return Number(web3.utils.fromWei(String(value), "ether"));
   }
 
   async getTokenBalance() {
-    var balance = await this.promisify((cb) =>
-      this.tokenContract.balanceOf(this.coinbase, cb)
-    );
-    return this.web3.fromWei(Number(balance), "ether");
+    if (this.coinbase) {
+      var balance = await this.promisify((cb) =>
+        this.tokenContract.balanceOf(this.coinbase, cb)
+      );
+      return Number(this.web3.fromWei(Number(balance), "ether"));
+    } else {
+      return 0;
+    }
   }
 }
 

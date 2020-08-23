@@ -257,8 +257,8 @@ namespace Zin.Services.Implementation
             var bonusRate = await bonusCalculationRepository.GetActiveBonusRateWithType(bonusType);
             if (bonusRate == null)
                 return 0;
-            BigInteger bonus = BigInteger.Multiply(originalAmount, bonusRate.BonusPercentage / 100);
-            return bonus;
+            BigInteger bonus = BigInteger.Multiply(originalAmount, bonusRate.BonusPercentage);
+            return BigInteger.Divide(bonus, 100);
         }
     }
 }

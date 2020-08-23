@@ -134,12 +134,17 @@ function Navbar() {
                 </span>
                 <div className="toggle-class dropdown-content dropdown-content-right dropdown-arrow-right user-dropdown">
                   <div className="user-status">
-                    <h6 className="user-status-title">Token balance</h6>
+                    <h6
+                      style={{ whiteSpace: "pre" }}
+                      className="user-status-title"
+                    >
+                      Token balance
+                    </h6>
                     <div className="user-status-balance">
                       {getPrettyValue(user.tokenBalance)} <small>ZIN</small>
                     </div>
                   </div>
-                  <ul className="user-links">
+                  <ul style={{ whiteSpace: "pre" }} className="user-links">
                     <li>
                       <Link to="/profile">
                         <i className="ti ti-id-badge"></i>My Profile

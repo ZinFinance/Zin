@@ -7,7 +7,6 @@ class EthService {
   constructor() {
     try {
       this.web3 = window.web3;
-      this.coinbase = this.web3.currentProvider.selectedAddress;
       this.web3.eth.getAccounts((error, accounts) => {
         this.coinbase = this.web3.currentProvider.selectedAddress;
         this.web3.eth.defaultAccount = this.coinbase;
@@ -36,9 +35,13 @@ class EthService {
     );
 
   async getTotalContribution() {
-    var balance = await this.promisify((cb) =>
-      this.crowdsaleContract.weiRaised(cb)
-    );
+    var balance = await this.promisify((cb) => {
+      if (this.crowdsaleContract.weiRaised(cb)) {
+        return this.crowdsaleContract.weiRaised(cb);
+      } else {
+        return "0";
+      }
+    });
     return this.web3.fromWei(Number(balance), "ether");
   }
 

@@ -370,13 +370,13 @@ contract Crowdsale {
 contract ZinCrowdsale is Crowdsale {
     constructor(IERC20 token)
         Crowdsale(
-            10,                                             // rate, in TKNbits 10 => 1ETH sent = 10ZIN received
-            0x2dA829d1b724dDBb878F5Ce7ED7b3EF624d2FC6D,     // wallet to send Ether (owner address)
+            25000,                                             // rate, in TKNbits 10 => 1ETH sent = 10ZIN received
+            0x0DDdd10190e24B5Ac3c8061731341Ea9eA9c5E9a,     // wallet to send Ether (owner address)
             token,                                          // the token address
-            3000000000000000000,                            // hard cap of the eth to be generated in wei
-            1597849500,                                     // opening time in unix epoch seconds
-            1597935900,                                     // closing time in unix epoch seconds
-            0xB2F3E8aB5D92286be18c831748Da602b1a6D7583      // wallet in which all the remaining tokens will be deposited once the sale is over
+            10000000000000000000000,                            // hard cap of the eth to be generated in wei
+            1598961600,                                     // opening time in unix epoch seconds
+            1602806399,                                     // closing time in unix epoch seconds
+            0x7b62E4385FdF7F2AAE74a335De762269679D8839      // wallet in which all the remaining tokens will be deposited once the sale is over
         )
         public
     {}

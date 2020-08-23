@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useEthToUSDValue } from "../utility";
+import PageLoader from "./pageLoader";
 
 const tokenRate = process.env.REACT_APP_API_TOKEN_RATE;
 function Transactions() {
@@ -9,6 +10,9 @@ function Transactions() {
   );
   const ethToUSDValue = useEthToUSDValue();
 
+  if (!transactions) {
+    return <PageLoader containerHeight="50vh" />;
+  }
   return (
     <div className="container">
       <div className="card content-area">
@@ -37,6 +41,8 @@ function Transactions() {
                       <div className="fake-class">
                         <a
                           href={`https://etherscan.io/tx/${transaction.txId}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="lead tnx-id"
                         >
                           {transaction.txId}

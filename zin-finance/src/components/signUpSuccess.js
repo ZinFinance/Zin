@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function SignUpSuccess(props) {
   const history = useHistory();
@@ -19,6 +20,9 @@ function SignUpSuccess(props) {
       <h2 className="page-ath-heading">
         Thank you! <small>Your singup process is almost done.</small>{" "}
         <span className="text-success">Please check your mail and verify.</span>
+        <Link to="/sign-in">
+          <span className="text-success">Go to Sign In</span>
+        </Link>
       </h2>
     </div>
   );

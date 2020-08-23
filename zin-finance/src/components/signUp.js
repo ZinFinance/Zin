@@ -1,8 +1,8 @@
 import React, { useReducer } from "react";
 import { Link } from "react-router-dom";
 import { registerUser } from "../redux/actions/userActions";
-import { useHistory } from "react-router-dom";
 import AsyncButton from "./AsyncButton";
+import { useDispatch } from "react-redux";
 
 const initialState = {
   // firstName: "",
@@ -24,7 +24,7 @@ function reducer(state, newState) {
 
 function SignUp() {
   const [state, setState] = useReducer(reducer, initialState);
-  const history = useHistory();
+  const dispatch = useDispatch();
 
   const {
     // firstName,
@@ -51,17 +51,21 @@ function SignUp() {
   const onSubmit = async (e) => {
     e.preventDefault();
     setState({ loading: true });
-    let error = await registerUser({
-      userName: email,
-      email,
-      password,
-      confirmPassword,
-    });
-    if (error) {
-      setState({ error, loading: false });
-    } else {
-      history.push("/sign-up-success", { justRegistered: true });
-    }
+    dispatch(
+      registerUser(
+        {
+          userName: email,
+          email,
+          password,
+          confirmPassword,
+        },
+        (error) => {
+          if (error) {
+            setState({ error, loading: false });
+          }
+        }
+      )
+    );
   };
 
   return (
@@ -148,14 +152,14 @@ function SignUp() {
             id="term-condition"
             type="checkbox"
           />
-          <label htmlFor="term-condition">
+          <label style={{ textTransform: "none" }} htmlFor="term-condition">
             I agree to Zin's{" "}
             <a
               target="_blank"
               rel="noopener noreferrer"
               href="https://zinlandingpage.azurewebsites.net/privacy-policy/"
             >
-              Privacy Policy
+              privacy policy
             </a>{" "}
             &amp;{" "}
             <a
@@ -164,7 +168,7 @@ function SignUp() {
               href="https://zinlandingpage.azurewebsites.net/terms-and-conditions/"
             >
               {" "}
-              Terms.
+              terms.
             </a>
           </label>
         </div>

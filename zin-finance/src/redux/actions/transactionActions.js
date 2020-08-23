@@ -2,14 +2,15 @@ import * as ActionTypes from "../constants";
 import axios from "axios";
 import Cookies from "js-cookie";
 import EthService from "../../ethService";
+import { fetchUser } from "./userActions";
 
 const DEFAULT_ERROR = "An error occurred. Please try again or contact support.";
 
 axios.defaults.headers.common["Content-Type"] = "application/json";
 // axios.defaults.baseURL =
 //   "https://cors-anywhere.herokuapp.com/http://localhost:5000";
-const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
-const API_URL = CORS_PROXY + "https://stgzinapi.azurewebsites.net";
+// const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
+const API_URL = "https://stgzinapi.azurewebsites.net";
 
 const ethService = new EthService();
 
@@ -79,16 +80,15 @@ export function saveTransaction(data, callback) {
   return async (dispatch) => {
     let response = null;
     try {
-      response = await axios.post(API_URL + "/api/Profile/registeredtx", null, {
+      response = await axios.post(API_URL + "/api/Profile/registertx", data, {
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
       });
       if (response.status === 200) {
-        dispatch({
-          type: ActionTypes.SAVE_TRANSACTION,
-          data: data,
-        });
+        dispatch(fetchUser());
+        dispatch(fetchTransactions());
+        dispatch(fetchBonusTransactions());
         if (callback) {
           callback(null);
         }

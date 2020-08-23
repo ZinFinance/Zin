@@ -63,9 +63,9 @@ function BuyToken() {
         },
         (err) => {
           if (err) {
-            setTxResult({ err });
+            setTxResult({ err, success: false });
           } else {
-            setTxResult({ success: txId });
+            setTxResult({ success: txId, err: false });
           }
         }
       )

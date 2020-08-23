@@ -51,13 +51,12 @@ function AdminUserBonusTransactions() {
     }
   }, [userBonusTransactions, params.userId, history]);
 
+  if (!userTransactions) {
+    return <PageLoader containerHeight="50vh" />;
+  }
   return (
     <div className="container">
-      {!userTransactions && <PageLoader containerHeight="50vh" />}
-      <div
-        style={{ display: !userTransactions ? "none" : "flex" }}
-        className="card content-area"
-      >
+      <div className="card content-area">
         <div className="card-innr">
           <div className="card-head d-flex justify-content-between align-items-center">
             <h4 className="card-title">Referral Transactions</h4>
@@ -96,7 +95,7 @@ function AdminUserBonusTransactions() {
             </thead>
             <tbody>
               {/* .data-item */}
-              {(userTransactions ? userTransactions : []).map((tx, index) => (
+              {userTransactions.map((tx, index) => (
                 <tr key={index} className="data-item">
                   <td className="data-col dt-bonusid">
                     <div className="d-flex align-items-center">

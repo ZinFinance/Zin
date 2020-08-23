@@ -10,8 +10,19 @@ function TransactionResultModal({ txResult }) {
               <div>
                 <h4 className="popup-title">Payment successful</h4>
                 <p className="lead text-success">
-                  Your Order no. <strong>{txResult.success}</strong> has been
-                  placed successfully.{" "}
+                  Your Transaction ID{" "}
+                  <a
+                    href={`https://etherscan.io/tx/${txResult}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <strong>
+                      {txResult.substr(0, 8) +
+                        "....." +
+                        txResult.substr(txResult.length - 8)}
+                    </strong>{" "}
+                  </a>
+                  has been placed successfully.{" "}
                 </p>
                 {/* <p>
                   The token balance will appear in your account after your

@@ -3,12 +3,16 @@ import TransactionDetailsModal from "./transactionDetailsModal";
 import { useSelector } from "react-redux";
 import ReferralCard from "./referralCard";
 import { getPrettyValue } from "../utility";
+import PageLoader from "./pageLoader";
 
 function Referral() {
   const user = useSelector((state) => state.userReducer.user);
   const bonusTransactions = useSelector(
     (state) => state.transactionReducer.bonusTransactions
   );
+  if (!bonusTransactions) {
+    return <PageLoader containerHeight="50vh" />;
+  }
   return (
     <div className="container">
       <TransactionDetailsModal />
@@ -95,6 +99,8 @@ function Referral() {
                     <div className="d-flex align-items-center">
                       <div className="fake-class">
                         <a
+                          target="_blank"
+                          rel="noopener noreferrer"
                           href={`https://etherscan.io/tx/${tx.txId}`}
                           className="lead tnx-id"
                         >

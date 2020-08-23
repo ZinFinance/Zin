@@ -13,35 +13,6 @@ const API_URL = CORS_PROXY + "https://stgzinapi.azurewebsites.net";
 
 const ethService = new EthService();
 
-const verifiedTestAccount = {
-  firstName: "admin",
-  lastName: "zin",
-  email: "admin@admin.com",
-  userName: "admin@admin.com",
-  ethAddress: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
-  isEmailVerified: true,
-  referralCode: "abc123",
-  zinTokens: "0",
-  referralZinTokens: "0",
-  bonusZinTokens: "0",
-  presaleZinTokens: "0",
-  isAdmin: true,
-};
-
-const unverifiedTestAccount = {
-  firstName: "agent",
-  lastName: "zin",
-  email: "agent@agent.com",
-  userName: "agent@agent.com",
-  ethAddress: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
-  isEmailVerified: false,
-  referralCode: "xyz123",
-  zinTokens: "0",
-  referralZinTokens: "0",
-  bonusZinTokens: "0",
-  presaleZinTokens: "0",
-};
-
 export function setTokenBalance(data) {
   return {
     type: ActionTypes.SET_TOKEN_BALANCE,
@@ -73,9 +44,6 @@ export function fetchUser(token) {
 export async function registerUser(data) {
   let response = null;
   try {
-    if (data.email === verifiedTestAccount.email) {
-      return null;
-    }
     response = await axios.post(API_URL + "/api/Account/register", data);
     if (response.status === 201) {
       return null;
@@ -95,9 +63,6 @@ export async function registerUser(data) {
 export async function resetPassword(userName) {
   let response = null;
   try {
-    if (userName === verifiedTestAccount.email) {
-      return null;
-    }
     response = await axios.get(API_URL + `/api/Account/reset`, {
       params: {
         userName,
@@ -121,9 +86,6 @@ export async function resetPassword(userName) {
 export async function resetAccount(data) {
   let response = null;
   try {
-    if (data.userId === verifiedTestAccount.email) {
-      return null;
-    }
     response = await axios.post(API_URL + "/api/Account/reset/confirm", data, {
       headers: {
         Authorization: `Bearer ${data.tempToken}`,
@@ -148,36 +110,12 @@ export function login(email, password, rememberMe, callback) {
   return async (dispatch) => {
     let authResponse = null;
     try {
-      if (email === verifiedTestAccount.email) {
-        dispatch(_setUser(verifiedTestAccount));
-        if (rememberMe) {
-          Cookies.set("token", email, { expires: 7, path: "/" });
-        } else {
-          Cookies.set("token", email, { path: "/" });
-        }
-        if (callback) {
-          callback();
-        }
-        return;
-      } else if (email === unverifiedTestAccount.email) {
-        dispatch(_setUser(unverifiedTestAccount));
-        if (rememberMe) {
-          Cookies.set("token", email, { expires: 7, path: "/" });
-        } else {
-          Cookies.set("token", email, { path: "/" });
-        }
-        if (callback) {
-          callback();
-        }
-        return;
-      }
       authResponse = await axios.post(API_URL + "/api/Auth/login", {
         userName: email,
         password,
       });
       if (authResponse.status === 200) {
         let profile = await _fetchUser(authResponse.data.data.accessToken);
-        dispatch(_setUser(profile.data));
         if (rememberMe) {
           Cookies.set("token", authResponse.data.data.accessToken, {
             expires: 7,
@@ -188,6 +126,7 @@ export function login(email, password, rememberMe, callback) {
             path: "/",
           });
         }
+        dispatch(_setUser(profile.data));
         if (callback) {
           callback();
         }
@@ -213,13 +152,6 @@ export function updateUser(data, callback) {
   return async (dispatch) => {
     let updateResponse = null;
     try {
-      if (data.email === verifiedTestAccount.email) {
-        dispatch(_setUser(data));
-        if (callback) {
-          callback();
-        }
-        return;
-      }
       updateResponse = await axios.put(API_URL + "/api/Profile", data, {
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -282,9 +214,6 @@ export async function updatePassword(data) {
 export async function resendEmail(email) {
   let resendResponse = null;
   try {
-    if (email === unverifiedTestAccount.email) {
-      return null;
-    }
     resendResponse = await axios.post(
       API_URL + "/api/Account/email/resend",
       null,
@@ -329,29 +258,6 @@ function _setUser(data) {
 function _fetchUser(token) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (token === verifiedTestAccount.email) {
-        verifiedTestAccount.zinTokens = ethService.convertFromWei(
-          verifiedTestAccount.zinTokens
-        );
-        verifiedTestAccount.referralZinTokens = ethService.convertFromWei(
-          verifiedTestAccount.referralZinTokens
-        );
-        verifiedTestAccount.bonusZinTokens = ethService.convertFromWei(
-          verifiedTestAccount.bonusZinTokens
-        );
-        verifiedTestAccount.presaleZinTokens = ethService.convertFromWei(
-          verifiedTestAccount.presaleZinTokens
-        );
-        resolve({
-          data: verifiedTestAccount,
-        });
-        return;
-      } else if (token === unverifiedTestAccount.email) {
-        resolve({
-          data: unverifiedTestAccount,
-        });
-        return;
-      }
       let profileResponse = await axios.get(API_URL + "/api/Profile", {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -154,7 +154,7 @@ namespace Zin.Services.Implementation
         {
             await bonusCalculationRepository.SaveNewBonusRate(new BonusRate
             {
-                BonusRateId = (new Guid()).ToString(),
+                BonusRateId = Guid.NewGuid().ToString(),
                 BonusPercentage = bonusPercentage,
                 BonusType = bonusType,
                 IsActive = isActive,
@@ -194,7 +194,7 @@ namespace Zin.Services.Implementation
                 await userBalanceRepository.AddUserTokenBalance(referredUser.Id, calculatedInviterBonus, BonusType.Inviter);
                 await bonusTxRepository.SaveBonusTxAsync(new BonusTx
                 {
-                    InternalId = (new Guid()).ToString(),
+                    InternalId = Guid.NewGuid().ToString(),
                     TxId = registeredTx.TxId,
                     UserId = referredUser.Id,
                     BonusType = BonusType.Inviter,
@@ -213,7 +213,7 @@ namespace Zin.Services.Implementation
                 await userBalanceRepository.AddUserTokenBalance(registeredTx.UserId, calculatedInviteeBonus, BonusType.Invitee);
                 await bonusTxRepository.SaveBonusTxAsync(new BonusTx
                 {
-                    InternalId = (new Guid()).ToString(),
+                    InternalId = Guid.NewGuid().ToString(),
                     TxId = registeredTx.TxId,
                     UserId = registeredTx.UserId,
                     BonusType = BonusType.Inviter,
@@ -238,7 +238,7 @@ namespace Zin.Services.Implementation
                 await userBalanceRepository.AddUserTokenBalance(registeredTx.UserId, calculatedPresaleBonus, BonusType.Presale);
                 await bonusTxRepository.SaveBonusTxAsync(new BonusTx
                 {
-                    InternalId = (new Guid()).ToString(),
+                    InternalId = Guid.NewGuid().ToString(),
                     TxId = registeredTx.TxId,
                     UserId = registeredTx.UserId,
                     BonusType = BonusType.Presale,
@@ -257,8 +257,8 @@ namespace Zin.Services.Implementation
             var bonusRate = await bonusCalculationRepository.GetActiveBonusRateWithType(bonusType);
             if (bonusRate == null)
                 return 0;
-            BigInteger bonus = BigInteger.Multiply(originalAmount, bonusRate.BonusPercentage / 100);
-            return bonus;
+            BigInteger bonus = BigInteger.Multiply(originalAmount, bonusRate.BonusPercentage);
+            return BigInteger.Divide(bonus, 100);
         }
     }
 }

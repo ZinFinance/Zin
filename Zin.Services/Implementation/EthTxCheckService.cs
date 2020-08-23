@@ -23,7 +23,7 @@ namespace Zin.Services.Implementation
             string crowdsaleTokenAddress = configuration["Settings:CrowdsaleTokenAddress"];
 
             var txData = await _web3.Eth.Transactions.GetTransactionByHash.SendRequestAsync(txId);
-            if (txData == null || !txData.To.Equals(crowdsaleTokenAddress))
+            if (txData == null || !txData.To.ToLower().Equals(crowdsaleTokenAddress.ToLower()))
                 return (null, null);
 
             BigInteger rate = BigInteger.Parse(configuration["Settings:TokenRate"]);
@@ -32,7 +32,7 @@ namespace Zin.Services.Implementation
             {
                 TxId = txData.TransactionHash,
                 AmountTransferredInEther = txData.Value.Value.ToString(),
-                AmountTransferredInToken = BigInteger.Divide(txData.Value.Value, rate).ToString()
+                AmountTransferredInToken = BigInteger.Multiply(txData.Value.Value, rate).ToString()
             });
         }
 

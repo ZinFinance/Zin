@@ -36,7 +36,11 @@ function NonAuthContent(props) {
         </div>
         <div style={{ alignItems: "inherit" }} className="page-ath-gfx">
           <div className="w-100 d-flex justify-content-center">
-            <img src="/images/screen-gif.gif" alt="gfx" />
+            <img
+              style={{ width: "100%" }}
+              src="/images/screen-gif.gif"
+              alt="gfx"
+            />
           </div>
         </div>
       </div>

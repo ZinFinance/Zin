@@ -33,7 +33,7 @@ function AdminDashboard() {
         })
       );
     }
-  }, [adminData.bonuses]);
+  }, [adminData.bonuses, bonuses.length]);
 
   useEffect(() => {
     let totalTokens = 0;

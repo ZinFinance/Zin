@@ -33,6 +33,7 @@ function App() {
   const location = useLocation();
   const history = useHistory();
   const [redirect, setRedirect] = useState("");
+  const accessToken = Cookies.get("token");
 
   useEffect(() => {
     if (user && !user.isAdmin) {
@@ -59,12 +60,12 @@ function App() {
     }
   }, [kycApplicant, dispatch]);
 
-  const shouldFetchUser = !user && Cookies.get("token");
+  const shouldFetchUser = !user && accessToken;
   useEffect(() => {
     if (shouldFetchUser) {
-      dispatch(fetchUser(Cookies.get("token")));
+      dispatch(fetchUser(accessToken));
     }
-  }, [shouldFetchUser, dispatch]);
+  }, [shouldFetchUser, dispatch, accessToken]);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -78,8 +79,10 @@ function App() {
     };
   }, [user, location.pathname]);
 
-  const shouldFetchUsers = user && user.isAdmin && !adminData.users;
-  const shouldFetchBonuses = user && user.isAdmin && !adminData.bonuses;
+  const shouldFetchUsers =
+    user && user.isAdmin && accessToken && !adminData.users;
+  const shouldFetchBonuses =
+    user && user.isAdmin && accessToken && !adminData.bonuses;
   useEffect(() => {
     if (shouldFetchUsers) {
       dispatch(fetchUsers());

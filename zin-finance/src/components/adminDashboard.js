@@ -38,7 +38,7 @@ function AdminDashboard() {
 
   const submitUpdate = (e, bonusType) => {
     e.preventDefault();
-    let bonusesCopy = bonuses;
+    let bonusesCopy = [...bonuses];
     bonusesCopy[bonusType] = {
       ...bonusesCopy[bonusType],
       loading: true,
@@ -51,7 +51,7 @@ function AdminDashboard() {
         bonuses[bonusType].bonusPercentage,
         (err) => {
           if (err) {
-            let bonusesCopy = bonuses;
+            let bonusesCopy = [...bonuses];
             bonusesCopy[bonusType] = {
               ...bonusesCopy[bonusType],
               success: false,
@@ -60,7 +60,7 @@ function AdminDashboard() {
             };
             setBonuses(bonusesCopy);
           } else {
-            let bonusesCopy = bonuses;
+            let bonusesCopy = [...bonuses];
             bonusesCopy[bonusType] = {
               ...bonusesCopy[bonusType],
               success: true,
@@ -75,10 +75,11 @@ function AdminDashboard() {
   };
 
   const handleChange = (e, bonusType) => {
-    let bonusesCopy = bonuses;
+    let bonusesCopy = [...bonuses];
     bonusesCopy[bonusType] = {
       ...bonusesCopy[bonusType],
-      [e.target.name]: e.target.value,
+      [e.target.name]:
+        e.target.type === "checkbox" ? e.target.checked : e.target.value,
       success: false,
       error: false,
     };
@@ -135,7 +136,7 @@ function AdminDashboard() {
                 id="admin-configuration"
               >
                 {bonuses.map((bonus) => (
-                  <form onSubmit={submitUpdate}>
+                  <form onSubmit={(e) => submitUpdate(e, bonus.bonusType)}>
                     <div style={{ display: "flex" }} className="input-item">
                       <input
                         type="checkbox"

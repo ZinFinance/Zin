@@ -61,13 +61,12 @@ function AdminUserTransactions() {
     csvExporter.generateCsv(userTransactions);
   };
 
+  if (!userTransactions) {
+    return <PageLoader containerHeight="50vh" />;
+  }
   return (
     <div className="container">
-      {!userTransactions && <PageLoader containerHeight="50vh" />}
-      <div
-        style={{ display: !userTransactions ? "none" : "flex" }}
-        className="card content-area"
-      >
+      <div className="card content-area">
         <div className="card-innr">
           <div className="card-head d-flex justify-content-between align-items-center">
             <h4 className="card-title">User Transactions</h4>
@@ -104,64 +103,62 @@ function AdminUserTransactions() {
             </thead>
             <tbody>
               {/* .data-item */}
-              {(userTransactions ? userTransactions : []).map(
-                (transaction, index) => (
-                  <tr key={index} className="data-item">
-                    <td className="data-col dt-tnxno">
-                      <div className="d-flex align-items-center">
-                        <div className="data-state data-state-approved">
-                          <span className="d-none">Approved</span>
-                        </div>
-                        <div className="fake-class">
-                          <a
-                            href={`https://etherscan.io/tx/${transaction.txId}`}
-                            className="lead tnx-id"
-                          >
-                            {transaction.txId}
-                          </a>
-                          <span className="sub sub-date">
-                            {transaction.createDateTimeOffset}
-                          </span>
-                        </div>
+              {userTransactions.map((transaction, index) => (
+                <tr key={index} className="data-item">
+                  <td className="data-col dt-tnxno">
+                    <div className="d-flex align-items-center">
+                      <div className="data-state data-state-approved">
+                        <span className="d-none">Approved</span>
                       </div>
-                    </td>
-                    <td className="data-col dt-token">
-                      <span className="lead token-amount">
-                        {transaction.amountTransferredInToken}
-                      </span>
-                      <span className="sub sub-symbol">ZIN</span>
-                    </td>
-                    <td className="data-col dt-amount">
-                      <span className="lead amount-pay">
-                        {transaction.amountTransferredInEther}
-                      </span>
-                      <span className="sub sub-symbol">
-                        ETH{" "}
-                        <em
-                          className="fas fa-info-circle"
-                          data-toggle="tooltip"
-                          data-placement="bottom"
-                          title={`1 ETH = ${tokenRate} ZIN`}
-                        />
-                      </span>
-                    </td>
-                    <td className="data-col dt-usd-amount">
-                      <span className="lead amount-pay">
-                        {transaction.amountTransferredInEther * ethToUSDValue}
-                      </span>
-                      <span className="sub sub-symbol">
-                        USD{" "}
-                        <em
-                          className="fas fa-info-circle"
-                          data-toggle="tooltip"
-                          data-placement="bottom"
-                          title={`1 ETH = ${ethToUSDValue} USD`}
-                        />
-                      </span>
-                    </td>
-                  </tr>
-                )
-              )}
+                      <div className="fake-class">
+                        <a
+                          href={`https://etherscan.io/tx/${transaction.txId}`}
+                          className="lead tnx-id"
+                        >
+                          {transaction.txId}
+                        </a>
+                        <span className="sub sub-date">
+                          {transaction.createDateTimeOffset}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="data-col dt-token">
+                    <span className="lead token-amount">
+                      {transaction.amountTransferredInToken}
+                    </span>
+                    <span className="sub sub-symbol">ZIN</span>
+                  </td>
+                  <td className="data-col dt-amount">
+                    <span className="lead amount-pay">
+                      {transaction.amountTransferredInEther}
+                    </span>
+                    <span className="sub sub-symbol">
+                      ETH{" "}
+                      <em
+                        className="fas fa-info-circle"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title={`1 ETH = ${tokenRate} ZIN`}
+                      />
+                    </span>
+                  </td>
+                  <td className="data-col dt-usd-amount">
+                    <span className="lead amount-pay">
+                      {transaction.amountTransferredInEther * ethToUSDValue}
+                    </span>
+                    <span className="sub sub-symbol">
+                      USD{" "}
+                      <em
+                        className="fas fa-info-circle"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title={`1 ETH = ${ethToUSDValue} USD`}
+                      />
+                    </span>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

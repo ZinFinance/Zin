@@ -8,8 +8,8 @@ const DEFAULT_ERROR = "An error occurred. Please try again or contact support.";
 axios.defaults.headers.common["Content-Type"] = "application/json";
 // axios.defaults.baseURL =
 //   "https://cors-anywhere.herokuapp.com/http://localhost:5000";
-const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
-const API_URL = CORS_PROXY + "https://stgzinapi.azurewebsites.net";
+// const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
+const API_URL = "https://stgzinapi.azurewebsites.net";
 
 const ethService = new EthService();
 
@@ -27,11 +27,11 @@ export function logoutUser() {
   };
 }
 
-export function fetchUser(token) {
+export function fetchUser() {
   return async (dispatch) => {
     try {
-      let profile = await _fetchUser(token);
-      dispatch(_setUser(profile.data));
+      let profile = await _fetchUser(Cookies.get("token"));
+      dispatch(_setUser(profile));
       let balance = await ethService.getTokenBalance();
       dispatch(setTokenBalance(balance));
     } catch (err) {
@@ -263,7 +263,7 @@ function _fetchUser(token) {
           Authorization: `Bearer ${token}`,
         },
       });
-      let user = profileResponse.data;
+      let user = profileResponse.data.data;
       user.zinTokens = ethService.convertFromWei(user.zinTokens);
       user.referralZinTokens = ethService.convertFromWei(
         user.referralZinTokens

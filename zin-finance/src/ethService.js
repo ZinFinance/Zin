@@ -8,13 +8,17 @@ class EthService {
     try {
       this.web3 = window.web3;
       this.coinbase = this.web3.currentProvider.selectedAddress;
-      this.web3.eth.defaultAccount = this.coinbase;
+      this.web3.eth.getAccounts((error, accounts) => {
+        this.coinbase = this.web3.currentProvider.selectedAddress;
+        this.web3.eth.defaultAccount = this.coinbase;
+        this.tokenContract = this.web3.eth
+          .contract(Token_ABI)
+          .at(Token_Address);
 
-      this.tokenContract = this.web3.eth.contract(Token_ABI).at(Token_Address);
-
-      this.crowdsaleContract = this.web3.eth
-        .contract(Crowdsale_ABI)
-        .at(Crowdsale_Address);
+        this.crowdsaleContract = this.web3.eth
+          .contract(Crowdsale_ABI)
+          .at(Crowdsale_Address);
+      });
     } catch (err) {
       console.warn(err);
     }
@@ -31,9 +35,16 @@ class EthService {
       })
     );
 
+  async getTotalContribution() {
+    var balance = await this.promisify((cb) =>
+      this.crowdsaleContract.weiRaised(cb)
+    );
+    return this.web3.fromWei(Number(balance), "ether");
+  }
+
   async buyToken(eth, fromAddress) {
     try {
-      if (this.coinbase !== fromAddress) {
+      if (this.coinbase.toLowerCase() !== fromAddress.toLowerCase()) {
         return "";
       }
       var tx = await this.promisify((cb) =>

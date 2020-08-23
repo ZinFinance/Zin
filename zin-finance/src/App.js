@@ -35,12 +35,13 @@ function App() {
   const [redirect, setRedirect] = useState("");
   const accessToken = Cookies.get("token");
 
+  const shouldFetchTransactions = user && !user.isAdmin;
   useEffect(() => {
-    if (user && !user.isAdmin) {
+    if (shouldFetchTransactions) {
       dispatch(fetchTransactions());
       dispatch(fetchBonusTransactions());
     }
-  }, [user, dispatch]);
+  }, [shouldFetchTransactions, dispatch]);
 
   useEffect(() => {
     if (!user && location.search && !redirect) {
@@ -63,9 +64,9 @@ function App() {
   const shouldFetchUser = !user && accessToken;
   useEffect(() => {
     if (shouldFetchUser) {
-      dispatch(fetchUser(accessToken));
+      dispatch(fetchUser());
     }
-  }, [shouldFetchUser, dispatch, accessToken]);
+  }, [shouldFetchUser, dispatch]);
 
   useEffect(() => {
     const script = document.createElement("script");

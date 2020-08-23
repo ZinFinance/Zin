@@ -1,8 +1,8 @@
 import * as ActionTypes from "../constants";
 
 const initialState = {
-  transactions: [],
-  bonusTransactions: [],
+  transactions: null,
+  bonusTransactions: null,
 };
 
 export default function (state = initialState, action) {
@@ -11,12 +11,6 @@ export default function (state = initialState, action) {
       return {
         ...state,
         transactions: action.data,
-      };
-    }
-    case ActionTypes.SAVE_TRANSACTION: {
-      return {
-        ...state,
-        transactions: [...state.transactions, action.data],
       };
     }
     case ActionTypes.FETCH_BONUS_TRANSACTIONS: {

@@ -112,11 +112,11 @@ function BuyWithOtherModal({
                   required
                   type="checkbox"
                   className="input-checkbox input-checkbox-md"
-                  id="agree-term-buy-with-other"
+                  id="agree-term-buy-with-other-first"
                 />
                 <label
                   style={{ textTransform: "none" }}
-                  htmlFor="agree-term-buy-with-other"
+                  htmlFor="agree-term-buy-with-other-first"
                 >
                   I hereby agree to the{" "}
                   <strong>
@@ -136,7 +136,7 @@ function BuyWithOtherModal({
                   required
                   type="checkbox"
                   className="input-checkbox input-checkbox-md"
-                  id="agree-term-buy-with-other-first"
+                  id="agree-term-buy-with-other-second"
                 />
                 <label
                   style={{ textTransform: "none" }}

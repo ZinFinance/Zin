@@ -4,6 +4,8 @@ import { getPrettyValue } from "../utility";
 import { updateBonus } from "../redux/actions/adminActions";
 import AsyncButton from "./AsyncButton";
 import PageLoader from "./pageLoader";
+import EthService from "../ethService";
+const ethService = new EthService();
 
 const tokenRate = process.env.REACT_APP_API_TOKEN_RATE;
 const INVITER = 0;
@@ -13,7 +15,7 @@ const PRESALE = 2;
 function AdminDashboard() {
   const dispatch = useDispatch();
   const adminData = useSelector((state) => state.adminReducer);
-  const [totalTokensSold, setTotalTokensSold] = useState(0);
+  const [totalContribution, setTotalContribution] = useState(0);
   const [bonuses, setBonuses] = useState([]);
 
   useEffect(() => {
@@ -36,13 +38,11 @@ function AdminDashboard() {
   }, [adminData.bonuses, bonuses.length]);
 
   useEffect(() => {
-    let totalTokens = 0;
-    if (adminData.users) {
-      for (let user of adminData.users) {
-        totalTokens += user.zinTokens;
-      }
-    }
-    setTotalTokensSold(totalTokens);
+    const getTotalContribution = async () => {
+      const totalContribution = await ethService.getTotalContribution();
+      setTotalContribution(totalContribution);
+    };
+    getTotalContribution();
   }, [adminData.users]);
 
   const submitUpdate = (e, bonusType) => {
@@ -111,7 +111,8 @@ function AdminDashboard() {
                   <div className="token-balance-text">
                     <h6 className="card-sub-title">Total Tokens Sold</h6>
                     <span className="lead">
-                      {getPrettyValue(totalTokensSold)} <span>ZIN</span>
+                      {getPrettyValue(totalContribution * tokenRate)}{" "}
+                      <span>ZIN</span>
                     </span>
                   </div>
                 </div>
@@ -120,7 +121,7 @@ function AdminDashboard() {
                   <ul className="token-balance-list">
                     <li className="token-balance-sub">
                       <span className="lead">
-                        {getPrettyValue(totalTokensSold / tokenRate)}
+                        {getPrettyValue(totalContribution)}
                       </span>
                       <span className="sub">ETH</span>
                     </li>

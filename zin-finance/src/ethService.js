@@ -10,14 +10,12 @@ class EthService {
       this.web3.eth.getAccounts((error, accounts) => {
         this.coinbase = this.web3.currentProvider.selectedAddress;
         this.web3.eth.defaultAccount = this.coinbase;
-        this.tokenContract = this.web3.eth
-          .contract(Token_ABI)
-          .at(Token_Address);
-
-        this.crowdsaleContract = this.web3.eth
-          .contract(Crowdsale_ABI)
-          .at(Crowdsale_Address);
       });
+      this.tokenContract = this.web3.eth.contract(Token_ABI).at(Token_Address);
+
+      this.crowdsaleContract = this.web3.eth
+        .contract(Crowdsale_ABI)
+        .at(Crowdsale_Address);
     } catch (err) {
       console.warn(err);
     }
@@ -36,7 +34,7 @@ class EthService {
 
   async getTotalContribution() {
     var balance = await this.promisify((cb) => {
-      if (this.crowdsaleContract.weiRaised(cb)) {
+      if (this.crowdsaleContract) {
         return this.crowdsaleContract.weiRaised(cb);
       } else {
         return "0";

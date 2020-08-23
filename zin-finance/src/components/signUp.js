@@ -152,14 +152,14 @@ function SignUp() {
             id="term-condition"
             type="checkbox"
           />
-          <label htmlFor="term-condition">
+          <label style={{ textTransform: "none" }} htmlFor="term-condition">
             I agree to Zin's{" "}
             <a
               target="_blank"
               rel="noopener noreferrer"
               href="https://zinlandingpage.azurewebsites.net/privacy-policy/"
             >
-              Privacy Policy
+              privacy policy
             </a>{" "}
             &amp;{" "}
             <a
@@ -168,7 +168,7 @@ function SignUp() {
               href="https://zinlandingpage.azurewebsites.net/terms-and-conditions/"
             >
               {" "}
-              Terms.
+              terms.
             </a>
           </label>
         </div>

@@ -95,8 +95,8 @@ function WalletModal() {
                 <p style={{ fontWeight: "bold" }}>
                   DO NOT USE your exchange wallet address such as Kraken,
                   Bitfinex, Bithumb, Binance etc. You can use MetaMask,
-                  MayEtherWallet, Mist wallets etc. Do not use the address if
-                  you don’t have a private key of the your address. You WILL NOT
+                  MyEtherWallet, Mist wallets etc. Do not use the address if you
+                  don’t have a private key of the your address. You WILL NOT
                   receive ZIN Tokens and WILL LOSE YOUR FUNDS if you do.
                 </p>
               </div>

@@ -24,7 +24,7 @@ export function fetchUsers() {
       });
       for (let user of users) {
         try {
-          let kycStatus = await getUserKYCStatus(user.userId);
+          let kycStatus = await getUserKYCStatus(user.email);
           if (kycStatus && kycStatus.reviewStatus) {
             dispatch({
               type: ActionTypes.SET_USER_KYC_STATUS,

@@ -136,11 +136,11 @@ function BuyWithOtherModal({
                   required
                   type="checkbox"
                   className="input-checkbox input-checkbox-md"
-                  id="agree-term-buy-with-other"
+                  id="agree-term-buy-with-other-first"
                 />
                 <label
                   style={{ textTransform: "none" }}
-                  htmlFor="agree-term-buy-with-other"
+                  htmlFor="agree-term-buy-with-other-second"
                 >
                   I confirm that the transaction is done through a wallet whose
                   private keys are owned by me and it is not an exchange wallet.

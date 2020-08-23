@@ -11,6 +11,8 @@ axios.defaults.headers.common["Content-Type"] = "application/json";
 const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
 const API_URL = CORS_PROXY + "https://stgzinapi.azurewebsites.net";
 
+const ethService = new EthService();
+
 const verifiedTestAccount = {
   firstName: "admin",
   lastName: "zin",
@@ -19,8 +21,11 @@ const verifiedTestAccount = {
   ethAddress: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
   isEmailVerified: true,
   referralCode: "abc123",
-  totalBonusGenerated: 60,
-  totalTokenBought: 1200,
+  zinTokens: "0",
+  referralZinTokens: "0",
+  bonusZinTokens: "0",
+  presaleZinTokens: "0",
+  isAdmin: true,
 };
 
 const unverifiedTestAccount = {
@@ -31,8 +36,10 @@ const unverifiedTestAccount = {
   ethAddress: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
   isEmailVerified: false,
   referralCode: "xyz123",
-  totalBonusGenerated: 60,
-  totalTokenBought: 120,
+  zinTokens: "0",
+  referralZinTokens: "0",
+  bonusZinTokens: "0",
+  presaleZinTokens: "0",
 };
 
 export function setTokenBalance(data) {
@@ -51,19 +58,25 @@ export function logoutUser() {
 
 export function fetchUser(token) {
   return async (dispatch) => {
-    let profile = await _fetchUser(token);
-    dispatch(_setUser(profile.data));
-    let balance = await new EthService().getTokenBalance();
-    dispatch(setTokenBalance(balance));
+    try {
+      let profile = await _fetchUser(token);
+      dispatch(_setUser(profile.data));
+      let balance = await ethService.getTokenBalance();
+      dispatch(setTokenBalance(balance));
+    } catch (err) {
+      console.warn("err in fetching user", err);
+      dispatch(logoutUser());
+    }
   };
 }
 
 export async function registerUser(data) {
+  let response = null;
   try {
     if (data.email === verifiedTestAccount.email) {
       return null;
     }
-    let response = await axios.post(API_URL + "/api/Account/register", data);
+    response = await axios.post(API_URL + "/api/Account/register", data);
     if (response.status === 201) {
       return null;
     } else {
@@ -71,16 +84,21 @@ export async function registerUser(data) {
     }
   } catch (err) {
     console.warn("error registering user", err);
-    return DEFAULT_ERROR;
+    if (response && response.data && response.data.message) {
+      return response.data.message;
+    } else {
+      return DEFAULT_ERROR;
+    }
   }
 }
 
 export async function resetPassword(userName) {
+  let response = null;
   try {
     if (userName === verifiedTestAccount.email) {
       return null;
     }
-    let response = await axios.get(API_URL + `/api/Account/reset`, {
+    response = await axios.get(API_URL + `/api/Account/reset`, {
       params: {
         userName,
       },
@@ -92,24 +110,25 @@ export async function resetPassword(userName) {
     }
   } catch (err) {
     console.warn("error resetting password", err);
-    return DEFAULT_ERROR;
+    if (response && response.data && response.data.message) {
+      return response.data.message;
+    } else {
+      return DEFAULT_ERROR;
+    }
   }
 }
 
 export async function resetAccount(data) {
+  let response = null;
   try {
     if (data.userId === verifiedTestAccount.email) {
       return null;
     }
-    let response = await axios.post(
-      API_URL + "/api/Account/reset/confirm",
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${data.tempToken}`,
-        },
-      }
-    );
+    response = await axios.post(API_URL + "/api/Account/reset/confirm", data, {
+      headers: {
+        Authorization: `Bearer ${data.tempToken}`,
+      },
+    });
     if (response.status === 200) {
       return null;
     } else {
@@ -117,12 +136,17 @@ export async function resetAccount(data) {
     }
   } catch (err) {
     console.warn("error resetting account", err);
-    return DEFAULT_ERROR;
+    if (response && response.data && response.data.message) {
+      return response.data.message;
+    } else {
+      return DEFAULT_ERROR;
+    }
   }
 }
 
 export function login(email, password, rememberMe, callback) {
   return async (dispatch) => {
+    let authResponse = null;
     try {
       if (email === verifiedTestAccount.email) {
         dispatch(_setUser(verifiedTestAccount));
@@ -147,7 +171,7 @@ export function login(email, password, rememberMe, callback) {
         }
         return;
       }
-      let authResponse = await axios.post(API_URL + "/api/Auth/login", {
+      authResponse = await axios.post(API_URL + "/api/Auth/login", {
         userName: email,
         password,
       });
@@ -156,11 +180,11 @@ export function login(email, password, rememberMe, callback) {
         dispatch(_setUser(profile.data));
         if (rememberMe) {
           Cookies.set("token", authResponse.data.data.accessToken, {
+            expires: 7,
             path: "/",
           });
         } else {
           Cookies.set("token", authResponse.data.data.accessToken, {
-            expires: 7,
             path: "/",
           });
         }
@@ -175,7 +199,11 @@ export function login(email, password, rememberMe, callback) {
     } catch (err) {
       console.warn("error logging in user", err);
       if (callback) {
-        callback(DEFAULT_ERROR);
+        if (authResponse && authResponse.errors) {
+          callback(authResponse.data.message);
+        } else {
+          callback(DEFAULT_ERROR);
+        }
       }
     }
   };
@@ -183,6 +211,7 @@ export function login(email, password, rememberMe, callback) {
 
 export function updateUser(data, callback) {
   return async (dispatch) => {
+    let updateResponse = null;
     try {
       if (data.email === verifiedTestAccount.email) {
         dispatch(_setUser(data));
@@ -191,7 +220,7 @@ export function updateUser(data, callback) {
         }
         return;
       }
-      let updateResponse = await axios.put(API_URL + "/api/Profile", data, {
+      updateResponse = await axios.put(API_URL + "/api/Profile", data, {
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
@@ -208,20 +237,25 @@ export function updateUser(data, callback) {
       }
     } catch (err) {
       console.warn("error updating user", err);
-      dispatch({
-        type: ActionTypes.USER_UPDATE_ERROR,
-        data: DEFAULT_ERROR,
-      });
       if (callback) {
-        callback(DEFAULT_ERROR);
+        if (
+          updateResponse &&
+          updateResponse.data &&
+          updateResponse.data.message
+        ) {
+          callback(updateResponse.data.message);
+        } else {
+          callback(DEFAULT_ERROR);
+        }
       }
     }
   };
 }
 
 export async function updatePassword(data) {
+  let updateResponse = null;
   try {
-    let updateResponse = await axios.post(
+    updateResponse = await axios.post(
       API_URL + "/api/Account/changePassword",
       data,
       {
@@ -237,16 +271,21 @@ export async function updatePassword(data) {
     }
   } catch (err) {
     console.warn("error updating password", err);
-    return DEFAULT_ERROR;
+    if (updateResponse && updateResponse.data && updateResponse.data.message) {
+      return updateResponse.data.message;
+    } else {
+      return DEFAULT_ERROR;
+    }
   }
 }
 
 export async function resendEmail(email) {
+  let resendResponse = null;
   try {
     if (email === unverifiedTestAccount.email) {
       return null;
     }
-    let resendResponse = await axios.post(
+    resendResponse = await axios.post(
       API_URL + "/api/Account/email/resend",
       null,
       {
@@ -265,7 +304,11 @@ export async function resendEmail(email) {
     }
   } catch (err) {
     console.warn("error resending email", err);
-    return DEFAULT_ERROR;
+    if (resendResponse && resendResponse.data && resendResponse.data.message) {
+      return resendResponse.data.message;
+    } else {
+      return DEFAULT_ERROR;
+    }
   }
 }
 
@@ -287,6 +330,18 @@ function _fetchUser(token) {
   return new Promise(async (resolve, reject) => {
     try {
       if (token === verifiedTestAccount.email) {
+        verifiedTestAccount.zinTokens = ethService.convertFromWei(
+          verifiedTestAccount.zinTokens
+        );
+        verifiedTestAccount.referralZinTokens = ethService.convertFromWei(
+          verifiedTestAccount.referralZinTokens
+        );
+        verifiedTestAccount.bonusZinTokens = ethService.convertFromWei(
+          verifiedTestAccount.bonusZinTokens
+        );
+        verifiedTestAccount.presaleZinTokens = ethService.convertFromWei(
+          verifiedTestAccount.presaleZinTokens
+        );
         resolve({
           data: verifiedTestAccount,
         });
@@ -302,16 +357,17 @@ function _fetchUser(token) {
           Authorization: `Bearer ${token}`,
         },
       });
-      let ethService = new EthService();
       let user = profileResponse.data;
-      user.totalBonusGenerated = ethService.convertFromWei(
-        user.totalBonusGenerated
+      user.zinTokens = ethService.convertFromWei(user.zinTokens);
+      user.referralZinTokens = ethService.convertFromWei(
+        user.referralZinTokens
       );
-      user.totalTokenBought = ethService.convertFromWei(user.totalTokenBought);
+      user.bonusZinTokens = ethService.convertFromWei(user.bonusZinTokens);
+      user.presaleZinTokens = ethService.convertFromWei(user.presaleZinTokens);
       if (profileResponse.status === 200) {
         resolve(user);
       } else {
-        reject(DEFAULT_ERROR);
+        reject(profileResponse.message);
       }
     } catch (err) {
       console.warn("error getting user info", err);

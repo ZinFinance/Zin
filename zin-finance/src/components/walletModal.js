@@ -33,7 +33,10 @@ function WalletModal() {
     dispatch(
       updateUser(
         {
-          ...user,
+          userName: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
           ethAddress,
         },
         (error) => {

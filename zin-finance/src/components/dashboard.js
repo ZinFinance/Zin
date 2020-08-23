@@ -41,7 +41,11 @@ function Dashboard() {
                 <ul className="token-balance-list">
                   <li className="token-balance-sub">
                     <span className="lead">
-                      {getPrettyValue(user.totalBonusGenerated)}
+                      {getPrettyValue(
+                        user.referralZinTokens +
+                          user.bonusZinTokens +
+                          user.presaleZinTokens
+                      )}
                     </span>
                     <span className="sub">ZIN</span>
                   </li>

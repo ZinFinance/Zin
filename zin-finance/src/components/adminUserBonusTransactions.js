@@ -1,69 +1,89 @@
-import React from "react";
-import TransactionDetailsModal from "./transactionDetailsModal";
-import { useSelector } from "react-redux";
-import ReferralCard from "./referralCard";
-import { getPrettyValue } from "../utility";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useParams, useHistory, Link } from "react-router-dom";
+import { fetchUserBonusTransactions } from "../redux/actions/adminActions";
+import PageLoader from "./pageLoader";
+import { ExportToCsv } from "export-to-csv";
 
-function Referral() {
-  const user = useSelector((state) => state.userReducer.user);
-  const bonusTransactions = useSelector(
-    (state) => state.transactionReducer.bonusTransactions
+function AdminUserBonusTransactions() {
+  const dispatch = useDispatch();
+  const params = useParams();
+  const history = useHistory();
+  const userBonusTransactions = useSelector(
+    (state) => state.adminReducer.userBonusTransactions
   );
+  const [userTransactions, setUserTransactions] = useState(null);
+
+  const exportData = () => {
+    const options = {
+      fieldSeparator: ",",
+      quoteStrings: '"',
+      decimalSeparator: ".",
+      showLabels: true,
+      filename: `${params.userId}-bonus-transactions`,
+      useTextFile: false,
+      useBom: true,
+      useKeysAsHeaders: true,
+    };
+    const csvExporter = new ExportToCsv(options);
+    csvExporter.generateCsv(userTransactions);
+  };
+
+  useEffect(() => {
+    if (params.userId && !userTransactions) {
+      dispatch(
+        fetchUserBonusTransactions(params.userId, (err) => {
+          if (err) {
+            setUserTransactions([]);
+          }
+        })
+      );
+    }
+  }, [userTransactions, params.userId, dispatch]);
+
+  useEffect(() => {
+    if (params.userId) {
+      if (userBonusTransactions[params.userId]) {
+        setUserTransactions(userBonusTransactions[params.userId]);
+      }
+    } else {
+      history.push("/user-list");
+    }
+  }, [userBonusTransactions, params.userId, history]);
+
   return (
     <div className="container">
-      <TransactionDetailsModal />
-      <div className="content-area card card-primary card-text-light">
-        <div className="card-innr text-center">
-          <div className="card-head">
-            <h6 className="card-title">
-              {" "}
-              20% Presale Bonus until 10th September 2020 or first 50 million
-              tokens (whichever comes first)
-            </h6>
-          </div>
-          <p style={{ whiteSpace: "pre-line" }}>
-            10% Inviter Bonus*{"\n"}
-            10% Invitee Bonus
-          </p>
-
-          <p>*10% of the amount bought by the invitee.</p>
-
-          <p>
-            Bonus tokens will be distributed one week after the token sale ends.
-          </p>
-        </div>
-        {/* .card-innr */}
-      </div>
-
-      <div className="token-statistics card card-token height-auto">
+      {!userTransactions && <PageLoader containerHeight="50vh" />}
+      <div
+        style={{ display: !userTransactions ? "none" : "flex" }}
+        className="card content-area"
+      >
         <div className="card-innr">
-          <div className="token-balance token-balance-with-icon">
-            <div className="token-balance-icon">
-              <img src="/images/logo-light-sm.png" alt="logo" />
-            </div>
-            <div className="token-balance-text">
-              <h6 className="card-sub-title">
-                Total Tokens Earned through Referrals
-              </h6>
-              <span className="lead">
-                {getPrettyValue(
-                  user.referralZinTokens +
-                    user.bonusZinTokens +
-                    user.presaleZinTokens
-                )}{" "}
-                <span>ZIN</span>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <ReferralCard />
-      <div className="card content-area">
-        <div className="card-innr">
-          <div className="card-head">
+          <div className="card-head d-flex justify-content-between align-items-center">
             <h4 className="card-title">Referral Transactions</h4>
+            <div className="d-flex align-items-center guttar-20px">
+              {userTransactions && userTransactions.length > 0 && (
+                <div className="flex-col d-sm-block d-none">
+                  <span
+                    onClick={exportData}
+                    className="btn btn-sm btn-auto btn-primary"
+                  >
+                    Export to CSV
+                  </span>
+                </div>
+              )}
+
+              <div className="flex-col d-sm-block d-none">
+                <Link to="/user-list">
+                  <span className="btn btn-sm btn-auto btn-primary">
+                    <em className="fas fa-arrow-left mr-3" />
+                    Back
+                  </span>
+                </Link>
+              </div>
+            </div>
           </div>
-          <table className="data-table dt-init user-tnx">
+          <table className="data-table dt-filter-init user-tnx">
             <thead>
               <tr className="data-item data-head">
                 <th className="data-col dt-bonusid">Bonus ID</th>
@@ -76,8 +96,8 @@ function Referral() {
             </thead>
             <tbody>
               {/* .data-item */}
-              {bonusTransactions.map((tx) => (
-                <tr className="data-item">
+              {(userTransactions ? userTransactions : []).map((tx, index) => (
+                <tr key={index} className="data-item">
                   <td className="data-col dt-bonusid">
                     <div className="d-flex align-items-center">
                       <div className="data-state data-state-approved">
@@ -146,9 +166,8 @@ function Referral() {
         </div>
         {/* .card-innr */}
       </div>
-      {/* .card */}
     </div>
   );
 }
 
-export default Referral;
+export default AdminUserBonusTransactions;

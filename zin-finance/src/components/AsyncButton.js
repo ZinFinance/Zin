@@ -16,8 +16,8 @@ function AsyncButton(props) {
           }}
           type="TailSpin"
           color="white"
-          height={20}
-          width={20}
+          height={15}
+          width={15}
         />
         <span>{props.loadingText}</span>
       </button>

@@ -13,6 +13,8 @@ import AdminRoutes from "./routes/adminRoutes";
 import Cookies from "js-cookie";
 
 import { fetchUser } from "./redux/actions/userActions";
+import { fetchUsers, fetchBonuses } from "./redux/actions/adminActions";
+
 import {
   getKYCAccessToken,
   getKYCApplicationStatus,
@@ -26,13 +28,14 @@ import PageLoader from "./components/pageLoader";
 
 function App() {
   const user = useSelector((state) => state.userReducer.user);
+  const adminData = useSelector((state) => state.adminReducer);
   const dispatch = useDispatch();
   const location = useLocation();
   const history = useHistory();
   const [redirect, setRedirect] = useState("");
 
   useEffect(() => {
-    if (user) {
+    if (user && !user.isAdmin) {
       dispatch(fetchTransactions());
       dispatch(fetchBonusTransactions());
     }
@@ -47,7 +50,8 @@ function App() {
     }
   }, [user, location.search, redirect, history]);
 
-  const kycApplicant = user && user.isEmailVerified && user.email;
+  const kycApplicant =
+    user && user.isEmailVerified && !user.isAdmin && user.email;
   useEffect(() => {
     if (kycApplicant) {
       dispatch(getKYCAccessToken(kycApplicant));
@@ -73,6 +77,17 @@ function App() {
       document.body.removeChild(script);
     };
   }, [user, location.pathname]);
+
+  const shouldFetchUsers = user && user.isAdmin && !adminData.users;
+  const shouldFetchBonuses = user && user.isAdmin && !adminData.bonuses;
+  useEffect(() => {
+    if (shouldFetchUsers) {
+      dispatch(fetchUsers());
+    }
+    if (shouldFetchBonuses) {
+      dispatch(fetchBonuses());
+    }
+  }, [shouldFetchUsers, shouldFetchBonuses, dispatch]);
 
   if (shouldFetchUser) {
     return <PageLoader />;

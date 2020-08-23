@@ -1,13 +1,28 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import AdminUserList from "../components/adminUserList";
-import AdminUserDetails from "../components/adminUserDetails";
+import AdminUserTransactions from "../components/adminUserTransactions";
+import AdminUserBonusTransactions from "../components/adminUserBonusTransactions";
+import AdminDashboard from "../components/adminDashboard";
+import Profile from "../components/profile";
 
 function AdminRoutes() {
   return (
     <Switch>
-      <Route exact path="/admin-dashboard" component={AdminUserList} />
-      <Route exact path="/user-details" component={AdminUserDetails} />
+      <Route exact path="/admin-dashboard" component={AdminDashboard} />
+      <Route exact path="/user-list/" component={AdminUserList} />
+      <Route
+        exact
+        path="/user-transactions/:userId?"
+        component={AdminUserTransactions}
+      />
+      <Route
+        exact
+        path="/user-bonus-transactions/:userId?"
+        component={AdminUserBonusTransactions}
+      />
+
+      <Route exact path="/profile" component={Profile} />
       <Redirect path="*" to="/admin-dashboard" />
     </Switch>
   );

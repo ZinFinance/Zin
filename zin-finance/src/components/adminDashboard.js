@@ -17,7 +17,7 @@ function AdminDashboard() {
   const [bonuses, setBonuses] = useState([]);
 
   useEffect(() => {
-    if (adminData.bonuses) {
+    if (!bonuses && adminData.bonuses) {
       setBonuses(
         adminData.bonuses.map((bonus) => {
           return {

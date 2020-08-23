@@ -14,9 +14,12 @@ function AdminDashboard() {
   const dispatch = useDispatch();
   const adminData = useSelector((state) => state.adminReducer);
   const [totalTokensSold, setTotalTokensSold] = useState(0);
-  const [bonuses, setBonuses] = useState(
-    adminData.bonuses
-      ? adminData.bonuses.map((bonus) => {
+  const [bonuses, setBonuses] = useState([]);
+
+  useEffect(() => {
+    if (adminData.bonuses) {
+      setBonuses(
+        adminData.bonuses.map((bonus) => {
           return {
             ...bonus,
             updating: false,
@@ -28,8 +31,9 @@ function AdminDashboard() {
               (bonus.bonusType === PRESALE && "Presale"),
           };
         })
-      : []
-  );
+      );
+    }
+  }, [adminData.bonuses]);
 
   useEffect(() => {
     let totalTokens = 0;

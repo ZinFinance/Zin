@@ -71,40 +71,35 @@ export function fetchUserBonusTransactions(userId, callback) {
   };
 }
 
-function _fetchUsers() {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let response = await axios.get(
-        API_URL + "/api/Profile/admin/allprofiles",
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("token")}`,
-          },
-        }
+async function _fetchUsers() {
+  try {
+    let response = await axios.get(API_URL + "/api/Profile/admin/allprofiles", {
+      headers: {
+        Authorization: `Bearer ${Cookies.get("token")}`,
+      },
+    });
+    let users = response.data.data;
+    for (let i = 0; i < users.length; i++) {
+      users[i].zinTokens = ethService.convertFromWei(users[i].zinTokens);
+      users[i].referralZinTokens = ethService.convertFromWei(
+        users[i].referralZinTokens
       );
-      let users = response.data;
-      for (let i = 0; i < users.length; i++) {
-        users[i].zinTokens = ethService.convertFromWei(users[i].zinTokens);
-        users[i].referralZinTokens = ethService.convertFromWei(
-          users[i].referralZinTokens
-        );
-        users[i].bonusZinTokens = ethService.convertFromWei(
-          users[i].bonusZinTokens
-        );
-        users[i].presaleZinTokens = ethService.convertFromWei(
-          users[i].presaleZinTokens
-        );
-      }
-      if (response.status === 200) {
-        resolve(users);
-      } else {
-        reject(response.message);
-      }
-    } catch (err) {
-      console.warn("error getting users info", err);
-      reject(DEFAULT_ERROR);
+      users[i].bonusZinTokens = ethService.convertFromWei(
+        users[i].bonusZinTokens
+      );
+      users[i].presaleZinTokens = ethService.convertFromWei(
+        users[i].presaleZinTokens
+      );
     }
-  });
+    if (response.status === 200) {
+      return users;
+    } else {
+      throw new Error(response.message);
+    }
+  } catch (err) {
+    console.warn("error getting users info", err);
+    throw new Error(DEFAULT_ERROR);
+  }
 }
 
 async function _fetchUserTransactions(userId) {
@@ -120,7 +115,7 @@ async function _fetchUserTransactions(userId) {
         },
       }
     );
-    let transactions = response.data;
+    let transactions = response.data.data;
     for (let i = 0; i < transactions.length; i++) {
       transactions[i].amountTransferredInEther = ethService.convertFromWei(
         transactions[i].amountTransferredInEther
@@ -159,7 +154,7 @@ async function _fetchUserBonusTransactions(userId) {
         Authorization: `Bearer ${Cookies.get("token")}`,
       },
     });
-    let transactions = response.data;
+    let transactions = response.data.data;
     for (let i = 0; i < transactions.length; i++) {
       transactions[i].amountTransferredInEther = ethService.convertFromWei(
         transactions[i].amountTransferredInEther
@@ -244,7 +239,7 @@ async function _updateBonus(bonusType, isActive, bonusPercentage) {
       }
     );
     if (response.status === 200) {
-      return response.data;
+      return response;
     } else {
       throw new Error(DEFAULT_ERROR);
     }

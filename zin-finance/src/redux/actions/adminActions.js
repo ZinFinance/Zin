@@ -240,9 +240,10 @@ export function updateBonus(bonusType, isActive, bonusPercentage, callback) {
 
 async function _updateBonus(bonusType, isActive, bonusPercentage) {
   try {
-    let response = await axios.get(
+    let response = await axios.post(
       API_URL +
         `/api/Profile/admin/updatebonus/${bonusType}/${isActive}/${bonusPercentage}`,
+      null,
       {
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,

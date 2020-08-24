@@ -21,7 +21,7 @@ function Referral() {
           <div className="card-head">
             <h6 className="card-title">
               {" "}
-              20% Presale Bonus until 10th September 2020 or first 50 million
+              20% Presale Bonus until 15th September 2020 or first 50 million
               tokens (whichever comes first)
             </h6>
           </div>

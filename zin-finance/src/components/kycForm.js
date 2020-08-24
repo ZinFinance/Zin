@@ -1,14 +1,16 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import {
   getKYCAccessToken,
   SUMSUB_BASE_URL,
+  getKYCApplicationStatus,
 } from "../redux/actions/kycActions";
 import snsWebSdk from "@sumsub/websdk";
 import ReactDOM from "react-dom";
 
 function KYCForm() {
+  const dispatch = useDispatch();
   const userId = useSelector((state) => state.userReducer.user.email);
   const emailVerified = useSelector(
     (state) => state.userReducer.user.isEmailVerified
@@ -34,6 +36,12 @@ function KYCForm() {
       history.push("/kyc-application");
     }
   }, [emailVerified, history]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(getKYCApplicationStatus(userId));
+    };
+  }, [userId, dispatch]);
 
   useEffect(() => {
     const launchWebSdk = (

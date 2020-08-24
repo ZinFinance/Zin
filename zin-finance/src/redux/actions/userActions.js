@@ -284,7 +284,7 @@ function _fetchUser(token) {
       if (profileResponse.status === 200) {
         resolve(user);
       } else {
-        reject(profileResponse.message);
+        reject(profileResponse.data.message);
       }
     } catch (err) {
       console.warn("error getting user info", err);

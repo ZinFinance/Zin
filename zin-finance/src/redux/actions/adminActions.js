@@ -119,7 +119,7 @@ async function _fetchUsers() {
     if (response.status === 200) {
       return users;
     } else {
-      throw new Error(response.message);
+      throw new Error(response.data.message);
     }
   } catch (err) {
     console.warn("error getting users info", err);
@@ -161,7 +161,7 @@ async function _fetchUserTransactions(userId) {
     if (response.status === 200) {
       return { userId, transactions };
     } else {
-      throw new Error(response.message);
+      throw new Error(response.data.message);
     }
   } catch (err) {
     console.warn("error getting user transactions", err);
@@ -194,7 +194,7 @@ async function _fetchUserBonusTransactions(userId) {
     if (response.status === 200) {
       return { userId, transactions };
     } else {
-      throw new Error(response.message);
+      throw new Error(response.data.message);
     }
   } catch (err) {
     console.warn("error getting user transactions", err);

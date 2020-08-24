@@ -322,12 +322,22 @@ function Profile() {
                   <li>
                     {kycApplicationStatus &&
                     kycApplicationStatus.reviewStatus === "completed" ? (
-                      <span
-                        style={{ cursor: "initial" }}
-                        className="btn btn-auto btn-xs btn-success"
-                      >
-                        KYC Complete
-                      </span>
+                      kycApplicationStatus.reviewResult.reviewAnswer ===
+                      "RED" ? (
+                        <span
+                          style={{ cursor: "initial" }}
+                          className="btn btn-auto btn-xs btn-danger"
+                        >
+                          KYC Rejected
+                        </span>
+                      ) : (
+                        <span
+                          style={{ cursor: "initial" }}
+                          className="btn btn-auto btn-xs btn-success"
+                        >
+                          KYC Complete
+                        </span>
+                      )
                     ) : (
                       <span
                         style={{ cursor: "initial" }}

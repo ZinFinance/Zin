@@ -137,7 +137,7 @@ export function login(email, password, rememberMe, callback) {
             path: "/",
           });
         }
-        dispatch(_setUser(profile.data));
+        dispatch(_setUser(profile));
         if (callback) {
           callback();
         }

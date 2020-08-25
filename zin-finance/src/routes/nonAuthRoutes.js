@@ -11,8 +11,8 @@ import ResetAccount from "../components/resetAccount";
 function NonAuthRoutes() {
   return (
     <Switch>
-      <Route exact path="/sign-in:pathParam?" component={SignIn} />
       <Route exact path="/sign-up" component={SignUp} />
+      <Route exact path="/sign-in:pathParam?" component={SignIn} />
       <Route exact path="/sign-up-success" component={SignUpSuccess} />
       <Route exact path="/forgot-password" component={ForgotPassword} />
       <Route exact path="/emailsuccess" component={EmailSuccess} />

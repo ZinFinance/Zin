@@ -69,8 +69,9 @@ function App() {
   }, [shouldFetchUser, dispatch]);
 
   const adminUsersLoaded = !!adminData.users;
-  const userTransactions = Object.keys(adminData.userTransactions);
-  const userBonusTransactions = Object.keys(adminData.userBonusTransactions);
+  const userTransactions = Object.keys(adminData.userTransactions).length;
+  const userBonusTransactions = Object.keys(adminData.userBonusTransactions)
+    .length;
   useEffect(() => {
     const script = document.createElement("script");
     script.id = "_themeScript";

@@ -80,8 +80,8 @@ function Referral() {
             </thead>
             <tbody>
               {/* .data-item */}
-              {bonusTransactions.map((tx) => (
-                <tr className="data-item">
+              {bonusTransactions.map((tx, index) => (
+                <tr key={index} className="data-item">
                   <td className="data-col dt-bonusid">
                     <div className="d-flex align-items-center">
                       <div className="data-state data-state-approved">

@@ -31,8 +31,8 @@ function Transactions() {
             </thead>
             <tbody>
               {/* .data-item */}
-              {transactions.map((transaction) => (
-                <tr className="data-item">
+              {transactions.map((transaction, index) => (
+                <tr key={index} className="data-item">
                   <td className="data-col dt-tnxno">
                     <div className="d-flex align-items-center">
                       <div className="data-state data-state-approved">

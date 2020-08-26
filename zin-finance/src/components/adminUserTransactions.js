@@ -113,6 +113,8 @@ function AdminUserTransactions() {
                       <div className="fake-class">
                         <a
                           href={`https://etherscan.io/tx/${transaction.txId}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="lead tnx-id"
                         >
                           {transaction.txId}

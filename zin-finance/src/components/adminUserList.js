@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ExportToCsv } from "export-to-csv";
 import PageLoader from "./pageLoader";
+import Loader from "react-loader-spinner";
 
 function AdminUserList() {
   const users = useSelector((state) => state.adminReducer.users);
@@ -102,9 +103,36 @@ function AdminUserList() {
                           )}{" "}
                           Email
                         </li>
-                        {user.kycStatus && (
+                        {!user.kycStatus && (
+                          <li>
+                            <Loader
+                              style={{
+                                display: "inline-block",
+                                marginRight: "10px",
+                              }}
+                              type="TailSpin"
+                              color="#165e50"
+                              height={15}
+                              width={15}
+                            ></Loader>{" "}
+                            KYC
+                          </li>
+                        )}
+                        {user.kycStatus === "pending" && (
                           <li>
                             <div className="data-state data-state-sm data-state-pending" />{" "}
+                            KYC
+                          </li>
+                        )}
+                        {user.kycStatus === "rejected" && (
+                          <li>
+                            <div className="data-state data-state-sm data-state-canceled" />{" "}
+                            KYC
+                          </li>
+                        )}
+                        {user.kycStatus === "approved" && (
+                          <li>
+                            <div className="data-state data-state-sm data-state-approved" />{" "}
                             KYC
                           </li>
                         )}

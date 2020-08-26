@@ -61,11 +61,12 @@ function WalletModal() {
             <h4 className="popup-title">Wallet Address</h4>
             <p>
               In order to receive your <strong>ZIN Tokens</strong>, please
-              select your wallet address and you have to put the address below
-              input box.{" "}
+              update your wallet address in the input box below. Please make
+              sure to send Ethereum from your private wallet (not an exchange
+              wallet).{" "}
               <strong>
-                You will receive ZIN tokens to this address after the Token Sale
-                end.
+                You will receive ZIN tokens on this address. Any bonus tokens
+                (if eligible) will be sent one week after the token sale ends.
               </strong>
             </p>
             <form onSubmit={updateWallet}>
@@ -94,10 +95,11 @@ function WalletModal() {
                 <em className="fas fa-info-circle" />
                 <p style={{ fontWeight: "bold" }}>
                   DO NOT USE your exchange wallet address such as Kraken,
-                  Bitfinex, Bithumb, Binance etc. You can use MetaMask,
-                  MyEtherWallet, Mist wallets etc. Do not use the address if you
-                  don’t have a private key of the your address. You WILL NOT
-                  receive ZIN Tokens and WILL LOSE YOUR FUNDS if you do.
+                  Bitfinex, Bithumb, Binance etc. to send Ethereum to us. You
+                  can use MetaMask, MyEtherWallet, Mist wallets etc. Do not use
+                  the address if you don’t have the private keys of your
+                  address. You WILL NOT receive ZIN Tokens and you WILL LOSE
+                  YOUR FUNDS, which we cannot recover.
                 </p>
               </div>
               <div className="gaps-3x" />

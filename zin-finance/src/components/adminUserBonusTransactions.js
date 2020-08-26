@@ -114,6 +114,8 @@ function AdminUserBonusTransactions() {
                     <div className="d-flex align-items-center">
                       <div className="fake-class">
                         <a
+                          target="_blank"
+                          rel="noopener noreferrer"
                           href={`https://etherscan.io/tx/${tx.txId}`}
                           className="lead tnx-id"
                         >

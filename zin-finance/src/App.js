@@ -68,6 +68,10 @@ function App() {
     }
   }, [shouldFetchUser, dispatch]);
 
+  const adminUsersLoaded = !!adminData.users;
+  const userTransactions = Object.keys(adminData.userTransactions).length;
+  const userBonusTransactions = Object.keys(adminData.userBonusTransactions)
+    .length;
   useEffect(() => {
     const script = document.createElement("script");
     script.id = "_themeScript";
@@ -78,7 +82,13 @@ function App() {
     return () => {
       document.body.removeChild(script);
     };
-  }, [user, location.pathname]);
+  }, [
+    user,
+    location.pathname,
+    adminUsersLoaded,
+    userTransactions,
+    userBonusTransactions,
+  ]);
 
   const shouldFetchUsers =
     user && user.isAdmin && accessToken && !adminData.users;

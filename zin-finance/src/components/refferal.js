@@ -21,7 +21,7 @@ function Referral() {
           <div className="card-head">
             <h6 className="card-title">
               {" "}
-              20% Presale Bonus until 10th September 2020 or first 50 million
+              20% Presale Bonus until 15th September 2020 or first 50 million
               tokens (whichever comes first)
             </h6>
           </div>
@@ -80,8 +80,8 @@ function Referral() {
             </thead>
             <tbody>
               {/* .data-item */}
-              {bonusTransactions.map((tx) => (
-                <tr className="data-item">
+              {bonusTransactions.map((tx, index) => (
+                <tr key={index} className="data-item">
                   <td className="data-col dt-bonusid">
                     <div className="d-flex align-items-center">
                       <div className="data-state data-state-approved">

@@ -1,4 +1,5 @@
 import React, { useReducer } from "react";
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useCheckEmailVerified } from "../utility";
 import { updateUser } from "../redux/actions/userActions";
@@ -322,19 +323,26 @@ function Profile() {
                   <li>
                     {kycApplicationStatus &&
                     kycApplicationStatus.reviewStatus === "completed" ? (
-                      <span
-                        style={{ cursor: "initial" }}
-                        className="btn btn-auto btn-xs btn-success"
-                      >
-                        KYC Complete
-                      </span>
+                      kycApplicationStatus.reviewResult.reviewAnswer ===
+                      "RED" ? (
+                        <Link to="/kyc-application">
+                          <span className="btn btn-auto btn-xs btn-danger">
+                            KYC Rejected
+                          </span>
+                        </Link>
+                      ) : (
+                        <Link to="/kyc-application">
+                          <span className="btn btn-auto btn-xs btn-success">
+                            KYC Complete
+                          </span>
+                        </Link>
+                      )
                     ) : (
-                      <span
-                        style={{ cursor: "initial" }}
-                        className="btn btn-auto btn-xs btn-warning"
-                      >
-                        KYC Pending
-                      </span>
+                      <Link to="/kyc-application">
+                        <span className="btn btn-auto btn-xs btn-warning">
+                          KYC Pending
+                        </span>
+                      </Link>
                     )}
                   </li>
                 </ul>
@@ -370,7 +378,7 @@ function Profile() {
                       style={{ cursor: "not-allowed" }}
                       className="link link-ucap"
                     >
-                      Edit
+                      Add
                     </span>
                   )}
                 </div>

@@ -22,21 +22,38 @@ export function fetchUsers() {
         type: ActionTypes.SET_USERS,
         data: users,
       });
-      for (let user of users) {
-        try {
-          let kycStatus = await getUserKYCStatus(user.email);
-          if (kycStatus && kycStatus.reviewStatus) {
+      for (let i = 0; i < users.length; i++) {
+        let user = users[i];
+        setTimeout(async () => {
+          try {
+            let kycApplicationStatus = await getUserKYCStatus(user.email);
+            kycApplicationStatus = kycApplicationStatus.data;
+            let kycStatus = "";
+            if (kycApplicationStatus.reviewStatus === "completed") {
+              if (kycApplicationStatus.reviewResult.reviewAnswer === "RED") {
+                kycStatus = "rejected";
+              } else {
+                kycStatus = "approved";
+              }
+            } else if (
+              kycApplicationStatus.reviewStatus === "pending" ||
+              kycApplicationStatus.reviewStatus === "queued" ||
+              kycApplicationStatus.reviewStatus === "onHold" ||
+              kycApplicationStatus.reviewStatus === "init"
+            ) {
+              kycStatus = "pending";
+            }
             dispatch({
               type: ActionTypes.SET_USER_KYC_STATUS,
               data: { userId: user.userId, kycStatus },
             });
+          } catch (err) {
+            dispatch({
+              type: ActionTypes.SET_USER_KYC_STATUS,
+              data: { userId: user.userId, kycStatus: "pending" },
+            });
           }
-        } catch (err) {
-          dispatch({
-            type: ActionTypes.SET_USER_KYC_STATUS,
-            data: { userId: user.userId, kycStatus: "notStarted" },
-          });
-        }
+        }, 20 * i);
       }
     } catch (err) {
       console.warn("error fetching users", err);
@@ -105,7 +122,7 @@ async function _fetchUsers() {
     if (response.status === 200) {
       return users;
     } else {
-      throw new Error(response.message);
+      throw new Error(response.data.message);
     }
   } catch (err) {
     console.warn("error getting users info", err);
@@ -147,7 +164,7 @@ async function _fetchUserTransactions(userId) {
     if (response.status === 200) {
       return { userId, transactions };
     } else {
-      throw new Error(response.message);
+      throw new Error(response.data.message);
     }
   } catch (err) {
     console.warn("error getting user transactions", err);
@@ -180,7 +197,7 @@ async function _fetchUserBonusTransactions(userId) {
     if (response.status === 200) {
       return { userId, transactions };
     } else {
-      throw new Error(response.message);
+      throw new Error(response.data.message);
     }
   } catch (err) {
     console.warn("error getting user transactions", err);

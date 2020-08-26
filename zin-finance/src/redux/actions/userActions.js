@@ -137,7 +137,7 @@ export function login(email, password, rememberMe, callback) {
             path: "/",
           });
         }
-        dispatch(_setUser(profile.data));
+        dispatch(_setUser(profile));
         if (callback) {
           callback();
         }
@@ -284,7 +284,7 @@ function _fetchUser(token) {
       if (profileResponse.status === 200) {
         resolve(user);
       } else {
-        reject(profileResponse.message);
+        reject(profileResponse.data.message);
       }
     } catch (err) {
       console.warn("error getting user info", err);

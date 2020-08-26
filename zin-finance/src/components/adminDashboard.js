@@ -20,8 +20,10 @@ function AdminDashboard() {
 
   useEffect(() => {
     if (bonuses.length === 0 && adminData.bonuses) {
+      let bonusesData = [...adminData.bonuses];
+      bonusesData = bonusesData.sort((a, b) => a.bonusType - b.bonusType);
       setBonuses(
-        adminData.bonuses.map((bonus) => {
+        bonusesData.map((bonus) => {
           return {
             ...bonus,
             updating: false,
@@ -149,21 +151,26 @@ function AdminDashboard() {
                   id="admin-configuration"
                 >
                   {bonuses.map((bonus) => (
-                    <form onSubmit={(e) => submitUpdate(e, bonus.bonusType)}>
+                    <form
+                      key={bonus.bonusType}
+                      onSubmit={(e) => submitUpdate(e, bonus.bonusType)}
+                    >
                       <div style={{ display: "flex" }} className="input-item">
                         <input
                           type="checkbox"
                           name="isActive"
                           className="input-switch input-switch-sm"
-                          id="save-log"
+                          id={`save-log-${bonus.bonusType}`}
                           checked={bonus.isActive}
-                          onChange={(e) => handleChange(e, bonus.bonusType)}
+                          onChange={(e) => {
+                            handleChange(e, bonus.bonusType);
+                          }}
                         />
 
                         <label
                           style={{ display: "contents" }}
                           className="input-item-label"
-                          htmlFor="save-log"
+                          htmlFor={`save-log-${bonus.bonusType}`}
                         >
                           {bonus.name} Bonus
                         </label>

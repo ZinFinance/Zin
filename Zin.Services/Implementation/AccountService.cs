@@ -7,6 +7,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Zin.Repository.Models;
 using Zin.Repository.Repository;
+using System;
 
 namespace Zin.Services.Implementation
 {
@@ -46,6 +47,7 @@ namespace Zin.Services.Implementation
             appUser.PresaleZinTokens = "0";
             appUser.ReferralZinTokens = "0";
             appUser.ZinTokens = "0";
+            appUser.CreateDateTimeOffset = DateTimeOffset.UtcNow;
 
             IdentityResult result = await userManager.CreateAsync(appUser, password);
             if (!result.Succeeded)

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace Zin.Repository.Models
 {
@@ -10,6 +11,8 @@ namespace Zin.Repository.Models
         public string TfaCode { get; set; }
         public string ReferralCode { get; set; }
         public bool IsAdmin { get; set; }
+
+        public DateTimeOffset CreateDateTimeOffset { get; set; }
 
         //Those tokens that this user has actually bought
         public string ZinTokens { get; set; }

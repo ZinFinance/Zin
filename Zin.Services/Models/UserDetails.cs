@@ -1,4 +1,5 @@
-﻿using Zin.Repository.Models;
+﻿using System;
+using Zin.Repository.Models;
 
 namespace Zin.Services.Models
 {
@@ -18,6 +19,7 @@ namespace Zin.Services.Models
         public string PresaleZinTokens { get; set; }
         public bool IsAdmin { get; set; }
         public bool IsEmailVerified { get; set; }
+        public DateTimeOffset CreateDateTimeOffset { get; set; }
 
         public AppUser ToCore()
         {
@@ -38,6 +40,7 @@ namespace Zin.Services.Models
             return new UserDetails
             {
                 UserName = appUser.UserName,
+                CreateDateTimeOffset = appUser.CreateDateTimeOffset,
                 Email = appUser.Email,
                 FirstName = appUser.FirstName,
                 LastName = appUser.LastName,

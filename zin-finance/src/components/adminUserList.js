@@ -96,7 +96,7 @@ function AdminUserList() {
                       className="data-col dt-registrationdate"
                     >
                       <span className="sub sub-s2">
-                        {new Date(user.createDateTimeOffset).toLocaleString()}
+                        {new Date(user.createDateTimeOffset).toUTCString()}
                       </span>
                     </td>
                     <td

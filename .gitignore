@@ -340,3 +340,5 @@ ASALocalRun/
 healthchecksdb
 
 .env
+/Zin/appsettings.Development.json
+/Zin/appsettings.json

@@ -23,7 +23,7 @@ function Footer(props) {
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href="https://zinlandingpage.azurewebsites.net/privacy-policy/"
+                  href="https://www.zin.finance/privacy-policy/"
                 >
                   Privacy Policy
                 </a>
@@ -32,7 +32,7 @@ function Footer(props) {
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href="https://zinlandingpage.azurewebsites.net/terms-and-conditions/"
+                  href="https://www.zin.finance/terms-and-conditions/"
                 >
                   Terms and Conditions
                 </a>

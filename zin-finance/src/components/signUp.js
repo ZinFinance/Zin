@@ -157,7 +157,7 @@ function SignUp() {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://zinlandingpage.azurewebsites.net/privacy-policy/"
+              href="https://www.zin.finance/privacy-policy/"
             >
               privacy policy
             </a>{" "}
@@ -165,7 +165,7 @@ function SignUp() {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://zinlandingpage.azurewebsites.net/terms-and-conditions/"
+              href="https://www.zin.finance/terms-and-conditions/"
             >
               {" "}
               terms.

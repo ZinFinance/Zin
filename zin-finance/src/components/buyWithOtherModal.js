@@ -123,7 +123,7 @@ function BuyWithOtherModal({
                     <a
                       target="_blank"
                       rel="noopener noreferrer"
-                      href="https://zinlandingpage.azurewebsites.net/terms-and-conditions/"
+                      href="https://www.zin.finance/terms-and-conditions/"
                     >
                       terms and conditions
                     </a>

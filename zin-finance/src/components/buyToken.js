@@ -271,7 +271,7 @@ function BuyToken() {
             {!checkBuyTokenCondition() ? (
               <Link to="/kyc-application">
                 <button className="btn btn-primary">
-                  Complete KYC in order to purchase more tokens
+                  Complete KYC in order to purchase tokens
                 </button>
               </Link>
             ) : (

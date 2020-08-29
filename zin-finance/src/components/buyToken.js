@@ -257,7 +257,7 @@ function BuyToken() {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://zinlandingpage.azurewebsites.net/how-to-buy-ethereum/"
+              href="https://zin.finance/how-to-buy-ethereum/"
               className="note-text text-light"
             >
               <em

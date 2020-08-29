@@ -5,7 +5,7 @@ import * as ActionTypes from "../constants";
 // These parameters should be used for all requests
 const SUMSUB_APP_TOKEN = process.env.REACT_APP_SUMSUB_APP_TOKEN;
 const SUMSUB_SECRET_KEY = process.env.REACT_APP_SUMSUB_SECRET_KEY;
-const CORS_PROXY_URL = "https://cors-anywhere.herokuapp.com/";
+const CORS_PROXY_URL = "https://mighty-thicket-01215.herokuapp.com/";
 export const SUMSUB_BASE_URL = "https://api.sumsub.com";
 const REQUEST_URL = CORS_PROXY_URL + SUMSUB_BASE_URL;
 

@@ -11,7 +11,7 @@ function Footer(props) {
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href="https://zinhome.azurewebsites.net/White%20paper%20v%201-4.pdf"
+                  href="https://www.zin.finance/white-paper/"
                 >
                   Whitepaper
                 </a>

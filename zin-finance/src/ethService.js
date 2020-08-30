@@ -11,10 +11,8 @@ class EthService {
       try {
         this.web3 = window.web3;
         this.web3.eth.getAccounts((error, accounts) => {
-          if (accounts.length > 0) {
-            this.coinbase = this.web3.currentProvider.selectedAddress;
-            this.web3.eth.defaultAccount = this.coinbase;
-          }
+          this.coinbase = this.web3.currentProvider.selectedAddress;
+          this.web3.eth.defaultAccount = this.coinbase;
         });
         this.tokenContract = this.web3.eth
           .contract(Token_ABI)
@@ -53,10 +51,12 @@ class EthService {
 
   async buyToken(eth, fromAddress) {
     try {
+      this.coinbase = this.web3.currentProvider.selectedAddress;
       if (
         !this.coinbase ||
         this.coinbase.toLowerCase() !== fromAddress.toLowerCase()
       ) {
+        debugger;
         return "";
       }
       var tx = await this.promisify((cb) =>

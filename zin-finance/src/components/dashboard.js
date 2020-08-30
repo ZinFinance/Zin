@@ -21,7 +21,16 @@ function Dashboard() {
                   <img src="/images/logo-light-sm.png" alt="logo" />
                 </div>
                 <div className="token-balance-text">
-                  <h6 className="card-sub-title">Tokens Balance</h6>
+                  <h6 className="card-sub-title">
+                    Tokens Balance{" "}
+                    <em
+                      style={{ color: "white" }}
+                      className="fas fa-question-circle"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="If you see 0 balance, you need to add Zin as a custom token in your metamask wallet which contains Zin."
+                    />
+                  </h6>
                   <span className="lead">
                     {getPrettyValue(user.tokenBalance)} <span>ZIN</span>
                   </span>

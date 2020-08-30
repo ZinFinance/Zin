@@ -66,8 +66,8 @@ export function fetchTransactions(callback) {
     } catch (err) {
       console.warn("error fetching transactions", err);
       if (callback) {
-        if (response && response.data && response.data.message) {
-          callback(response.data.message);
+        if (err.response && err.response.data && err.response.data.message) {
+          callback(err.response.data.message);
         } else {
           callback(DEFAULT_ERROR);
         }
@@ -100,8 +100,8 @@ export function saveTransaction(data, callback) {
     } catch (err) {
       console.warn("error saving transaction", err);
       if (callback) {
-        if (response && response.data && response.data.message) {
-          callback(response.data.message);
+        if (err.response && err.response.data && err.response.data.message) {
+          callback(err.response.data.message);
         } else {
           callback(DEFAULT_ERROR);
         }
@@ -147,8 +147,8 @@ export function fetchBonusTransactions(callback) {
     } catch (err) {
       console.warn("error fetching bonus transactions", err);
       if (callback) {
-        if (response && response.data && response.data.message) {
-          callback(response.data.message);
+        if (err.response && err.response.data && err.response.data.message) {
+          callback(err.response.data.message);
         } else {
           callback(DEFAULT_ERROR);
         }

@@ -58,9 +58,9 @@ export function registerUser(data, callback) {
       }
     } catch (err) {
       console.warn("error registering user", err);
-      if (response && response.data && response.data.message) {
+      if (err.response && err.response.data && err.response.data.message) {
         if (callback) {
-          callback(response.data.message);
+          callback(err.response.data.message);
         }
       } else {
         if (callback) {
@@ -86,8 +86,8 @@ export async function resetPassword(userName) {
     }
   } catch (err) {
     console.warn("error resetting password", err);
-    if (response && response.data && response.data.message) {
-      return response.data.message;
+    if (err.response && err.response.data && err.response.data.message) {
+      return err.response.data.message;
     } else {
       return DEFAULT_ERROR;
     }
@@ -109,8 +109,8 @@ export async function resetAccount(data) {
     }
   } catch (err) {
     console.warn("error resetting account", err);
-    if (response && response.data && response.data.message) {
-      return response.data.message;
+    if (err.response && err.response.data && err.response.data.message) {
+      return err.response.data.message;
     } else {
       return DEFAULT_ERROR;
     }
@@ -181,12 +181,8 @@ export function updateUser(data, callback) {
     } catch (err) {
       console.warn("error updating user", err);
       if (callback) {
-        if (
-          updateResponse &&
-          updateResponse.data &&
-          updateResponse.data.message
-        ) {
-          callback(updateResponse.data.message);
+        if (err.response && err.response.data && err.response.data.message) {
+          callback(err.response.data.message);
         } else {
           callback(DEFAULT_ERROR);
         }
@@ -214,8 +210,8 @@ export async function updatePassword(data) {
     }
   } catch (err) {
     console.warn("error updating password", err);
-    if (updateResponse && updateResponse.data && updateResponse.data.message) {
-      return updateResponse.data.message;
+    if (err.response && err.response.data && err.response.data.message) {
+      return err.response.data.message;
     } else {
       return DEFAULT_ERROR;
     }
@@ -244,8 +240,8 @@ export async function resendEmail(email) {
     }
   } catch (err) {
     console.warn("error resending email", err);
-    if (resendResponse && resendResponse.data && resendResponse.data.message) {
-      return resendResponse.data.message;
+    if (err.response && err.response.data && err.response.data.message) {
+      return err.response.data.message;
     } else {
       return DEFAULT_ERROR;
     }

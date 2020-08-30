@@ -110,7 +110,8 @@ function BuyToken() {
       );
     } else {
       setTxResult({
-        err: "Your Wallet address doesn't match MetaMask address",
+        err:
+          "An Error occurred. Please make sure MetaMask is connected and your wallet address matches MetaMask address.",
       });
     }
   };

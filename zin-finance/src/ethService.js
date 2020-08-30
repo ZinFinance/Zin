@@ -56,7 +56,6 @@ class EthService {
         !this.coinbase ||
         this.coinbase.toLowerCase() !== fromAddress.toLowerCase()
       ) {
-        debugger;
         return "";
       }
       var tx = await this.promisify((cb) =>

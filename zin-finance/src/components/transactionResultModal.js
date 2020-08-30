@@ -20,7 +20,7 @@ function TransactionResultModal({ txResult }) {
                 <p className="lead text-success">
                   Your Transaction ID{" "}
                   <a
-                    href={`https://etherscan.io/tx/${txResult}`}
+                    href={`https://etherscan.io/tx/${txResult.success}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

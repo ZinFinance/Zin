@@ -85,7 +85,7 @@ function Dashboard() {
                     <a
                       target="_blank"
                       rel="noopener noreferrer"
-                      href="https://zinlandingpage.azurewebsites.net/how-to-buy-ethereum/"
+                      href="https://zin.finance/how-to-buy-ethereum/"
                       className="note-text text-light"
                     >
                       How to buy Ethereum (ETH)?
@@ -105,7 +105,7 @@ function Dashboard() {
                       </li>
                     </ul>
                     <a
-                      href="https://zinhome.azurewebsites.net/White%20paper%20v%201-4.pdf"
+                      href="https://www.zin.finance/white-paper/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn btn-primary"

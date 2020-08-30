@@ -49,6 +49,7 @@ function AdminUserList() {
                 <tr className="data-item data-head">
                   <th className="data-col dt-user">User</th>
                   <th className="data-col dt-email">Email</th>
+                  <th className="data-col dt-registrationdate">Registration</th>
                   <th className="data-col dt-verify">Status</th>
                   <th className="data-col dt-referral">Referral</th>
                   <th className="data-col dt-ethaddress">Wallet</th>
@@ -89,6 +90,14 @@ function AdminUserList() {
                       className="data-col dt-email"
                     >
                       <span className="sub sub-s2 sub-email">{user.email}</span>
+                    </td>
+                    <td
+                      style={{ paddingRight: "100px" }}
+                      className="data-col dt-registrationdate"
+                    >
+                      <span className="sub sub-s2">
+                        {new Date(user.createDateTimeOffset).toUTCString()}
+                      </span>
                     </td>
                     <td
                       style={{ paddingRight: "100px" }}

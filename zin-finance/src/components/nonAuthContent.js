@@ -22,13 +22,19 @@ function NonAuthContent(props) {
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href="https://zinlandingpage.azurewebsites.net/terms-and-conditions/"
+                  href="https://www.zin.finance/privacy-policy/"
                 >
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="regular-page.html">Terms and Conditions</a>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://www.zin.finance/terms-and-conditions/"
+                >
+                  Terms and Conditions
+                </a>
               </li>
               <li>© {new Date().getFullYear()} Zin.</li>
             </ul>

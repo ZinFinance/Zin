@@ -116,20 +116,14 @@ function BuyToken() {
   };
 
   const checkBuyTokenCondition = () => {
-    let userReachedThreshold =
-      (user.totalTokenBought / tokenRate) * ethToUSDValue > 2000;
     let kycStatus =
       kycApplicationStatus &&
       kycApplicationStatus.reviewStatus === "completed" &&
       kycApplicationStatus.reviewResult.reviewAnswer !== "RED";
-    if (userReachedThreshold) {
-      if (kycStatus) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
+    if (kycStatus) {
       return true;
+    } else {
+      return false;
     }
   };
 
@@ -263,7 +257,7 @@ function BuyToken() {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://zinlandingpage.azurewebsites.net/how-to-buy-ethereum/"
+              href="https://zin.finance/how-to-buy-ethereum/"
               className="note-text text-light"
             >
               <em
@@ -277,7 +271,7 @@ function BuyToken() {
             {!checkBuyTokenCondition() ? (
               <Link to="/kyc-application">
                 <button className="btn btn-primary">
-                  Complete KYC in order to purchase more tokens
+                  Complete KYC in order to purchase tokens
                 </button>
               </Link>
             ) : (

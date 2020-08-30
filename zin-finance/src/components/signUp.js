@@ -157,7 +157,7 @@ function SignUp() {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://zinlandingpage.azurewebsites.net/privacy-policy/"
+              href="https://www.zin.finance/privacy-policy/"
             >
               privacy policy
             </a>{" "}
@@ -165,11 +165,24 @@ function SignUp() {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://zinlandingpage.azurewebsites.net/terms-and-conditions/"
+              href="https://www.zin.finance/terms-and-conditions/"
             >
               {" "}
               terms.
             </a>
+          </label>
+        </div>
+        <div className="input-item text-left">
+          <input
+            required
+            className="input-checkbox input-checkbox-md"
+            id="location-condition"
+            type="checkbox"
+          />
+          <label style={{ textTransform: "none" }} htmlFor="location-condition">
+            I confirm, I am not a citizen of United States of America (USA),
+            North Korea, Iran, Iraq , Democratic Republic of Congo, Cuba,
+            Somalia, Sudan, Syria and any other sanctioned country.
           </label>
         </div>
         <AsyncButton

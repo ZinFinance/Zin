@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useHistory } from "react-router-dom";
+import axios from "axios";
 
 import AppContent from "./components/appContent";
 import NonAuthContent from "./components/nonAuthContent";
 import AdminContent from "./components/adminContent";
+import RestrictedPage from "./components/restrictedPage";
 
 import AuthRoutes from "./routes/authRoutes";
 import NonAuthRoutes from "./routes/nonAuthRoutes";
@@ -26,6 +28,8 @@ import {
 
 import PageLoader from "./components/pageLoader";
 
+const blockedCountries = ["US", "KP", "IR", "IQ", "CD", "CU", "SO", "SD", "SY"];
+
 function App() {
   const user = useSelector((state) => state.userReducer.user);
   const adminData = useSelector((state) => state.adminReducer);
@@ -34,8 +38,17 @@ function App() {
   const history = useHistory();
   const [redirect, setRedirect] = useState("");
   const accessToken = Cookies.get("token");
-
   const shouldFetchTransactions = user && !user.isAdmin;
+  const [userCountry, setUserCountry] = useState("");
+
+  useEffect(() => {
+    const fetchUserCountry = async () => {
+      let ipResponse = await axios.get("https://ipapi.co/json/");
+      setUserCountry(ipResponse.data.country_code);
+    };
+    fetchUserCountry();
+  }, []);
+
   useEffect(() => {
     if (shouldFetchTransactions) {
       dispatch(fetchTransactions());
@@ -103,8 +116,10 @@ function App() {
     }
   }, [shouldFetchUsers, shouldFetchBonuses, dispatch]);
 
-  if (shouldFetchUser) {
+  if (shouldFetchUser || !userCountry) {
     return <PageLoader />;
+  } else if (blockedCountries.includes(userCountry)) {
+    return <RestrictedPage />;
   } else if (user && user.isAdmin) {
     return (
       <AdminContent>

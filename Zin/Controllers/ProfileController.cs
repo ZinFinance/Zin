@@ -197,6 +197,8 @@ namespace Zin.Controllers
         [HttpPost("admin/updatebonus/{bonusType}/{isActive}/{bonusPercentage}")]
         public async Task<ActionResult> UpdateBonusAsync(BonusType bonusType, bool isActive, int bonusPercentage)
         {
+            if(bonusPercentage < 0)
+                return BadRequest();
             var res = await profileService.UpdateBonusAsync(bonusType, isActive, bonusPercentage);
             return Ok(res);
         }

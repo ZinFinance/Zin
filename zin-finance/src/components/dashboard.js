@@ -2,13 +2,12 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { getPrettyValue } from "../utility";
 import BuyToken from "./buyToken";
-import { useEthToUSDValue } from "../utility";
 
 const tokenRate = process.env.REACT_APP_API_TOKEN_RATE;
 
 function Dashboard() {
   const user = useSelector((state) => state.userReducer.user);
-  const ethToUSDValue = useEthToUSDValue();
+  const ethToUSDValue = useSelector((state) => state.userReducer.ethToUSDValue);
 
   return (
     <div className="container">

@@ -1,6 +1,8 @@
 import * as ActionTypes from "../constants";
 
-const initialState = {};
+const initialState = {
+  ethToUSDValue: 400,
+};
 
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -17,6 +19,12 @@ export default function (state = initialState, action) {
       return {
         ...state,
         user: state.user ? { ...state.user, tokenBalance: action.data } : null,
+      };
+    }
+    case ActionTypes.SET_ETH_TO_USD_VALUE: {
+      return {
+        ...state,
+        ethToUSDValue: action.data,
       };
     }
     default:

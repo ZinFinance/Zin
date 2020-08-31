@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useEthToUSDValue } from "../utility";
 import PageLoader from "./pageLoader";
 
 const tokenRate = process.env.REACT_APP_API_TOKEN_RATE;
@@ -8,7 +7,18 @@ function Transactions() {
   const transactions = useSelector(
     (state) => state.transactionReducer.transactions
   );
-  const ethToUSDValue = useEthToUSDValue();
+  const ethToUSDValue = useSelector((state) => state.userReducer.ethToUSDValue);
+
+  useEffect(() => {
+    window.themeScript();
+  }, []);
+
+  const transactionsLoaded = !!transactions;
+  useEffect(() => {
+    if (transactionsLoaded) {
+      window.themeScript();
+    }
+  }, [transactionsLoaded]);
 
   if (!transactions) {
     return <PageLoader containerHeight="50vh" />;
@@ -20,7 +30,7 @@ function Transactions() {
           <div className="card-head">
             <h4 className="card-title">User Transactions</h4>
           </div>
-          <table className="data-table dt-init user-tnx">
+          <table className="data-table dt-filter-init user-tnx">
             <thead>
               <tr className="data-item data-head">
                 <th className="data-col dt-tnxno">Transaction ID</th>
@@ -69,7 +79,7 @@ function Transactions() {
                         className="fas fa-info-circle"
                         data-toggle="tooltip"
                         data-placement="bottom"
-                        title={`1 ETH = ${tokenRate} ZIN`}
+                        data-title={`1 ETH = ${tokenRate} ZIN`}
                       />
                     </span>
                   </td>
@@ -83,7 +93,7 @@ function Transactions() {
                         className="fas fa-info-circle"
                         data-toggle="tooltip"
                         data-placement="bottom"
-                        title={`1 ETH = ${ethToUSDValue} USD`}
+                        data-title={`1 ETH = ${ethToUSDValue} USD`}
                       />
                     </span>
                   </td>

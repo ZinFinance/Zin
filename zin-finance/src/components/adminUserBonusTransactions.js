@@ -30,6 +30,15 @@ function AdminUserBonusTransactions() {
   };
 
   useEffect(() => {
+    window.themeScript();
+  }, []);
+
+  const transactionsLoaded = !!userTransactions;
+  useEffect(() => {
+    window.themeScript();
+  }, [transactionsLoaded]);
+
+  useEffect(() => {
     if (params.userId && !userTransactions) {
       dispatch(
         fetchUserBonusTransactions(params.userId, (err) => {
@@ -43,13 +52,13 @@ function AdminUserBonusTransactions() {
 
   useEffect(() => {
     if (params.userId) {
-      if (userBonusTransactions[params.userId]) {
+      if (userBonusTransactions[params.userId] && !userTransactions) {
         setUserTransactions(userBonusTransactions[params.userId]);
       }
     } else {
       history.push("/user-list");
     }
-  }, [userBonusTransactions, params.userId, history]);
+  }, [userBonusTransactions, params.userId, userTransactions, history]);
 
   if (!userTransactions) {
     return <PageLoader containerHeight="50vh" />;

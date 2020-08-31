@@ -45,7 +45,7 @@ function AdminDashboard() {
       setTotalContribution(totalContribution);
     };
     getTotalContribution();
-  }, [adminData.users]);
+  }, []);
 
   const submitUpdate = (e, bonusType) => {
     e.preventDefault();
@@ -97,7 +97,7 @@ function AdminDashboard() {
     setBonuses(bonusesCopy);
   };
 
-  if (!adminData.users || !adminData.bonuses) {
+  if (!adminData.bonuses) {
     return <PageLoader containerHeight="50vh" />;
   } else {
     return (

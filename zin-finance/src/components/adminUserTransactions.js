@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useEthToUSDValue } from "../utility";
 import { useParams, useHistory, Link } from "react-router-dom";
 import { fetchUserTransactions } from "../redux/actions/adminActions";
 import PageLoader from "./pageLoader";
@@ -16,7 +15,16 @@ function AdminUserTransactions() {
     (state) => state.adminReducer.userTransactions
   );
   const [userTransactions, setUserTransactions] = useState(null);
-  const ethToUSDValue = useEthToUSDValue();
+  const ethToUSDValue = useSelector((state) => state.userReducer.ethToUSDValue);
+
+  useEffect(() => {
+    window.themeScript();
+  }, []);
+
+  const transactionsLoaded = !!userTransactions;
+  useEffect(() => {
+    window.themeScript();
+  }, [transactionsLoaded]);
 
   useEffect(() => {
     if (params.userId && !userTransactions) {
@@ -32,7 +40,7 @@ function AdminUserTransactions() {
 
   useEffect(() => {
     if (params.userId) {
-      if (adminUserTransactions[params.userId]) {
+      if (adminUserTransactions[params.userId] && !userTransactions) {
         setUserTransactions(adminUserTransactions[params.userId]);
       }
     } else {

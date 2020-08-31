@@ -5,7 +5,7 @@ import Profile from "../components/profile";
 import Transactions from "../components/transactions";
 import KYCApplication from "../components/kycApplication";
 import KYCForm from "../components/kycForm";
-import Referral from "../components/refferal";
+import Referral from "../components/referral";
 import EmailSuccessAuth from "../components/emailSuccessAuth";
 import EmailFailAuth from "../components/emailFailAuth";
 

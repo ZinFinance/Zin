@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "../redux/actions/userActions";
 import AsyncButton from "./AsyncButton";
 
-function WalletModal() {
+function WalletModal({ successCallback, closeRef }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userReducer.user);
   const [state, setState] = useReducer(reducer, {
@@ -43,7 +43,11 @@ function WalletModal() {
           if (error) {
             setState({ error, loading: false });
           } else {
-            setState({ success: true, loading: false });
+            if (successCallback) {
+              successCallback();
+            } else {
+              setState({ success: true, loading: false });
+            }
           }
         }
       )
@@ -54,7 +58,13 @@ function WalletModal() {
     <div className="modal fade" id="edit-wallet" tabIndex={-1}>
       <div className="modal-dialog modal-dialog-md modal-dialog-centered">
         <div className="modal-content">
-          <span className="modal-close" data-dismiss="modal" aria-label="Close">
+          <span
+            ref={closeRef}
+            style={{ cursor: "pointer" }}
+            className="modal-close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
             <em className="ti ti-close" />
           </span>
           <div className="popup-body">

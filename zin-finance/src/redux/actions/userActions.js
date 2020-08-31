@@ -13,6 +13,13 @@ const API_URL = "https://stgzinapi.azurewebsites.net";
 
 const ethService = new EthService();
 
+export function setETHtoUSDValue(data) {
+  return {
+    type: ActionTypes.SET_ETH_TO_USD_VALUE,
+    data,
+  };
+}
+
 export function setTokenBalance(data) {
   return {
     type: ActionTypes.SET_TOKEN_BALANCE,

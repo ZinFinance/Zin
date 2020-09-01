@@ -35,12 +35,13 @@ namespace Zin.Repository.Implementation
 
         public async Task<RegisteredTx> GetRegisteredTxUsingIdAsync(string txId)
         {
-            var data = await appDbContext.RegisteredTx.FindAsync(txId);
+            var data = await appDbContext.RegisteredTx.FindAsync(txId.ToLower());
             return data;
         }
 
         public async Task SaveRegisteredTxAsync(RegisteredTx registeredTx)
         {
+            registeredTx.TxId = registeredTx.TxId.ToLower();
             registeredTx.CreateDateTimeOffset = DateTimeOffset.UtcNow;
             appDbContext.RegisteredTx.Add(registeredTx);
             await appDbContext.SaveChangesAsync();

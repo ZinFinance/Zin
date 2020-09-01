@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { useCheckEmailVerified, useEthToUSDValue } from "../utility";
+import { useCheckEmailVerified } from "../utility";
 import WalletModal from "./walletModal";
 import BuyWithOtherModal from "./buyWithOtherModal";
 import BuyWithMetaMaskModal from "./buyWithMetaMaskModal";
@@ -19,19 +19,32 @@ function BuyToken() {
   const kycApplicationStatus = useSelector(
     (state) => state.kycReducer.applicationStatus
   );
-  const ethToUSDValue = useEthToUSDValue();
+  const ethToUSDValue = useSelector((state) => state.userReducer.ethToUSDValue);
 
   const [ethCalculation, setEthCalculation] = useState(1);
   const [txResult, setTxResult] = useState({});
   const [buyTokenLoading, setBuyTokenLoading] = useState(false);
+  const [buyType, setBuyType] = useState("");
 
-  let walletToggle = null;
-  let buyWithOtherToggle = null;
-  let buyWithMetaMaskToggle = null;
-  let closeBuyWithOtherModal = null;
-  let closeBuyWithMetaMaskModal = null;
-  let transactionResultToggle = null;
-  let infoModalToggle = null;
+  let walletToggle = useRef();
+  let buyWithOtherToggle = useRef();
+  let buyWithMetaMaskToggle = useRef();
+  let closeBuyWithOtherModal = useRef();
+  let closeBuyWithMetaMaskModal = useRef();
+  let transactionResultToggle = useRef();
+  let infoModalToggle = useRef();
+  let closeWalletModal = useRef();
+
+  const onWalletSet = () => {
+    if (closeWalletModal.current) {
+      closeWalletModal.current.click();
+      if (buyType === "metamask" && buyWithMetaMaskToggle.current) {
+        buyWithMetaMaskToggle.current.click();
+      } else if (buyType === "other" && buyWithOtherToggle.current) {
+        buyWithOtherToggle.current.click();
+      }
+    }
+  };
 
   const checkIfTransactionsOpened = () => {
     let transactionsOpenDate = new Date("2020-09-01T12:00:00.000Z");
@@ -39,22 +52,24 @@ function BuyToken() {
   };
 
   const buyTokensWithOther = () => {
+    setBuyType("other");
     if (!checkIfTransactionsOpened()) {
-      infoModalToggle.click();
-    } else if (!user.ethAddress && walletToggle) {
-      walletToggle.click();
-    } else if (buyWithOtherToggle) {
-      buyWithOtherToggle.click();
+      infoModalToggle.current.click();
+    } else if (user.ethAddress && walletToggle.current) {
+      walletToggle.current.click();
+    } else if (buyWithOtherToggle.current) {
+      buyWithOtherToggle.current.click();
     }
   };
 
   const buyTokensWithMetaMask = () => {
+    setBuyType("metamask");
     if (!checkIfTransactionsOpened()) {
-      infoModalToggle.click();
-    } else if (!user.ethAddress && walletToggle) {
-      walletToggle.click();
-    } else if (buyWithMetaMaskToggle) {
-      buyWithMetaMaskToggle.click();
+      infoModalToggle.current.click();
+    } else if (!user.ethAddress && walletToggle.current) {
+      walletToggle.current.click();
+    } else if (buyWithMetaMaskToggle.current) {
+      buyWithMetaMaskToggle.current.click();
     }
   };
 
@@ -110,7 +125,8 @@ function BuyToken() {
       );
     } else {
       setTxResult({
-        err: "Your Wallet address doesn't match MetaMask address",
+        err:
+          "An Error occurred. Please make sure MetaMask is connected and your wallet address matches MetaMask address.",
       });
     }
   };
@@ -130,25 +146,20 @@ function BuyToken() {
   useEffect(() => {
     if (txResult.success || txResult.err) {
       setBuyTokenLoading(false);
-      if (closeBuyWithMetaMaskModal) {
-        closeBuyWithMetaMaskModal.click();
+      if (closeBuyWithMetaMaskModal.current) {
+        closeBuyWithMetaMaskModal.current.click();
       }
-      if (closeBuyWithOtherModal) {
-        closeBuyWithOtherModal.click();
+      if (closeBuyWithOtherModal.current) {
+        closeBuyWithOtherModal.current.click();
       }
-      transactionResultToggle.click();
+      transactionResultToggle.current.click();
     }
-  }, [
-    txResult,
-    closeBuyWithMetaMaskModal,
-    closeBuyWithOtherModal,
-    transactionResultToggle,
-  ]);
+  }, [txResult]);
 
   return (
     <div className="col-lg-12">
       <button
-        ref={(el) => (infoModalToggle = el)}
+        ref={(el) => (infoModalToggle.current = el)}
         style={{ display: "none" }}
         data-toggle="modal"
         data-target="#info-modal"
@@ -161,17 +172,22 @@ function BuyToken() {
       />
 
       <button
-        ref={(el) => (walletToggle = el)}
+        ref={(el) => (walletToggle.current = el)}
         style={{ display: "none" }}
         data-toggle="modal"
         data-target="#edit-wallet"
       >
         Add Wallet
       </button>
-      <WalletModal />
+      <WalletModal
+        successCallback={onWalletSet}
+        closeRef={(el) => {
+          closeWalletModal.current = el;
+        }}
+      />
 
       <button
-        ref={(el) => (buyWithMetaMaskToggle = el)}
+        ref={(el) => (buyWithMetaMaskToggle.current = el)}
         style={{ display: "none" }}
         data-toggle="modal"
         data-target="#buy-with-metamask"
@@ -183,11 +199,11 @@ function BuyToken() {
         tokenRate={tokenRate}
         confirmBuyToken={confirmBuyTokenWithMetaMask}
         loading={buyTokenLoading}
-        closeRef={(el) => (closeBuyWithMetaMaskModal = el)}
+        closeRef={(el) => (closeBuyWithMetaMaskModal.current = el)}
       />
 
       <button
-        ref={(el) => (buyWithOtherToggle = el)}
+        ref={(el) => (buyWithOtherToggle.current = el)}
         style={{ display: "none" }}
         data-toggle="modal"
         data-target="#buy-with-other"
@@ -199,11 +215,11 @@ function BuyToken() {
         tokenRate={tokenRate}
         confirmBuyToken={confirmBuyTokenWithOther}
         loading={buyTokenLoading}
-        closeRef={(el) => (closeBuyWithOtherModal = el)}
+        closeRef={(el) => (closeBuyWithOtherModal.current = el)}
       />
 
       <button
-        ref={(el) => (transactionResultToggle = el)}
+        ref={(el) => (transactionResultToggle.current = el)}
         style={{ display: "none" }}
         data-toggle="modal"
         data-target="#pay-confirm"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TransactionDetailsModal from "./transactionDetailsModal";
 import { useSelector } from "react-redux";
 import ReferralCard from "./referralCard";
@@ -10,6 +10,18 @@ function Referral() {
   const bonusTransactions = useSelector(
     (state) => state.transactionReducer.bonusTransactions
   );
+
+  useEffect(() => {
+    window.themeScript();
+  }, []);
+
+  const transactionsLoaded = !!bonusTransactions;
+  useEffect(() => {
+    if (transactionsLoaded) {
+      window.themeScript();
+    }
+  }, [transactionsLoaded]);
+
   if (!bonusTransactions) {
     return <PageLoader containerHeight="50vh" />;
   }
@@ -67,7 +79,7 @@ function Referral() {
           <div className="card-head">
             <h4 className="card-title">Referral Transactions</h4>
           </div>
-          <table className="data-table dt-init user-tnx">
+          <table className="data-table dt-filter-init user-tnx">
             <thead>
               <tr className="data-item data-head">
                 <th className="data-col dt-bonusid">Bonus ID</th>

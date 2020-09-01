@@ -30,7 +30,10 @@ export const useEthToUSDValue = () => {
   useEffect(() => {
     const getEthValue = async () => {
       let ethValue = await price.getCryptoPrice("USD", "ETH");
-      setETHtoUSDValue(getPrettyValue(ethValue.price));
+      ethValue = Number(ethValue.price);
+      ethValue = ethValue.toFixed(2);
+      ethValue = parseFloat(ethValue);
+      setETHtoUSDValue(ethValue);
     };
     getEthValue();
   }, []);

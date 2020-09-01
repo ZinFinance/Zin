@@ -14,7 +14,7 @@ import AdminRoutes from "./routes/adminRoutes";
 
 import Cookies from "js-cookie";
 
-import { fetchUser } from "./redux/actions/userActions";
+import { fetchUser, setETHtoUSDValue } from "./redux/actions/userActions";
 import { fetchUsers, fetchBonuses } from "./redux/actions/adminActions";
 
 import {
@@ -27,6 +27,7 @@ import {
 } from "./redux/actions/transactionActions";
 
 import PageLoader from "./components/pageLoader";
+import { useEthToUSDValue } from "./utility";
 
 const blockedCountries = ["US", "KP", "IR", "IQ", "CD", "CU", "SO", "SD", "SY"];
 
@@ -40,6 +41,11 @@ function App() {
   const accessToken = Cookies.get("token");
   const shouldFetchTransactions = user && !user.isAdmin;
   const [userCountry, setUserCountry] = useState("");
+  const ethToUSDValue = useEthToUSDValue();
+
+  useEffect(() => {
+    dispatch(setETHtoUSDValue(ethToUSDValue));
+  }, [dispatch, ethToUSDValue]);
 
   useEffect(() => {
     const fetchUserCountry = async () => {
@@ -82,26 +88,9 @@ function App() {
   }, [shouldFetchUser, dispatch]);
 
   const adminUsersLoaded = !!adminData.users;
-  const userTransactions = Object.keys(adminData.userTransactions).length;
-  const userBonusTransactions = Object.keys(adminData.userBonusTransactions)
-    .length;
   useEffect(() => {
-    const script = document.createElement("script");
-    script.id = "_themeScript";
-    script.src = "/assets/js/script.js?ver=104";
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, [
-    user,
-    location.pathname,
-    adminUsersLoaded,
-    userTransactions,
-    userBonusTransactions,
-  ]);
+    window.themeScript();
+  }, [user, location.pathname, adminUsersLoaded]);
 
   const shouldFetchUsers =
     user && user.isAdmin && accessToken && !adminData.users;

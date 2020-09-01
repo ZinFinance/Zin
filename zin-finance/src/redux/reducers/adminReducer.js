@@ -12,7 +12,11 @@ export default function (state = initialState, action) {
     case ActionTypes.SET_USERS: {
       return {
         ...state,
-        users: action.data,
+        users: action.data.sort((a, b) => {
+          return (
+            new Date(b.createDateTimeOffset) - new Date(a.createDateTimeOffset)
+          );
+        }),
       };
     }
     case ActionTypes.SET_USER_TRANSACTIONS: {
@@ -20,7 +24,12 @@ export default function (state = initialState, action) {
         ...state,
         userTransactions: {
           ...state.userTransactions,
-          [action.data.userId]: action.data.transactions,
+          [action.data.userId]: action.data.transactions.sort((a, b) => {
+            return (
+              new Date(b.createDateTimeOffset) -
+              new Date(a.createDateTimeOffset)
+            );
+          }),
         },
       };
     }
@@ -29,7 +38,12 @@ export default function (state = initialState, action) {
         ...state,
         userBonusTransactions: {
           ...state.userBonusTransactions,
-          [action.data.userId]: action.data.transactions,
+          [action.data.userId]: action.data.transactions.sort((a, b) => {
+            return (
+              new Date(b.createDateTimeOffset) -
+              new Date(a.createDateTimeOffset)
+            );
+          }),
         },
       };
     }

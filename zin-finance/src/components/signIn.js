@@ -78,7 +78,7 @@ function SignIn() {
         </div>
         <AsyncButton
           loading={loading}
-          loadingText={"Singing In..."}
+          loadingText={"Signing In..."}
           defaultText={"Sign In"}
           buttonClasses="btn-primary btn-block"
         />

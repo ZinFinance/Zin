@@ -20,14 +20,14 @@ function TransactionResultModal({ txResult }) {
                 <p className="lead text-success">
                   Your Transaction ID{" "}
                   <a
-                    href={`https://etherscan.io/tx/${txResult}`}
+                    href={`https://etherscan.io/tx/${txResult.success}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     <strong>
-                      {txResult.substr(0, 8) +
+                      {txResult.success.substr(0, 8) +
                         "....." +
-                        txResult.substr(txResult.length - 8)}
+                        txResult.success.substr(txResult.success.length - 8)}
                     </strong>{" "}
                   </a>
                   has been placed successfully.{" "}

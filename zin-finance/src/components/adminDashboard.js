@@ -5,7 +5,6 @@ import { updateBonus } from "../redux/actions/adminActions";
 import AsyncButton from "./AsyncButton";
 import PageLoader from "./pageLoader";
 import EthService from "../ethService";
-const ethService = new EthService();
 
 const tokenRate = process.env.REACT_APP_API_TOKEN_RATE;
 const INVITER = 0;
@@ -40,6 +39,7 @@ function AdminDashboard() {
   }, [adminData.bonuses, bonuses.length]);
 
   useEffect(() => {
+    const ethService = new EthService();
     const getTotalContribution = async () => {
       const totalContribution = await ethService.getTotalContribution();
       setTotalContribution(totalContribution);

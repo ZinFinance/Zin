@@ -49,15 +49,6 @@ function BuyWithMetaMask({
                 defaultValue={process.env.REACT_APP_Crowdsale_Contract_Address}
                 disabled
               />
-              <button
-                type="submit"
-                className="copy-trigger copy-clipboard"
-                data-clipboard-text={
-                  process.env.REACT_APP_Crowdsale_Contract_Address
-                }
-              >
-                <em className="ti ti-files" />
-              </button>
             </div>
             {/* .copy-wrap */}
             <form onSubmit={onSubmit}>

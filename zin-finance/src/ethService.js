@@ -11,13 +11,11 @@ class EthService {
       try {
         this.web3 = window.web3;
         this.web3.eth.getAccounts((error, accounts) => {
-          this.coinbase = this.web3.currentProvider.selectedAddress;
-          this.web3.eth.defaultAccount = this.coinbase;
+          window.metamaskAccount = accounts[0];
         });
         this.tokenContract = this.web3.eth
           .contract(Token_ABI)
           .at(Token_Address);
-
         this.crowdsaleContract = this.web3.eth
           .contract(Crowdsale_ABI)
           .at(Crowdsale_Address);
@@ -26,6 +24,13 @@ class EthService {
       }
     }
   }
+
+  setMetaMaskAccount = async () => {
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    window.metamaskAccount = accounts[0];
+  };
 
   promisify = (inner) =>
     new Promise((resolve, reject) =>
@@ -51,17 +56,16 @@ class EthService {
 
   async buyToken(eth, fromAddress) {
     try {
-      this.coinbase = this.web3.currentProvider.selectedAddress;
       if (
-        !this.coinbase ||
-        this.coinbase.toLowerCase() !== fromAddress.toLowerCase()
+        !window.metamaskAccount ||
+        window.metamaskAccount.toLowerCase() !== fromAddress.toLowerCase()
       ) {
         return "";
       }
       var tx = await this.promisify((cb) =>
         this.web3.eth.sendTransaction(
           {
-            from: this.coinbase,
+            from: window.metamaskAccount,
             to: Crowdsale_Address,
             value: this.web3.toWei(eth, "ether"),
           },
@@ -83,9 +87,9 @@ class EthService {
   }
 
   async getTokenBalance() {
-    if (this.coinbase) {
+    if (window.metamaskAccount) {
       var balance = await this.promisify((cb) =>
-        this.tokenContract.balanceOf(this.coinbase, cb)
+        this.tokenContract.balanceOf(window.metamaskAccount, cb)
       );
       return Number(this.web3.fromWei(Number(balance), "ether"));
     } else {

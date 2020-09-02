@@ -62,14 +62,25 @@ function BuyToken() {
     }
   };
 
-  const buyTokensWithMetaMask = () => {
+  const buyTokensWithMetaMask = async () => {
     setBuyType("metamask");
     if (!checkIfTransactionsOpened()) {
       infoModalToggle.current.click();
     } else if (!user.ethAddress && walletToggle.current) {
       walletToggle.current.click();
     } else if (buyWithMetaMaskToggle.current) {
-      buyWithMetaMaskToggle.current.click();
+      try {
+        let ethService = new EthService();
+        await ethService.setMetaMaskAccount();
+        buyWithMetaMaskToggle.current.click();
+      } catch (err) {
+        console.warn("metamask error", err);
+        setTxResult({
+          err:
+            "Please connect a MetaMask account first in order to buy tokens through MetaMask.",
+          success: false,
+        });
+      }
     }
   };
 

@@ -4,6 +4,8 @@ import Cookies from "js-cookie";
 import EthService from "../../ethService";
 import { getUserKYCStatus } from "./kycActions";
 
+const ethService = new EthService();
+
 const DEFAULT_ERROR = "An error occurred. Please try again or contact support.";
 
 axios.defaults.headers.common["Content-Type"] = "application/json";
@@ -11,8 +13,6 @@ axios.defaults.headers.common["Content-Type"] = "application/json";
 //   "https://cors-anywhere.herokuapp.com/http://localhost:5000";
 // const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
 const API_URL = "https://stgzinapi.azurewebsites.net";
-
-const ethService = new EthService();
 
 export function fetchUsers() {
   return async (dispatch) => {

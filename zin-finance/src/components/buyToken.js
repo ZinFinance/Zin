@@ -141,7 +141,7 @@ function BuyToken() {
     } else {
       setTxResult({
         err:
-          "An Error occurred. Please make sure MetaMask is connected and your wallet address matches MetaMask address.",
+          "Metamask Wallet mismatch! - Please Update your connected metamask wallet address in your Zin Profile tab (Receiving wallet). This is to ensure that you receive your bonus transactions at the end of the crowdsale.",
       });
     }
   };

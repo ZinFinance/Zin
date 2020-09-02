@@ -44,6 +44,7 @@ function WalletModal({ successCallback, closeRef }) {
             setState({ error, loading: false });
           } else {
             if (successCallback) {
+              setState({ loading: false });
               successCallback();
             } else {
               setState({ success: true, loading: false });

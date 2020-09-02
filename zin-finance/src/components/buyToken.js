@@ -35,11 +35,26 @@ function BuyToken() {
   let infoModalToggle = useRef();
   let closeWalletModal = useRef();
 
+  const initiateMetaMask = async () => {
+    try {
+      let ethService = new EthService();
+      await ethService.setMetaMaskAccount();
+      buyWithMetaMaskToggle.current.click();
+    } catch (err) {
+      console.warn("metamask error", err);
+      setTxResult({
+        err:
+          "Please connect a MetaMask account first in order to buy tokens through MetaMask.",
+        success: false,
+      });
+    }
+  };
+
   const onWalletSet = () => {
     if (closeWalletModal.current) {
       closeWalletModal.current.click();
       if (buyType === "metamask" && buyWithMetaMaskToggle.current) {
-        buyWithMetaMaskToggle.current.click();
+        initiateMetaMask();
       } else if (buyType === "other" && buyWithOtherToggle.current) {
         buyWithOtherToggle.current.click();
       }
@@ -55,36 +70,25 @@ function BuyToken() {
     setBuyType("other");
     if (!checkIfTransactionsOpened()) {
       infoModalToggle.current.click();
-    } else if (user.ethAddress && walletToggle.current) {
+    } else if (!user.ethAddress && walletToggle.current) {
       walletToggle.current.click();
     } else if (buyWithOtherToggle.current) {
       buyWithOtherToggle.current.click();
     }
   };
 
-  const buyTokensWithMetaMask = async () => {
+  const buyTokensWithMetaMask = () => {
     setBuyType("metamask");
     if (!checkIfTransactionsOpened()) {
       infoModalToggle.current.click();
     } else if (!user.ethAddress && walletToggle.current) {
       walletToggle.current.click();
     } else if (buyWithMetaMaskToggle.current) {
-      try {
-        let ethService = new EthService();
-        await ethService.setMetaMaskAccount();
-        buyWithMetaMaskToggle.current.click();
-      } catch (err) {
-        console.warn("metamask error", err);
-        setTxResult({
-          err:
-            "Please connect a MetaMask account first in order to buy tokens through MetaMask.",
-          success: false,
-        });
-      }
+      initiateMetaMask();
     }
   };
 
-  const confirmBuyTokenWithOther = async (txId, referralCode) => {
+  const confirmBuyTokenWithOther = (txId, referralCode) => {
     let ethService = new EthService();
     setBuyTokenLoading(true);
     dispatch(

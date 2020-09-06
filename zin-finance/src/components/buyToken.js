@@ -89,8 +89,12 @@ function BuyToken() {
   };
 
   const confirmBuyTokenWithOther = (txId, referralCode) => {
-    let ethService = new EthService();
     setBuyTokenLoading(true);
+    performTransaction(txId, referralCode);
+  };
+
+  const performTransaction = (txId, referralCode) => {
+    let ethService = new EthService();
     dispatch(
       saveTransaction(
         {
@@ -100,13 +104,17 @@ function BuyToken() {
             ethCalculation * tokenRate
           ),
           etherToUsdRateAtThatTime: "" + ethToUSDValue,
-          referralCode: referralCode,
+          referralCode,
         },
         (err) => {
-          if (err) {
+          if (buyType === "metamask" && err === "TRANSACTION_NOT_FOUND") {
+            setTimeout(() => {
+              performTransaction(txId, referralCode);
+            }, 5000);
+          } else if (err) {
             setTxResult({ err, success: false });
           } else {
-            setTxResult({ success: txId, err: false });
+            setTxResult({ err: false, success: txId });
           }
         }
       )
@@ -118,26 +126,7 @@ function BuyToken() {
     let txId = await ethService.buyToken(ethCalculation, user.ethAddress);
     setBuyTokenLoading(true);
     if (txId) {
-      dispatch(
-        saveTransaction(
-          {
-            txId,
-            amountTransferredInEther: ethService.convertToWei(ethCalculation),
-            amountTransferredInToken: ethService.convertToWei(
-              ethCalculation * tokenRate
-            ),
-            etherToUsdRateAtThatTime: "" + ethToUSDValue,
-            referralCode: referralCode,
-          },
-          (err) => {
-            if (err) {
-              setTxResult({ err });
-            } else {
-              setTxResult({ success: txId });
-            }
-          }
-        )
-      );
+      performTransaction(txId, referralCode);
     } else {
       setTxResult({
         err:

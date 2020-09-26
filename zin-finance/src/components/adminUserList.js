@@ -157,9 +157,7 @@ function AdminUserList() {
                       style={{ paddingRight: "100px" }}
                       className="data-col dt-ethaddress"
                     >
-                      <span className="sub sub-s2">
-                        {user.ethAddress ? user.ethAddress : "No Address Set"}
-                      </span>
+                      <span className="sub sub-s2">{user.ethAddress}</span>
                     </td>
                     <td
                       style={{ paddingRight: "100px" }}

@@ -272,7 +272,7 @@ function BuyToken() {
                 <div className="token-symbol">ZIN</div>
               </div>
               {/* show presale bonus amount if presale is on (up till sep 15 2020) */}
-              {new Date() < new Date("2020-09-15T12:00:00.000Z") && (
+              {/* {new Date() < new Date("2020-09-15T12:00:00.000Z") && (
                 <>
                   <div className="token-eq-sign">+</div>
                   <div className="token-received-amount">
@@ -288,7 +288,7 @@ function BuyToken() {
                     <div className="token-symbol">(Presale bonus)</div>
                   </div>
                 </>
-              )}
+              )} */}
             </div>
           </div>
           <div className="token-calc-note note note-plane">

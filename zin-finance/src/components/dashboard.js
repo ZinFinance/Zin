@@ -82,7 +82,7 @@ function Dashboard() {
                     alt="logo-sm"
                   />
                   <div className="gaps-2x" />
-                  <h1 className="token-info-head text-light">
+                  {/* <h1 className="token-info-head text-light">
                     1 ETH = {tokenRate} ZIN
                   </h1>
                   <h5 className="token-info-sub">
@@ -98,7 +98,7 @@ function Dashboard() {
                     >
                       How to buy Ethereum (ETH)?
                     </a>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="col-md-6">
@@ -129,7 +129,27 @@ function Dashboard() {
           {/* .card */}
         </div>
         {/* .col */}
-        <BuyToken />
+        {/* <BuyToken /> */}
+        <div className="col-lg-12">
+          <div className="content-area card">
+            <div className="card-innr text-center">
+              <div className="card-head">
+                <h6 className="card-title">
+                  The crowdsale has ended. Bonus tokens will be distributed in
+                  the next 7 days, please be patient. For uniswap and exchange
+                  listings - find details on{" "}
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://www.zin.finance"
+                  >
+                    www.zin.finance
+                  </a>
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       {/* .row */}
     </div>

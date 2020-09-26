@@ -18,42 +18,46 @@ export function fetchUsers() {
   return async (dispatch) => {
     try {
       let users = await _fetchUsers();
+      for (let i = 0; i < users.length; i++) {
+        users[i].ethAddress = users[i].ethAddress
+          ? users[i].ethAddress
+          : "No Address Set";
+      }
       dispatch({
         type: ActionTypes.SET_USERS,
         data: users,
       });
       for (let i = 0; i < users.length; i++) {
         let user = users[i];
-        setTimeout(async () => {
-          try {
-            let kycApplicationStatus = await getUserKYCStatus(user.email);
-            kycApplicationStatus = kycApplicationStatus.data;
-            let kycStatus = "";
-            if (kycApplicationStatus.reviewStatus === "completed") {
-              if (kycApplicationStatus.reviewResult.reviewAnswer === "RED") {
-                kycStatus = "rejected";
-              } else {
-                kycStatus = "approved";
-              }
-            } else if (
-              kycApplicationStatus.reviewStatus === "pending" ||
-              kycApplicationStatus.reviewStatus === "queued" ||
-              kycApplicationStatus.reviewStatus === "onHold" ||
-              kycApplicationStatus.reviewStatus === "init"
-            ) {
-              kycStatus = "pending";
+        try {
+          let kycApplicationStatus = await getUserKYCStatus(user.email);
+          kycApplicationStatus = kycApplicationStatus.data;
+          let kycStatus = "";
+          if (kycApplicationStatus.reviewStatus === "completed") {
+            if (kycApplicationStatus.reviewResult.reviewAnswer === "RED") {
+              kycStatus = "rejected";
+            } else {
+              kycStatus = "approved";
             }
-            dispatch({
-              type: ActionTypes.SET_USER_KYC_STATUS,
-              data: { userId: user.userId, kycStatus },
-            });
-          } catch (err) {
-            dispatch({
-              type: ActionTypes.SET_USER_KYC_STATUS,
-              data: { userId: user.userId, kycStatus: "pending" },
-            });
+          } else if (
+            kycApplicationStatus.reviewStatus === "pending" ||
+            kycApplicationStatus.reviewStatus === "queued" ||
+            kycApplicationStatus.reviewStatus === "onHold" ||
+            kycApplicationStatus.reviewStatus === "init"
+          ) {
+            kycStatus = "pending";
           }
-        }, 20 * i);
+          dispatch({
+            type: ActionTypes.SET_USER_KYC_STATUS,
+            data: { userId: user.userId, kycStatus },
+          });
+        } catch (err) {
+          debugger;
+          dispatch({
+            type: ActionTypes.SET_USER_KYC_STATUS,
+            data: { userId: user.userId, kycStatus: "pending" },
+          });
+        }
       }
     } catch (err) {
       console.warn("error fetching users", err);
